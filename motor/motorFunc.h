@@ -12,12 +12,13 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/time.h>
+#include <math.h>
 #include <fcntl.h>
 
 using namespace std;
 
 const char FWDPATH1 [29] = "/sys/class/gpio/gpio66/value"; // P8 Pin 7
-const char REVPATH1 [29] = "/sys/class/gpio/gpio60/value"; // P8 Pin 9
+const char REVPATH1 [29] = "/sys/class/gpio/gpio69/value"; // P8 Pin 9
 const char FWDPATH2 [29] = "/sys/class/gpio/gpio67/value"; // P8 Pin 8
 const char REVPATH2 [29] = "/sys/class/gpio/gpio68/value"; // P8 Pin 10
 const char FWDPATH3 [29] = "/sys/class/gpio/gpio23/value"; // P8 Pin 13
@@ -97,8 +98,8 @@ void turnMotor(const int stringNum, double turns){
   double debounceTime = 0.025;
 
   int ticks = turns / RES;
-  double timeTicks = turns / RES;
-  double overTicks = timeTicks - ticks;
+  double timeTicks = fabs(turns) / RES;
+  double overTicks = fabs(timeTicks) - abs(ticks);
   long double times [abs(ticks)];
   long double runTime;
   long double avgTime = 0;
@@ -149,6 +150,15 @@ void turnMotor(const int stringNum, double turns){
       
         if(runTime > debounceTime){
           if (ReadValue1[0] != LastRead[0]) {
+            if (turns > 0) {
+              motorStart(REVPATH1);
+              usleep(300000);
+              motorStop(REVPATH1);
+            } else if (turns < 0) {
+              motorStart(FWDPATH1);
+              usleep(300000);
+              motorStop(FWDPATH1);
+            }
             clock_gettime(CLOCK_MONOTONIC_RAW,&lastTime);
             counter++;
             cout << "counter: " << counter << endl;
@@ -189,12 +199,18 @@ void turnMotor(const int stringNum, double turns){
       motorStop(REVPATH1);
       motorStop(FWDPATH1);
     } else {
-      motorStart(FWDPATH1);
-      usleep(1000);
+      for (int i = 0; i < abs(ticks); i++) {
+        avgTime += times[i];
+      }
+      avgTime = (avgTime / abs(ticks)) * 1000000;
+      turnTime = overTicks * avgTime;
+      cout << overTicks << " " << avgTime << " " <<  turnTime << endl;
       motorStart(REVPATH1);
+      usleep(turnTime);
+      motorStart(FWDPATH1);
       usleep(300000);
-      motorStop(REVPATH1);
       motorStop(FWDPATH1);
+      motorStop(REVPATH1);
     }
   }
 }

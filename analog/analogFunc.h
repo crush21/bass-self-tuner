@@ -83,7 +83,7 @@ double getFrequency(double *FFT, int size, int limit, const double& sampleFreq) 
   double * max = FFT;
   int index = 0;
   double frequency;
-  for (int i = 1; i < limit; i++) {
+  for (int i = 145; i < limit; i++) {
 //    std::cout << *(FFT + i) << std::endl;
 //    sleep(2);
     if (*(FFT + i) > *max) {
@@ -105,7 +105,7 @@ double getFrequency(double *FFT, int size, int limit, const double& sampleFreq) 
  * Restrictions: None.
  */
 double getCents(double& currFreq, double& idealFreq) {
-  return 1200 * log2(currFreq / idealFreq);
+  return 1200 * log2(idealFreq / currFreq);
 }
 
 /* Translates a number into a frequency.
