@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <unistd.h>
+#include <cstdlib>
 #include <cstdio>
 #include <fcntl.h>
 
@@ -23,9 +24,8 @@ const char DATA0 [29] = "/sys/class/gpio/gpio30/value";
 const char * ON = "1";
 const char * OFF = "0";
 
-void dispCtrl(unsigned dispOn, unsigned cursorOn, unsigned blinkOn) {
-  char * buffer;
-  if ((dispOn > 1) || (cursorOn > 1) || (blinkOn > 1)) {
+void dispCtrl(char dispOn, char cursorOn, char blinkOn) {
+  if ((atoi(dispOn) > 1) || (atoi(cursorOn) > 1) || (atoi(blinkOn) > 1)) {
     cout << "Error: Parameter is greater than 1." << endl;
     return;
   } else {
@@ -102,3 +102,4 @@ void clearScreen() {
     close(handle);
   
 }
+void setDDRAM(char 
