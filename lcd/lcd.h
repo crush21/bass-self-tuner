@@ -134,3 +134,10 @@ void setDDRAM(bool array[]) {
   write(handle, array[0], 1);
   close(handle);
 }
+
+void writeChar(char character, char address[]) {
+  bool dataBits[7];
+  for (int i = 0; i < 7; i++) {
+    
+  }
+}

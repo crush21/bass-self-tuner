@@ -87,7 +87,7 @@ int main() {
   close(strHandle);
   cout << "Size of waveform: " << sizeof(waveform) / 8 << endl;
 //  getFFT(fftPlan,waveform,FFT);
-  fftPlan = fftw_plan_r2r_1d(sizeof(waveform)/16 + 1, waveform, FFT, FFTW_R2HC, FFTW_DESTROY_INPUT);
+  fftPlan = fftw_plan_r2r_1d(sizeof(waveform)/8, waveform, FFT, FFTW_R2HC, FFTW_DESTROY_INPUT);
   cout << "Made it here!" << endl;
   fftw_print_plan(fftPlan);
   fftw_execute(fftPlan);
