@@ -11,20 +11,22 @@
 #include <unistd.h>
 #include <errno.h>
 #include <sys/types.h>
+#include <sys/time.h>
 #include <fcntl.h>
+#include <fftw3.h>
 
 using namespace std;
 
-unsigned getAnalog(unsigned stringNum, int strHandle) {
+double getAnalog(unsigned stringNum, int strHandle) {
   char analogBuffer [5];
-  unsigned aVal;
+  double aVal;
   read(strHandle, analogBuffer, 4);
 //  perror("\nRead result");
 //  errno = 0;
   analogBuffer[4] = '\0';
   aVal = atoi(analogBuffer);
-/*  cout << "String " << stringNum << " Voltage Reading: "
-       << aVal << endl; */
+  cout << "String " << stringNum << " Voltage Reading: "
+       << aVal << endl;
   return aVal;
 }
 
@@ -46,4 +48,10 @@ void heart() {
     }
     fclose(LEDHandle);
   }
+}
+
+void getFFT(fftw_plan &FFT, double *in, double *out) {
+  int n = sizeof(*in);
+  FFT = fftw_plan_r2r_1d(n, in, out, FFTW_R2HC, 
+                         FFTW_PRESERVE_INPUT);
 }

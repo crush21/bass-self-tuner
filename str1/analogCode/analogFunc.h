@@ -25,8 +25,8 @@ double getAnalog(unsigned stringNum, int strHandle) {
 //  errno = 0;
   analogBuffer[4] = '\0';
   aVal = atoi(analogBuffer);
-/*  cout << "String " << stringNum << " Voltage Reading: "
-       << aVal << endl; */
+  cout << "String " << stringNum << " Voltage Reading: "
+       << aVal << endl;
   return aVal;
 }
 
