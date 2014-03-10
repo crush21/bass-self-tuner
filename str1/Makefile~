@@ -1,0 +1,16 @@
+# Makefile that generates executable getAnalog file.
+
+CC=g++
+
+CFLAGS=-c -Wall
+
+all: getAnalog
+
+getAnalog: getAnalog.o
+	$(CC) getAnalog.o -o getAnalog -lfftw3 -lm
+
+getAnalog.o: getAnalog.cpp
+	$(CC) $(CFLAGS) getAnalog.cpp 
+
+clean:
+	rm -rf *o getAnalog
