@@ -8,9 +8,10 @@ all: getAnalog
 
 getAnalog: getAnalog.o
 	$(CC) getAnalog.o -o getAnalog -lfftw3 -lm
+	rm -f getAnalog.o
 
 getAnalog.o: getAnalog.cpp
 	$(CC) $(CFLAGS) getAnalog.cpp
 
 clean:
-	rm -rf *o getAnalog
+	rm -f *o getAnalog

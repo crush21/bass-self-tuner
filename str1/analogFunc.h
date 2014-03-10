@@ -50,10 +50,8 @@ void heart() {
   }
 }
 
-double *getFFT(fftw_plan *FFT, double *in) {
-  double *out;
+void getFFT(fftw_plan &FFT, double *in, double *out) {
   int n = sizeof(*in);
-  *FFT = fftw_plan_r2r_1d(n, in, out, FFTW_R2HC, 
+  FFT = fftw_plan_r2r_1d(n, in, out, FFTW_R2HC, 
                          FFTW_PRESERVE_INPUT);
-  return out;
 }

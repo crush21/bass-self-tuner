@@ -13,8 +13,9 @@ using namespace std;
 
 int main() {
   
-  double waveform[400];
+  double waveform[512];
   double *FFT = NULL;
+  fftw_plan fftPlan;
   double aIn;
   timeval startTime, endTime, runTime;
   double avgSec;
@@ -46,14 +47,15 @@ int main() {
     strFile.fd = strHandle;
     strFile.events = POLLIN;
     strFile.revents = POLLIN;
-    poll(&strFile, 1, -1);
+    poll(&strFile, 1, 0);
     aIn = getAnalog(2, strFile.fd);
     lseek(strHandle, 0, SEEK_SET);
 
     usleep(680);
 
     waveform[i] = aIn;
-
+    
+    
 //    heart();
 
 //    aIn2 = getAnalog(2, str2In);
@@ -76,11 +78,15 @@ int main() {
   
   gettimeofday(&endTime, NULL);
   timersub(&endTime,&startTime,&runTime);
-  avgSec = (runTime.tv_sec + runTime.tv_usec / 512) / 512.0;
+  avgSec = (runTime.tv_sec + runTime.tv_usec / 1000000.0) / 512.0;
   cout << "Total runtime is: " << runTime.tv_sec + runTime.tv_usec / 
-          512.0 << endl;
+          1000000.0 << endl;
   cout << "Average sample time is: " << avgSec << endl;
   close(strHandle);
-  FFT = getFFT(waveform);
+  getFFT(fftPlan,waveform,FFT);
+  fftw_execute(fftPlan);
+  for (double * i = FFT; i != NULL; *(i+1)) {
+    cout << i << endl;
+  }
   return 0;
 }
