@@ -19,6 +19,14 @@ echo "Done!"
 
 # Initialize digital General Purpose Input/Output (GPIO) pins
 echo "Initializing Digital GPIO..."
-# Insert GPIO initialization calls.
+echo 66 > /sys/class/gpio/export
+echo 0 > /sys/class/gpio/gpio66/value
+echo high > /sys/class/gpio/gpio66/direction
+echo 69 > /sys/class/gpio/export
+echo 0 > /sys/class/gpio/gpio69/value
+echo high > /sys/class/gpio/gpio69/direction
+echo 45 > /sys/class/gpio/export
+echo 0 > /sys/class/gpio/gpio45/value
+echo high > /sys/class/gpio/gpio45/direction
 echo "Done!"
 
