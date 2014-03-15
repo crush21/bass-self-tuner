@@ -53,7 +53,7 @@ int main() {
     aIn = getAnalog(1, strFile.fd);
     lseek(strHandle, 0, SEEK_SET);
 
-    usleep(680);
+    usleep(200000);
 
     waveform[i] = aIn;
     

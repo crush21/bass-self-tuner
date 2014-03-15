@@ -15,14 +15,14 @@
 
 using namespace std;
 
-void motorControl(char * file) {
+void motorControl(char * file, unsigned time) {
   char * start = "1";
   char * stop = "0";
   int handle = open(file, O_WRONLY);
   write(handle, start, 1);
   perror("Result");
   errno = 0;
-  sleep(1);
+  sleep(time);
   write(handle, stop, 1);
   close(handle);
 }
