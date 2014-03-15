@@ -20,7 +20,7 @@ echo "Done!"
 # Initialize digital General Purpose Input/Output (GPIO) pins
 echo "Initializing Digital GPIO..."
 
-echo "Motor Control..."
+echo "Motor Control Pins..."
 # Motor 1
 echo 66 > /sys/class/gpio/export
 echo high > /sys/class/gpio/gpio66/direction
@@ -66,8 +66,90 @@ echo high > /sys/class/gpio/gpio65/direction
 echo 0 > /sys/class/gpio/gpio65/value
 
 
-echo "LCD Display Control..."
-#Insert LCD Display GPIO
+echo "LCD Display Control Pins..."
+# Data Pins
+echo 70 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio70/direction
+echo 0 > /sys/class/gpio/gpio70/value
+echo 71 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio71/direction
+echo 0 > /sys/class/gpio/gpio71/value
+echo 72 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio72/direction
+echo 0 > /sys/class/gpio/gpio72/value
+echo 73 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio73/direction
+echo 0 > /sys/class/gpio/gpio73/value
+echo 74 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio74/direction
+echo 0 > /sys/class/gpio/gpio74/value
+echo 75 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio75/direction
+echo 0 > /sys/class/gpio/gpio75/value
+echo 76 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio76/direction
+echo 0 > /sys/class/gpio/gpio76/value
+echo 77 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio77/direction
+echo 0 > /sys/class/gpio/gpio77/value
+
+# Register Select
+echo 60 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio60/direction
+echo 0 > /sys/class/gpio/gpio60/value
+
+# Clock
+echo 30 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio30/direction
+echo 1 > /sys/class/gpio/gpio30/value
 
 echo "Done!"
 
+echo "Initializing LCD Screen..."
+# Clear display
+echo 0 > /sys/class/gpio/gpio60/value
+echo 0 > /sys/class/gpio/gpio77/value
+echo 0 > /sys/class/gpio/gpio76/value
+echo 0 > /sys/class/gpio/gpio75/value
+echo 0 > /sys/class/gpio/gpio74/value
+echo 0 > /sys/class/gpio/gpio73/value
+echo 0 > /sys/class/gpio/gpio72/value
+echo 0 > /sys/class/gpio/gpio71/value
+echo 1 > /sys/class/gpio/gpio70/value
+
+# Trigger Clock to call command
+echo 0 > /sys/class/gpio/gpio30/value
+sleep 0.05
+echo 1 > /sys/class/gpio/gpio30/value
+
+# Set screen to 8-bit, 2 lines, 5x10 dots (0 00111100)
+echo 0 > /sys/class/gpio/gpio60/value
+echo 0 > /sys/class/gpio/gpio77/value
+echo 0 > /sys/class/gpio/gpio76/value
+echo 1 > /sys/class/gpio/gpio75/value
+echo 1 > /sys/class/gpio/gpio74/value
+echo 1 > /sys/class/gpio/gpio73/value
+echo 0 > /sys/class/gpio/gpio72/value
+echo 0 > /sys/class/gpio/gpio71/value
+echo 0 > /sys/class/gpio/gpio70/value
+
+# Trigger Clock to call command
+echo 0 > /sys/class/gpio/gpio30/value
+sleep 0.05
+echo 1 > /sys/class/gpio/gpio30/value
+
+# Activate Display and Cursor on and Blinking
+echo 0 > /sys/class/gpio/gpio60/value
+echo 0 > /sys/class/gpio/gpio77/value
+echo 0 > /sys/class/gpio/gpio76/value
+echo 0 > /sys/class/gpio/gpio75/value
+echo 0 > /sys/class/gpio/gpio74/value
+echo 1 > /sys/class/gpio/gpio73/value
+echo 1 > /sys/class/gpio/gpio72/value
+echo 1 > /sys/class/gpio/gpio71/value
+echo 1 > /sys/class/gpio/gpio70/value
+
+# Trigger Clock to call command
+echo 0 > /sys/class/gpio/gpio30/value
+sleep 0.05
+echo 1 > /sys/class/gpio/gpio30/value
