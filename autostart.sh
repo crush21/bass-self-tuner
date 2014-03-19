@@ -68,88 +68,42 @@ echo 0 > /sys/class/gpio/gpio65/value
 
 echo "LCD Display Control Pins..."
 # Data Pins
-echo 70 > /sys/class/gpio/export
-echo high > /sys/class/gpio/gpio70/direction
-echo 0 > /sys/class/gpio/gpio70/value
-echo 71 > /sys/class/gpio/export
-echo high > /sys/class/gpio/gpio71/direction
-echo 0 > /sys/class/gpio/gpio71/value
-echo 72 > /sys/class/gpio/export
-echo high > /sys/class/gpio/gpio72/direction
-echo 0 > /sys/class/gpio/gpio72/value
-echo 73 > /sys/class/gpio/export
-echo high > /sys/class/gpio/gpio73/direction
-echo 0 > /sys/class/gpio/gpio73/value
-echo 74 > /sys/class/gpio/export
-echo high > /sys/class/gpio/gpio74/direction
-echo 0 > /sys/class/gpio/gpio74/value
-echo 75 > /sys/class/gpio/export
-echo high > /sys/class/gpio/gpio75/direction
-echo 0 > /sys/class/gpio/gpio75/value
-echo 76 > /sys/class/gpio/export
-echo high > /sys/class/gpio/gpio76/direction
-echo 0 > /sys/class/gpio/gpio76/value
-echo 77 > /sys/class/gpio/export
-echo high > /sys/class/gpio/gpio77/direction
-echo 0 > /sys/class/gpio/gpio77/value
-
-# Register Select
+echo 30 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio30/direction
+echo 0 > /sys/class/gpio/gpio30/value
 echo 60 > /sys/class/gpio/export
 echo high > /sys/class/gpio/gpio60/direction
 echo 0 > /sys/class/gpio/gpio60/value
+echo 31 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio31/direction
+echo 0 > /sys/class/gpio/gpio31/value
+echo 15 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio15/direction
+echo 0 > /sys/class/gpio/gpio15/value
+echo 48 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio48/direction
+echo 0 > /sys/class/gpio/gpio48/value
+echo 51 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio51/direction
+echo 0 > /sys/class/gpio/gpio51/value
+echo 49 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio49/direction
+echo 0 > /sys/class/gpio/gpio49/value
+echo 14 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio14/direction
+echo 0 > /sys/class/gpio/gpio14/value
+
+# Register Select
+echo 2 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio2/direction
+echo 0 > /sys/class/gpio/gpio2/value
 
 # Clock
-echo 30 > /sys/class/gpio/export
-echo high > /sys/class/gpio/gpio30/direction
-echo 1 > /sys/class/gpio/gpio30/value
+echo 3 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio3/direction
+echo 1 > /sys/class/gpio/gpio3/value
 
 echo "Done!"
 
 echo "Initializing LCD Screen..."
 # Clear display
-echo 0 > /sys/class/gpio/gpio60/value
-echo 0 > /sys/class/gpio/gpio77/value
-echo 0 > /sys/class/gpio/gpio76/value
-echo 0 > /sys/class/gpio/gpio75/value
-echo 0 > /sys/class/gpio/gpio74/value
-echo 0 > /sys/class/gpio/gpio73/value
-echo 0 > /sys/class/gpio/gpio72/value
-echo 0 > /sys/class/gpio/gpio71/value
-echo 1 > /sys/class/gpio/gpio70/value
-
-# Trigger Clock to call command
-echo 0 > /sys/class/gpio/gpio30/value
-sleep 0.05
-echo 1 > /sys/class/gpio/gpio30/value
-
-# Set screen to 8-bit, 2 lines, 5x10 dots (0 00111100)
-echo 0 > /sys/class/gpio/gpio60/value
-echo 0 > /sys/class/gpio/gpio77/value
-echo 0 > /sys/class/gpio/gpio76/value
-echo 1 > /sys/class/gpio/gpio75/value
-echo 1 > /sys/class/gpio/gpio74/value
-echo 1 > /sys/class/gpio/gpio73/value
-echo 0 > /sys/class/gpio/gpio72/value
-echo 0 > /sys/class/gpio/gpio71/value
-echo 0 > /sys/class/gpio/gpio70/value
-
-# Trigger Clock to call command
-echo 0 > /sys/class/gpio/gpio30/value
-sleep 0.05
-echo 1 > /sys/class/gpio/gpio30/value
-
-# Activate Display and Cursor on and Blinking
-echo 0 > /sys/class/gpio/gpio60/value
-echo 0 > /sys/class/gpio/gpio77/value
-echo 0 > /sys/class/gpio/gpio76/value
-echo 0 > /sys/class/gpio/gpio75/value
-echo 0 > /sys/class/gpio/gpio74/value
-echo 1 > /sys/class/gpio/gpio73/value
-echo 1 > /sys/class/gpio/gpio72/value
-echo 1 > /sys/class/gpio/gpio71/value
-echo 1 > /sys/class/gpio/gpio70/value
-
-# Trigger Clock to call command
-echo 0 > /sys/class/gpio/gpio30/value
-sleep 0.05
-echo 1 > /sys/class/gpio/gpio30/value

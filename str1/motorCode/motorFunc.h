@@ -22,7 +22,7 @@ void motorControl(char * file, unsigned time) {
   write(handle, start, 1);
   perror("Result");
   errno = 0;
-  sleep(time);
+  usleep(time);
   write(handle, stop, 1);
   close(handle);
 }
