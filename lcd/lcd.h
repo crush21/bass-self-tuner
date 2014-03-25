@@ -68,38 +68,69 @@ void dispCtrl(char dispOn, char cursorOn, char blinkOn) {
 }
 
 void clearScreen() {
-    int handle = open(RS, O_WRONLY);
-    write(handle, OFF, 1);
-    close(handle);
-    handle = open(DATA7, O_WRONLY);
-    write(handle, OFF, 1);
-    close(handle);
-    handle = open(DATA6, O_WRONLY);
-    write(handle, OFF, 1);
-    close(handle);
-    handle = open(DATA5, O_WRONLY);
-    write(handle, OFF, 1);
-    close(handle);
-    handle = open(DATA4, O_WRONLY);
-    write(handle, OFF, 1);
-    close(handle);
-    handle = open(DATA3, O_WRONLY);
-    write(handle, OFF, 1);
-    close(handle);
-    handle = open(DATA2, O_WRONLY);
-    write(handle, OFF, 1);
-    close(handle);
-    handle = open(DATA1, O_WRONLY);
-    write(handle, OFF, 1);
-    close(handle);
-    handle = open(DATA0, O_WRONLY);
-    write(handle, ON, 1);
-    close(handle);
-    handle = open(CLK, O_WRONLY);
-    write(handle, OFF, 1);
-    lseek(handle, 0, SEEK_SET);
-    write(handle, ON, 1);
-    close(handle);
-  
+  int handle = open(RS, O_WRONLY);
+  write(handle, OFF, 1);
+  close(handle);
+  handle = open(DATA7, O_WRONLY);
+  write(handle, OFF, 1);
+  close(handle);
+  handle = open(DATA6, O_WRONLY);
+  write(handle, OFF, 1);
+  close(handle);
+  handle = open(DATA5, O_WRONLY);
+  write(handle, OFF, 1);
+  close(handle);
+  handle = open(DATA4, O_WRONLY);
+  write(handle, OFF, 1);
+  close(handle);
+  handle = open(DATA3, O_WRONLY);
+  write(handle, OFF, 1);
+  close(handle);
+  handle = open(DATA2, O_WRONLY);
+  write(handle, OFF, 1);
+  close(handle);
+  handle = open(DATA1, O_WRONLY);
+  write(handle, OFF, 1);
+  close(handle);
+  handle = open(DATA0, O_WRONLY);
+  write(handle, ON, 1);
+  close(handle);
+  handle = open(CLK, O_WRONLY);
+  write(handle, OFF, 1);
+  lseek(handle, 0, SEEK_SET);
+  write(handle, ON, 1);
+  close(handle);
 }
-void setDDRAM(char 
+
+void setDDRAM(bool array[]) {
+  if (array.size() != 7) {
+    cout << "Cannot set DDRAM: array size not 7." << endl;
+  }
+  int handle = open(RS, O_WRONLY);
+  write(handle, OFF, 1);
+  close(handle);
+  handle = open(DATA7, O_WRONLY);
+  write(handle, ON, 1);
+  close(handle);
+  handle = open(DATA6, O_WRONLY);
+  write(handle, array[6], 1);
+  close(handle);
+  handle = open(DATA5, O_WRONLY);
+  write(handle, array[5], 1);
+  close(handle);
+  handle = open(DATA4, O_WRONLY);
+  write(handle, array[4], 1);
+  close(handle);
+  handle = open(DATA3, O_WRONLY);
+  write(handle, array[3], 1);
+  close(handle);
+  handle = open(DATA2, O_WRONLY);
+  write(handle, array[2], 1);
+  close(handle);
+  handle = open(DATA1, O_WRONLY);
+  write(handle, array[1], 1);
+  close(handle);
+  handle = open(DATA0, O_WRONLY);
+  write(handle, array[0], 1);
+  close(handle);
+}

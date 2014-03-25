@@ -23,7 +23,7 @@ int main() {
 //  char brake [29] = "/sys/class/gpio/gpio65/value"; // P8 Pin 18
   for (int i = 0; i < 200; i++) {
     cout << "Running forward" << endl;
-    motorControl(fwdPath, 60000000); // Forward 60 seconds.
+    motorControl(bwdPath, 30000000); // Forward 60 seconds.
     motorControl(brake, 1000000); // Brake for 1 second.
     cout << "Running backward" << endl;
     motorControl(bwdPath, 1000000); // Backward 5 seconds.

@@ -11,7 +11,7 @@
 using namespace std;
 
 int main() {
-  const int NUM_CYCLES = 1000000;
+  const int NUM_CYCLES = 1000;
   const double ONE_MIL = 1000000.0;
   
   double waveform[NUM_CYCLES];
@@ -20,21 +20,21 @@ int main() {
   double aIn;
   timeval startTime, endTime, runTime;
   double avgSec;
-  char str1In [35] = "/sys/devices/ocp.3/helper.15/AIN0";
+  char strIn [35] = "/sys/devices/ocp.3/helper.15/AIN0";
 //  char str2In [35] = "/sys/devices/ocp.3/helper.15/AIN1";
 //  char str3In [35] = "/sys/devices/ocp.3/helper.15/AIN2";
 //  char str4In [35] = "/sys/devices/ocp.3/helper.15/AIN3";
   
   cout << "\nStarting program to read analog signals.\n" << endl;
   
-  cout << str1In << endl;
+  cout << strIn << endl;
   
   /* Open a file once before the while loop, to
    * "initialize" the files to update. I do not
    * understand why this is so. A bug in the driver?
    */
   
-  int strHandle = open(str1In, O_RDONLY);
+  int strHandle = open(strIn, O_RDONLY);
   
   cout << "\nEntering infinite loop..." << endl;
 
@@ -53,7 +53,7 @@ int main() {
     aIn = getAnalog(1, strFile.fd);
     lseek(strHandle, 0, SEEK_SET);
 
-    usleep(200000);
+    usleep(680);
 
     waveform[i] = aIn;
     
@@ -85,10 +85,16 @@ int main() {
           ONE_MIL << endl;
   cout << "Average sample time is: " << avgSec << endl;
   close(strHandle);
-  getFFT(fftPlan,waveform,FFT);
+  cout << "Size of waveform: " << sizeof(waveform) / 8 << endl;
+//  getFFT(fftPlan,waveform,FFT);
+  fftPlan = fftw_plan_r2r_1d(sizeof(waveform)/16 + 1, waveform, FFT, FFTW_R2HC, FFTW_DESTROY_INPUT);
+  cout << "Made it here!" << endl;
+  fftw_print_plan(fftPlan);
   fftw_execute(fftPlan);
-  for (double * i = FFT; i != NULL; *(i+1)) {
+  //fftw_execute(fftPlan);
+/*  for (double * i = FFT; i != NULL; *(i+1)) {
     cout << i << endl;
-  }
+  } */
   return 0;
 }
+
