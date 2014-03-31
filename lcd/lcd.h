@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <cstdlib>
 #include <cstdio>
+//#include <cmath>
 #include <fcntl.h>
 
 using namespace std;
@@ -24,7 +25,7 @@ const char DATA0 [29] = "/sys/class/gpio/gpio30/value";
 const char * ON = "1";
 const char * OFF = "0";
 
-void dispCtrl(char dispOn, char cursorOn, char blinkOn) {
+void dispCtrl(char* dispOn, char* cursorOn, char* blinkOn) {
   if ((atoi(dispOn) > 1) || (atoi(cursorOn) > 1) || (atoi(blinkOn) > 1)) {
     cout << "Error: Parameter is greater than 1." << endl;
     return;
@@ -47,17 +48,17 @@ void dispCtrl(char dispOn, char cursorOn, char blinkOn) {
     handle = open(DATA3, O_WRONLY);
     write(handle, ON, 1);
     close(handle);
-    sprintf(buffer, "%d", dispOn);
+//    sprintf(buffer, "%d", dispOn);
     handle = open(DATA2, O_WRONLY);
-    write(handle, buffer, 1);
+    write(handle, dispOn, 1);
     close(handle);
-    sprintf(buffer, "%d", cursorOn);
+//    sprintf(buffer, "%d", cursorOn);
     handle = open(DATA1, O_WRONLY);
-    write(handle, buffer, 1);
+    write(handle, cursorOn, 1);
     close(handle);
-    sprintf(buffer, "%d", blinkOn);
+//    sprintf(buffer, "%d", blinkOn);
     handle = open(DATA0, O_WRONLY);
-    write(handle, buffer, 1);
+    write(handle, blinkOn, 1);
     close(handle);
     handle = open(CLK, O_WRONLY);
     write(handle, OFF, 1);
@@ -102,10 +103,7 @@ void clearScreen() {
   close(handle);
 }
 
-void setDDRAM(bool array[]) {
-  if (array.size() != 7) {
-    cout << "Cannot set DDRAM: array size not 7." << endl;
-  }
+void setDDRAM(char* array) {
   int handle = open(RS, O_WRONLY);
   write(handle, OFF, 1);
   close(handle);
@@ -113,31 +111,106 @@ void setDDRAM(bool array[]) {
   write(handle, ON, 1);
   close(handle);
   handle = open(DATA6, O_WRONLY);
-  write(handle, array[6], 1);
+  write(handle, &array[6], 1);
   close(handle);
   handle = open(DATA5, O_WRONLY);
-  write(handle, array[5], 1);
+  write(handle, &array[5], 1);
   close(handle);
   handle = open(DATA4, O_WRONLY);
-  write(handle, array[4], 1);
+  write(handle, &array[4], 1);
   close(handle);
   handle = open(DATA3, O_WRONLY);
-  write(handle, array[3], 1);
+  write(handle, &array[3], 1);
   close(handle);
   handle = open(DATA2, O_WRONLY);
-  write(handle, array[2], 1);
+  write(handle, &array[2], 1);
   close(handle);
   handle = open(DATA1, O_WRONLY);
-  write(handle, array[1], 1);
+  write(handle, &array[1], 1);
   close(handle);
   handle = open(DATA0, O_WRONLY);
-  write(handle, array[0], 1);
+  write(handle, &array[0], 1);
+  close(handle);
+  handle = open(CLK, O_WRONLY);
+  write(handle, OFF, 1);
+  lseek(handle, 0, SEEK_SET);
+  write(handle, ON, 1);
   close(handle);
 }
 
-void writeChar(char character, char address[]) {
-  bool dataBits[7];
-  for (int i = 0; i < 7; i++) {
-    
+void getCharArray(char* charArray, char* address, int arraySize) {
+  char char0 = address[0];
+  char char1 = address[1];
+  cout << "getCharArray..." << endl;
+  for (int i = 0; i < arraySize; i++) {
+    cout << "In the for loop!" << endl;
+    if (i > 3) {
+      cout << "In the greater if!" << endl;
+      charArray[i] = char1 % 2;
+      cout << "Bit " << i << ": " << charArray[i] << endl;
+      char1 = char1 / 2;
+    } else {
+      cout << "In the lesser if!" << endl;
+      charArray[i] = char0 % 2;
+      cout << "Bit " << i << ": " << charArray[i] << endl;
+      char0 = char0 / 2;
+    }
   }
+}
+
+void writeChar(char * character, char * address) {
+  char dataBits[8];
+  getCharArray(dataBits, character, 8);
+//  char * dB7 = &dataBits[7];
+//  char * dB6 = &dataBits[6];
+//  char * dB5 = &dataBits[5];
+//  char * dB4 = &dataBits[4];
+//  char * dB3 = &dataBits[3];
+//  char * dB2 = &dataBits[2];
+//  char * dB1 = &dataBits[1];
+//  char * dB0 = &dataBits[0];
+  for (int i = 7; i >= 0; i--) {
+    cout << "Bit " << i << ": " << dataBits[i] << endl;
+  }
+  setDDRAM(address);
+  int handle = open(RS, O_WRONLY);
+  write(handle, ON, 1);
+  close(handle);
+  handle = open(DATA7, O_WRONLY);
+  write(handle, dataBits[7], 1);
+//  write(handle, dB7, 1);
+  close(handle);
+  handle = open(DATA6, O_WRONLY);
+  write(handle, dataBits[6], 1);
+//  write(handle, dB6, 1);
+  close(handle);
+  handle = open(DATA5, O_WRONLY);
+  write(handle, dataBits[5], 1);
+//  write(handle, dB5, 1);
+  close(handle);
+  handle = open(DATA4, O_WRONLY);
+  write(handle, dataBits[4], 1);
+//  write(handle, dB4, 1);
+  close(handle);
+  handle = open(DATA3, O_WRONLY);
+  write(handle, dataBits[3], 1);
+//  write(handle, dB3, 1);
+  close(handle);
+  handle = open(DATA2, O_WRONLY);
+  write(handle, dataBits[2], 1);
+//  write(handle, dB2, 1);
+  close(handle);
+  handle = open(DATA1, O_WRONLY);
+  write(handle, dataBits[1], 1);
+//  write(handle, dB1, 1);
+  close(handle);
+  handle = open(DATA0, O_WRONLY);
+  write(handle, dataBits[0], 1);
+//  write(handle, dB0, 1);
+  close(handle);
+  handle = open(CLK, O_WRONLY);
+  write(handle, OFF, 1);
+  lseek(handle, 0, SEEK_SET);
+  write(handle, ON, 1);
+  close(handle);
 }

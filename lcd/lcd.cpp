@@ -6,4 +6,7 @@
 
 int main() {
   clearScreen();
+  char * arrow = "NG";
+  char * startAdd = "0000000";
+  writeChar(arrow, startAdd);
 }

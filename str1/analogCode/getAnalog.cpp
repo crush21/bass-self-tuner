@@ -6,17 +6,17 @@
  */
 
 #include "analogFunc.h"
+#include <fstream>
 #include <poll.h>
 
 using namespace std;
 
 int main() {
-  const int NUM_CYCLES = 1000;
+  const int NUM_CYCLES = 1024;
   const double ONE_MIL = 1000000.0;
   
   double waveform[NUM_CYCLES];
-  double *FFT = NULL;
-  fftw_plan fftPlan;
+  double FFT[NUM_CYCLES];
   double aIn;
   timeval startTime, endTime, runTime;
   double avgSec;
@@ -24,6 +24,7 @@ int main() {
 //  char str2In [35] = "/sys/devices/ocp.3/helper.15/AIN1";
 //  char str3In [35] = "/sys/devices/ocp.3/helper.15/AIN2";
 //  char str4In [35] = "/sys/devices/ocp.3/helper.15/AIN3";
+  char FFTout [35] = "/root/code/str1/output.txt";
   
   cout << "\nStarting program to read analog signals.\n" << endl;
   
@@ -37,25 +38,25 @@ int main() {
   int strHandle = open(strIn, O_RDONLY);
   
   cout << "\nEntering infinite loop..." << endl;
-
-  gettimeofday(&startTime, NULL);
   
   pollfd strFile;
   strFile.fd = strHandle;
   strFile.events = POLLIN;
   strFile.revents = POLLIN;
 
+  gettimeofday(&startTime, NULL);
+
   for (int i = 0; i < NUM_CYCLES; i++) {
 
 //    heart();
 
-    poll(&strFile, 1, 0);
+    poll(&strFile, 1, -1);
     aIn = getAnalog(1, strFile.fd);
     lseek(strHandle, 0, SEEK_SET);
 
-    usleep(680);
-
     waveform[i] = aIn;
+
+    usleep(680);
     
     
 //    heart();
@@ -87,14 +88,17 @@ int main() {
   close(strHandle);
   cout << "Size of waveform: " << sizeof(waveform) / 8 << endl;
 //  getFFT(fftPlan,waveform,FFT);
-  fftPlan = fftw_plan_r2r_1d(sizeof(waveform)/8, waveform, FFT, FFTW_R2HC, FFTW_DESTROY_INPUT);
+  fftw_plan fftPlan = fftw_plan_r2r_1d(NUM_CYCLES, waveform, FFT, FFTW_R2HC, FFTW_DESTROY_INPUT);
   cout << "Made it here!" << endl;
   fftw_print_plan(fftPlan);
   fftw_execute(fftPlan);
   //fftw_execute(fftPlan);
-/*  for (double * i = FFT; i != NULL; *(i+1)) {
-    cout << i << endl;
-  } */
+  ofstream FFTfile;
+  FFTfile.open(FFTout);
+  for (int i = 0; i < NUM_CYCLES; i++) {
+    FFTfile << FFT[i] << endl;
+  }
+  FFTfile.close();
   return 0;
 }
 
