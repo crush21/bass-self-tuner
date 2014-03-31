@@ -12,7 +12,7 @@
 using namespace std;
 
 int main() {
-  const int NUM_CYCLES = 2048;
+  const int NUM_CYCLES = 8192;
   const double ONE_MIL = 1000000.0;
   
   double waveform[NUM_CYCLES];
@@ -56,7 +56,7 @@ int main() {
 
     waveform[i] = aIn;
 
-    usleep(680);
+//    usleep(680);
     
     
 //    heart();
