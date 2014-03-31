@@ -12,7 +12,7 @@
 using namespace std;
 
 int main() {
-  const int NUM_CYCLES = 1024;
+  const int NUM_CYCLES = 2048;
   const double ONE_MIL = 1000000.0;
   
   double waveform[NUM_CYCLES];
@@ -90,7 +90,7 @@ int main() {
 //  getFFT(fftPlan,waveform,FFT);
   fftw_plan fftPlan = fftw_plan_r2r_1d(NUM_CYCLES, waveform, FFT, FFTW_R2HC, FFTW_DESTROY_INPUT);
   cout << "Made it here!" << endl;
-  fftw_print_plan(fftPlan);
+//  fftw_print_plan(fftPlan);
   fftw_execute(fftPlan);
   //fftw_execute(fftPlan);
   ofstream FFTfile;
