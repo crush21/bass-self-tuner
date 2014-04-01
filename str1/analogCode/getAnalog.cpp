@@ -18,8 +18,9 @@ int main() {
   double waveform[NUM_CYCLES];
   double FFT[NUM_CYCLES];
   double aIn;
+  double totalSec, avgSec;
+  fftw_plan fftPlan;
   timeval startTime, endTime, runTime;
-  double avgSec;
   char strIn [35] = "/sys/devices/ocp.3/helper.15/AIN0";
 //  char str2In [35] = "/sys/devices/ocp.3/helper.15/AIN1";
 //  char str3In [35] = "/sys/devices/ocp.3/helper.15/AIN2";
@@ -56,49 +57,55 @@ int main() {
 
     waveform[i] = aIn;
 
-//    usleep(680);
-    
+//    usleep(680);    
     
 //    heart();
 
 //    aIn2 = getAnalog(2, str2In);
     
-//    sleep(1);
-
 //    heart();
     
 //    aIn3 = getAnalog(3, str3In);
     
-//    sleep(1);
-
 //    heart();
     
 //    aIn4 = getAnalog(4, str4In);
-    
-//    sleep(1);
     
   }
   
   gettimeofday(&endTime, NULL);
   timersub(&endTime,&startTime,&runTime);
-  avgSec = (runTime.tv_sec + runTime.tv_usec / ONE_MIL) / NUM_CYCLES;
-  cout << "Total runtime is: " << runTime.tv_sec + runTime.tv_usec / 
-          ONE_MIL << endl;
+  totalSec = runTime.tv_sec + runTime.tv_usec / ONE_MIL;
+  avgSec = totalSec / NUM_CYCLES;
+  cout << "Total runtime is: " << totalSec << endl;
   cout << "Average sample time is: " << avgSec << endl;
   close(strHandle);
-  cout << "Size of waveform: " << sizeof(waveform) / 8 << endl;
-//  getFFT(fftPlan,waveform,FFT);
-  fftw_plan fftPlan = fftw_plan_r2r_1d(NUM_CYCLES, waveform, FFT, FFTW_R2HC, FFTW_DESTROY_INPUT);
-  cout << "Made it here!" << endl;
-//  fftw_print_plan(fftPlan);
+  fftPlan = fftw_plan_r2r_1d(NUM_CYCLES, waveform, FFT, FFTW_R2HC, FFTW_DESTROY_INPUT);
+//  cout << "Made it here!" << endl;
   fftw_execute(fftPlan);
-  //fftw_execute(fftPlan);
   ofstream FFTfile;
   FFTfile.open(FFTout);
-  for (int i = 0; i < NUM_CYCLES; i++) {
+  for (int i = 0; i < (NUM_CYCLES / 2 + 1); i++) {
     FFTfile << FFT[i] << endl;
   }
   FFTfile.close();
+
+// Check average of FFT with DC value ( FFT[0] )
+  double avg = 0;
+  for (int j = 1; j < (NUM_CYCLES / 2 + 1); j++) {
+    if (FFT[j] < 0) {
+      avg -= FFT[j];
+    } else {
+      avg += FFT[j];
+    }
+  }
+//  avg = avg / NUM_CYCLES;
+//  cout << "Average: " << avg << endl;
+//  cout << "FFT[0]: " << FFT[0] << endl;
+  if (avg == FFT[0]) {
+    cout << "Success! FFT[0] is the average!" << endl;
+  }
+  FFT[0] = 0;
+  cout << "Frequency: " << getFrequency(FFT, NUM_CYCLES / 2 + 1, totalSec) << endl;
   return 0;
 }
-

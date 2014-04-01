@@ -49,17 +49,8 @@ void heart() {
     fclose(LEDHandle);
   }
 }
-/*
-void getFFT(fftw_plan &FFT, double in[], double *out) {
-  int n = 0;
-  cout << in.size() << endl;
-  for (int i = 0; i < in.size(); i++) {
-//    cout << i << endl;
-    n++;
-  }
-//  int n = sizeof(*in);
-  cout << "Size: " << n << endl;
-  FFT = fftw_plan_r2r_1d(n, in, out, FFTW_R2HC, 
-                         FFTW_PRESERVE_INPUT);
+
+double getFrequency(double *FFT, int size, const double& execTime) {
+// Temporary
+  return 0.0;
 }
-*/
