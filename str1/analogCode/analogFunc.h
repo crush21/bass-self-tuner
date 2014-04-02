@@ -19,14 +19,15 @@
 
 using namespace std;
 
-double getAnalog(unsigned stringNum, char * strAddress) {//int strHandle) {
+double getAnalog(unsigned stringNum, /* char * strAddress) { */ int strHandle) {
   char analogBuffer [5];
   double aVal;
+/*
   for (int i = 0; i < 4; i++) {
     analogBuffer[i] = *(strAddress + i);
-  }
-/*  read(strHandle, analogBuffer, 4);
-    analogBuffer[4] = '\0'; */
+  } */
+  read(strHandle, analogBuffer, 4);
+  analogBuffer[4] = '\0';
   aVal = atoi(analogBuffer);
 /*  cout << "String " << stringNum << " Voltage Reading: "
        << aVal << endl; */
@@ -70,5 +71,5 @@ double getFrequency(double *FFT, int size, const double& execTime) {
 }
 
 double getCents(double& currFreq, double& idealFreq) {
-  return 3986 * log2(currFreq / idealFreq);
+  return 3986 * log10(currFreq / idealFreq);
 }

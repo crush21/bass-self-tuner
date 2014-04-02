@@ -6,10 +6,10 @@
  */
 
 #include "analogFunc.h"
-//#include <fstream>
+#include <fstream>
 #include <poll.h>
 
-  const int NUM_CYCLES = 8192;
+  const int NUM_CYCLES = 2048;
   const double ONE_MIL = 1000000.0;
 
 int main() {
@@ -19,13 +19,13 @@ int main() {
   double aIn;
   double totalSec, avgSec;
   fftw_plan fftPlan;
-  char * strAddr;
+//  char * strAddr;
 
   char strIn [35] = "/sys/devices/ocp.3/helper.15/AIN0";
 //  char str2In [35] = "/sys/devices/ocp.3/helper.15/AIN1";
 //  char str3In [35] = "/sys/devices/ocp.3/helper.15/AIN2";
 //  char str4In [35] = "/sys/devices/ocp.3/helper.15/AIN3";
-//  char FFTout [35] = "/root/code/str1/output.txt";
+  char FFTout [35] = "/root/code/str1/output.txt";
 
   cout << "\nStarting program to read analog signals.\n" << endl;
   
@@ -37,24 +37,24 @@ int main() {
    */
   
   int strHandle = open(strIn, O_RDONLY);
-  strAddr = (char*)mmap(NULL, 1, PROT_READ, MAP_SHARED, strHandle, 0);
+//  strAddr = (char*)mmap(NULL, 1, PROT_READ, MAP_SHARED, strHandle, 0);
 
   cout << "\nEntering infinite loop..." << endl;
-/*
+
   pollfd strFile;
   strFile.fd = strHandle;
   strFile.events = POLLIN;
   strFile.revents = POLLIN;
-*/
+
   gettimeofday(&startTime, NULL);
 
   for (int i = 0; i < NUM_CYCLES; i++) {
 
 //    heart();
 
-//    poll(&strFile, 1, -1);
-    aIn = getAnalog(1, strAddr); //strFile.fd);
-//    lseek(strHandle, 0, SEEK_SET);
+    poll(&strFile, 1, -1);
+    aIn = getAnalog(1, /* strAddr); */ strFile.fd);
+    lseek(strHandle, 0, SEEK_SET);
 
     waveform[i] = aIn;
 
@@ -84,14 +84,15 @@ int main() {
   fftPlan = fftw_plan_r2r_1d(NUM_CYCLES, waveform, FFT, FFTW_R2HC, FFTW_DESTROY_INPUT);
 //  cout << "Made it here!" << endl;
   fftw_execute(fftPlan);
-/*
+
   ofstream FFTfile;
   FFTfile.open(FFTout);
   for (int i = 0; i < (NUM_CYCLES / 2 + 1); i++) {
-    FFTfile << FFT[i] << endl;
+//    FFTfile << FFT[i] << endl;
+      FFTfile << waveform[i] << endl;
   }
   FFTfile.close();
-*/
+
 // Check average of FFT with DC value ( FFT[0] )
 /*
   double avg = 0;
@@ -110,6 +111,9 @@ int main() {
   }
 */
   FFT[0] = 0;
-  cout << "Frequency: " << getFrequency(FFT, NUM_CYCLES / 2 + 1, totalSec) << endl;
+  double frequency = getFrequency(FFT, NUM_CYCLES / 2 + 1, totalSec);
+  double ideal = 97.99;
+  cout << "Frequency: " << frequency << endl;
+  cout << "Cent Difference: " << getCents(frequency, ideal) << endl;
   return 0;
 }
