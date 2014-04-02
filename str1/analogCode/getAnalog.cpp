@@ -9,24 +9,24 @@
 //#include <fstream>
 #include <poll.h>
 
-using namespace std;
-
-int main() {
   const int NUM_CYCLES = 8192;
   const double ONE_MIL = 1000000.0;
-  
+
+int main() {
+  timeval startTime, endTime, runTime;
   double waveform[NUM_CYCLES];
   double FFT[NUM_CYCLES];
   double aIn;
   double totalSec, avgSec;
   fftw_plan fftPlan;
-  timeval startTime, endTime, runTime;
+  char * strAddr;
+
   char strIn [35] = "/sys/devices/ocp.3/helper.15/AIN0";
 //  char str2In [35] = "/sys/devices/ocp.3/helper.15/AIN1";
 //  char str3In [35] = "/sys/devices/ocp.3/helper.15/AIN2";
 //  char str4In [35] = "/sys/devices/ocp.3/helper.15/AIN3";
 //  char FFTout [35] = "/root/code/str1/output.txt";
-  
+
   cout << "\nStarting program to read analog signals.\n" << endl;
   
   cout << strIn << endl;
@@ -37,23 +37,24 @@ int main() {
    */
   
   int strHandle = open(strIn, O_RDONLY);
-  
+  strAddr = (char*)mmap(NULL, 1, PROT_READ, MAP_SHARED, strHandle, 0);
+
   cout << "\nEntering infinite loop..." << endl;
-  
+/*
   pollfd strFile;
   strFile.fd = strHandle;
   strFile.events = POLLIN;
   strFile.revents = POLLIN;
-
+*/
   gettimeofday(&startTime, NULL);
 
   for (int i = 0; i < NUM_CYCLES; i++) {
 
 //    heart();
 
-    poll(&strFile, 1, -1);
-    aIn = getAnalog(1, strFile.fd);
-    lseek(strHandle, 0, SEEK_SET);
+//    poll(&strFile, 1, -1);
+    aIn = getAnalog(1, strAddr); //strFile.fd);
+//    lseek(strHandle, 0, SEEK_SET);
 
     waveform[i] = aIn;
 
@@ -79,7 +80,7 @@ int main() {
   avgSec = totalSec / NUM_CYCLES;
   cout << "Total runtime is: " << totalSec << endl;
   cout << "Average sample time is: " << avgSec << endl;
-  close(strHandle);
+//  close(strHandle);
   fftPlan = fftw_plan_r2r_1d(NUM_CYCLES, waveform, FFT, FFTW_R2HC, FFTW_DESTROY_INPUT);
 //  cout << "Made it here!" << endl;
   fftw_execute(fftPlan);

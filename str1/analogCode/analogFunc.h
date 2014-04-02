@@ -11,6 +11,7 @@
 #include <cmath>
 #include <unistd.h>
 //#include <errno.h>
+#include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/time.h>
 #include <fcntl.h>
@@ -18,11 +19,14 @@
 
 using namespace std;
 
-double getAnalog(unsigned stringNum, int strHandle) {
+double getAnalog(unsigned stringNum, char * strAddress) {//int strHandle) {
   char analogBuffer [5];
   double aVal;
-  read(strHandle, analogBuffer, 4);
-  analogBuffer[4] = '\0';
+  for (int i = 0; i < 4; i++) {
+    analogBuffer[i] = *(strAddress + i);
+  }
+/*  read(strHandle, analogBuffer, 4);
+    analogBuffer[4] = '\0'; */
   aVal = atoi(analogBuffer);
 /*  cout << "String " << stringNum << " Voltage Reading: "
        << aVal << endl; */
