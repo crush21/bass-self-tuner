@@ -6,7 +6,7 @@
  */
 
 #include "analogFunc.h"
-#include <fstream>
+//#include <fstream>
 #include <poll.h>
 
 using namespace std;
@@ -25,7 +25,7 @@ int main() {
 //  char str2In [35] = "/sys/devices/ocp.3/helper.15/AIN1";
 //  char str3In [35] = "/sys/devices/ocp.3/helper.15/AIN2";
 //  char str4In [35] = "/sys/devices/ocp.3/helper.15/AIN3";
-  char FFTout [35] = "/root/code/str1/output.txt";
+//  char FFTout [35] = "/root/code/str1/output.txt";
   
   cout << "\nStarting program to read analog signals.\n" << endl;
   
@@ -83,14 +83,16 @@ int main() {
   fftPlan = fftw_plan_r2r_1d(NUM_CYCLES, waveform, FFT, FFTW_R2HC, FFTW_DESTROY_INPUT);
 //  cout << "Made it here!" << endl;
   fftw_execute(fftPlan);
+/*
   ofstream FFTfile;
   FFTfile.open(FFTout);
   for (int i = 0; i < (NUM_CYCLES / 2 + 1); i++) {
     FFTfile << FFT[i] << endl;
   }
   FFTfile.close();
-
+*/
 // Check average of FFT with DC value ( FFT[0] )
+/*
   double avg = 0;
   for (int j = 1; j < (NUM_CYCLES / 2 + 1); j++) {
     if (FFT[j] < 0) {
@@ -99,12 +101,13 @@ int main() {
       avg += FFT[j];
     }
   }
-//  avg = avg / NUM_CYCLES;
-//  cout << "Average: " << avg << endl;
-//  cout << "FFT[0]: " << FFT[0] << endl;
+  avg = avg / NUM_CYCLES;
+  cout << "Average: " << avg << endl;
+  cout << "FFT[0]: " << FFT[0] << endl;
   if (avg == FFT[0]) {
     cout << "Success! FFT[0] is the average!" << endl;
   }
+*/
   FFT[0] = 0;
   cout << "Frequency: " << getFrequency(FFT, NUM_CYCLES / 2 + 1, totalSec) << endl;
   return 0;

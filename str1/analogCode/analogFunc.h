@@ -8,8 +8,9 @@
 #include <stdio.h>
 #include <iostream>
 #include <cstdlib>
+#include <cmath>
 #include <unistd.h>
-#include <errno.h>
+//#include <errno.h>
 #include <sys/types.h>
 #include <sys/time.h>
 #include <fcntl.h>
@@ -21,8 +22,6 @@ double getAnalog(unsigned stringNum, int strHandle) {
   char analogBuffer [5];
   double aVal;
   read(strHandle, analogBuffer, 4);
-//  perror("\nRead result");
-//  errno = 0;
   analogBuffer[4] = '\0';
   aVal = atoi(analogBuffer);
 /*  cout << "String " << stringNum << " Voltage Reading: "
@@ -40,7 +39,8 @@ void heart() {
   char LEDBrightness [50] = "/sys/class/leds/beaglebone:green:usr0/brightness";
   if((LEDHandle = fopen(LEDBrightness, "r+")) != NULL){
     fread(onOff, sizeof(char), 1, LEDHandle);
-    isOn = atoi(onOff);
+    isOn = onOff[0] % 2;
+//    isOn = atoi(onOff);
     if (isOn == 0) {
       fwrite("1", sizeof(char), 1, LEDHandle);
     } else {
@@ -51,6 +51,20 @@ void heart() {
 }
 
 double getFrequency(double *FFT, int size, const double& execTime) {
-// Temporary
-  return 0.0;
+  double *max = FFT;
+  int index = 0;
+  double frequency;
+  for (int i = 0; i < size; i++) {
+    if (*(FFT + i) > *max) {
+      max = FFT + i;
+      index = i;
+    }
+  }
+  cout << "Highest index is: " << index << endl;
+  frequency = index / execTime;
+  return frequency;
+}
+
+double getCents(double& currFreq, double& idealFreq) {
+  return 3986 * log2(currFreq / idealFreq);
 }
