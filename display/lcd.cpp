@@ -10,6 +10,9 @@ int main() {
   char * ONE = "1";
   
   setDDRAM(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
+/* Have to do this twice, or the top row will be offset by one character to the left.
+ * Still trying to figure out why this is so.
+ */
   setDDRAM(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
   writeChar(ZERO, ONE, ONE, ONE, ONE, ONE, ONE, ZERO);		// "->"
   writeChar(ZERO, ONE, ZERO, ZERO, ZERO, ONE, ZERO, ONE);	// "E"
