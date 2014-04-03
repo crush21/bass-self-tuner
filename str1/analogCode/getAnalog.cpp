@@ -9,7 +9,8 @@
 #include <fstream>
 #include <poll.h>
 
-  const int NUM_CYCLES = 2048;
+  const int NUM_CYCLES = 4096;
+  const int PEAK_LIMIT = 500;
   const double ONE_MIL = 1000000.0;
 
 int main() {
@@ -26,6 +27,7 @@ int main() {
 //  char str3In [35] = "/sys/devices/ocp.3/helper.15/AIN2";
 //  char str4In [35] = "/sys/devices/ocp.3/helper.15/AIN3";
   char FFTout [35] = "/root/code/str1/output.txt";
+  char waveOut [35] = "/root/code/str1/waveform.txt";
 
   cout << "\nStarting program to read analog signals.\n" << endl;
   
@@ -86,12 +88,15 @@ int main() {
   fftw_execute(fftPlan);
 
   ofstream FFTfile;
+  ofstream wavFile;
   FFTfile.open(FFTout);
+  wavFile.open(waveOut);
   for (int i = 0; i < (NUM_CYCLES / 2 + 1); i++) {
-//    FFTfile << FFT[i] << endl;
-      FFTfile << waveform[i] << endl;
+    FFTfile << FFT[i] << endl;
+    wavFile << waveform[i] << endl;
   }
   FFTfile.close();
+  wavFile.close();
 
 // Check average of FFT with DC value ( FFT[0] )
 /*
@@ -111,7 +116,7 @@ int main() {
   }
 */
   FFT[0] = 0;
-  double frequency = getFrequency(FFT, NUM_CYCLES / 2 + 1, totalSec);
+  double frequency = getFrequency(FFT, NUM_CYCLES / 2 + 1, PEAK_LIMIT, totalSec);
   double ideal = 97.99;
   cout << "Frequency: " << frequency << endl;
   cout << "Cent Difference: " << getCents(frequency, ideal) << endl;

@@ -55,11 +55,11 @@ void heart() {
   }
 }
 
-double getFrequency(double *FFT, int size, const double& execTime) {
+double getFrequency(double *FFT, int size, int limit, const double& execTime) {
   double *max = FFT;
   int index = 0;
   double frequency;
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < limit; i++) {
     if (*(FFT + i) > *max) {
       max = FFT + i;
       index = i;
