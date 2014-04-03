@@ -205,3 +205,4 @@ echo 0 > /sys/class/gpio/gpio3/value
 echo 1 > /sys/class/gpio/gpio3/value
 
 
+/root/code/lcd/lcd
