@@ -13,7 +13,7 @@
 #define MAP_MASK (MAP_SIZE - 1)
 
 const int NUM_CYCLES = 4096;
-const int PEAK_LIMIT = 300;
+const int PEAK_LIMIT = 500;
 const double ONE_MIL = 1000000.0;
 
 int main() {
@@ -24,9 +24,9 @@ int main() {
   double totalSec, avgSec;
   fftw_plan fftPlan;
 /*  char * strAddr; */
-  unsigned long * map_base, * virt_addr;
+/*  unsigned long * map_base, * virt_addr;
 //  off_t ain = 0x44e0d000;
-  off_t ain = 0x54c00000;
+  off_t ain = 0x54c00000; */
 
   char strIn [35] = "/sys/devices/ocp.3/helper.15/AIN0";
 //  char str2In [35] = "/sys/devices/ocp.3/helper.15/AIN1";
@@ -34,22 +34,25 @@ int main() {
 //  char str4In [35] = "/sys/devices/ocp.3/helper.15/AIN3";
   char FFTout [35] = "/root/code/output.txt";
   char waveOut [35] = "/root/code/waveform.txt";
+/*  char trigger [40] = "/sys/bus/devices/trigger0/trigger_now";
+  char * ONE = "1"; */
 
   cout << "\nStarting program to read analog signals.\n" << endl;
   
   cout << strIn << endl;
   
-  int strHandle = open(strIn, O_RDONLY);
+  int strHandle = open(strIn, O_RDONLY /* | O_SYNC */);
+//  int triggerHandle = open(trigger, O_WRONLY);
 //  unsigned long * address = 0x44e0d000;
 //  unsigned long * address = 0x54c00000;
 //  strAddr = (int*)mmap(0, getpagesize(), PROT_READ, MAP_SHARED, strHandle, 0x44e0d000 & ~MAP_MASK);
-  map_base = (unsigned long*)mmap(0, 16, PROT_READ, MAP_SHARED, strHandle, ain);
+/*  map_base = (unsigned long*)mmap(0, 16, PROT_READ, MAP_SHARED, strHandle, ain);
 
   virt_addr = map_base + (ain & MAP_MASK);
 
-  cout << "Address: " << (unsigned long*)virt_addr << endl;
+  cout << "Address: " << (unsigned long*)virt_addr << endl; */
 
-  cout << "\nEntering infinite loop..." << endl;
+  cout << "\nEntering the loop..." << endl;
 
   pollfd strFile;
   strFile.fd = strHandle;
@@ -62,9 +65,11 @@ int main() {
 
 //    heart();
 
-    poll(&strFile, 1, -1);
-    aIn = getAnalog(1,  virt_addr); /* strFile.fd); */
+//    poll(&strFile, 1, -1);
+    aIn = getAnalog(1, /* virt_addr); */ strHandle);  // strFile.fd); 
     lseek(strHandle, 0, SEEK_SET);
+/*    write(triggerHandle, ONE, 1);
+    lseek(triggerHandle, 0, SEEK_SET); */
 
     waveform[i] = aIn;
 
@@ -90,7 +95,8 @@ int main() {
   avgSec = totalSec / NUM_CYCLES;
   cout << "Total runtime is: " << totalSec << endl;
   cout << "Average sample time is: " << avgSec << endl;
-//  close(strHandle);
+//  close(triggerHandle);
+  close(strHandle);
   fftPlan = fftw_plan_r2r_1d(NUM_CYCLES, waveform, FFT, FFTW_R2HC, FFTW_DESTROY_INPUT);
 //  cout << "Made it here!" << endl;
   fftw_execute(fftPlan);
@@ -125,7 +131,7 @@ int main() {
 */
   FFT[0] = 0;
   double frequency = getFrequency(FFT, NUM_CYCLES, PEAK_LIMIT, totalSec);
-  double ideal = 55;
+  double ideal = 97.99;
   cout << "Frequency: " << frequency << endl;
   cout << "Cent Difference: " << getCents(frequency, ideal) << endl;
   return 0;
