@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <sstream>
 #include <cstdlib>
 #include <cmath>
 #include <unistd.h>
@@ -19,16 +20,20 @@
 
 using namespace std;
 
-double getAnalog(unsigned stringNum, /* char * strAddress) { */ int strHandle) {
-  char analogBuffer [5];
+double getAnalog(unsigned stringNum,  unsigned long * strAddress) {  /* int strHandle) { */
+//  char analogBuffer [4];
   double aVal;
-/*
-  for (int i = 0; i < 4; i++) {
+  stringstream ss;
+/*  for (int i = 0; i < 4; i++) {
     analogBuffer[i] = *(strAddress + i);
   } */
-  read(strHandle, analogBuffer, 4);
-  analogBuffer[4] = '\0';
-  aVal = atoi(analogBuffer);
+  for (int i = 0; i < 4; i++) {
+    ss << strAddress[i];
+  }
+/*  read(strHandle, analogBuffer, 4);
+  analogBuffer[4] = '\0'; */
+  ss >> aVal;
+//  aVal = atoi(analogBuffer);
 /*  cout << "String " << stringNum << " Voltage Reading: "
        << aVal << endl; */
   return aVal;
@@ -55,7 +60,7 @@ void heart() {
   }
 }
 
-double getFrequency(double *FFT, int size, int limit, const double& execTime) {
+double getFrequency(double *FFT, int size, int limit, const double& time) {
   double *max = FFT;
   int index = 0;
   double frequency;
@@ -66,7 +71,7 @@ double getFrequency(double *FFT, int size, int limit, const double& execTime) {
     }
   }
   cout << "Highest index is: " << index << endl;
-  frequency = index / execTime;
+  frequency = index / time;
   return frequency;
 }
 

@@ -9,9 +9,12 @@
 #include <fstream>
 #include <poll.h>
 
-  const int NUM_CYCLES = 4096;
-  const int PEAK_LIMIT = 500;
-  const double ONE_MIL = 1000000.0;
+#define MAP_SIZE 4096UL
+#define MAP_MASK (MAP_SIZE - 1)
+
+const int NUM_CYCLES = 4096;
+const int PEAK_LIMIT = 300;
+const double ONE_MIL = 1000000.0;
 
 int main() {
   timeval startTime, endTime, runTime;
@@ -20,26 +23,31 @@ int main() {
   double aIn;
   double totalSec, avgSec;
   fftw_plan fftPlan;
-//  char * strAddr;
+/*  char * strAddr; */
+  unsigned long * map_base, * virt_addr;
+//  off_t ain = 0x44e0d000;
+  off_t ain = 0x54c00000;
 
   char strIn [35] = "/sys/devices/ocp.3/helper.15/AIN0";
 //  char str2In [35] = "/sys/devices/ocp.3/helper.15/AIN1";
 //  char str3In [35] = "/sys/devices/ocp.3/helper.15/AIN2";
 //  char str4In [35] = "/sys/devices/ocp.3/helper.15/AIN3";
-  char FFTout [35] = "/root/code/str1/output.txt";
-  char waveOut [35] = "/root/code/str1/waveform.txt";
+  char FFTout [35] = "/root/code/output.txt";
+  char waveOut [35] = "/root/code/waveform.txt";
 
   cout << "\nStarting program to read analog signals.\n" << endl;
   
   cout << strIn << endl;
   
-  /* Open a file once before the while loop, to
-   * "initialize" the files to update. I do not
-   * understand why this is so. A bug in the driver?
-   */
-  
   int strHandle = open(strIn, O_RDONLY);
-//  strAddr = (char*)mmap(NULL, 1, PROT_READ, MAP_SHARED, strHandle, 0);
+//  unsigned long * address = 0x44e0d000;
+//  unsigned long * address = 0x54c00000;
+//  strAddr = (int*)mmap(0, getpagesize(), PROT_READ, MAP_SHARED, strHandle, 0x44e0d000 & ~MAP_MASK);
+  map_base = (unsigned long*)mmap(0, 16, PROT_READ, MAP_SHARED, strHandle, ain);
+
+  virt_addr = map_base + (ain & MAP_MASK);
+
+  cout << "Address: " << (unsigned long*)virt_addr << endl;
 
   cout << "\nEntering infinite loop..." << endl;
 
@@ -55,7 +63,7 @@ int main() {
 //    heart();
 
     poll(&strFile, 1, -1);
-    aIn = getAnalog(1, /* strAddr); */ strFile.fd);
+    aIn = getAnalog(1,  virt_addr); /* strFile.fd); */
     lseek(strHandle, 0, SEEK_SET);
 
     waveform[i] = aIn;
@@ -116,8 +124,8 @@ int main() {
   }
 */
   FFT[0] = 0;
-  double frequency = getFrequency(FFT, NUM_CYCLES / 2 + 1, PEAK_LIMIT, totalSec);
-  double ideal = 97.99;
+  double frequency = getFrequency(FFT, NUM_CYCLES, PEAK_LIMIT, totalSec);
+  double ideal = 55;
   cout << "Frequency: " << frequency << endl;
   cout << "Cent Difference: " << getCents(frequency, ideal) << endl;
   return 0;

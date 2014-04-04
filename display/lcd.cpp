@@ -16,7 +16,7 @@ int main() {
   setDDRAM(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
   writeChar(ZERO, ONE, ONE, ONE, ONE, ONE, ONE, ZERO);		// "->"
   writeChar(ZERO, ONE, ZERO, ZERO, ZERO, ONE, ZERO, ONE);	// "E"
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
+  writeChar(ZERO, ONE, ONE, ZERO, ZERO, ZERO, ONE, ZERO);	// "b"
   writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
   writeChar(ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO, ONE);	// "A"
   writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
