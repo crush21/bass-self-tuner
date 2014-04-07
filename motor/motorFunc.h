@@ -26,3 +26,28 @@ void motorControl(char * file, unsigned time) {
   write(handle, stop, 1);
   close(handle);
 }
+
+double motorTune(double freqDiff, char note){				//speed of motor changes if it is up or down, equation for string changes between strings. , char note
+  double speed = 1; 							//speed of motor: Turns/Sec
+  double turns = 0;
+
+  if('G'== note){
+	turns = (freqDiff - 1.3595)/13.076;				//an oversimplified linear equation representing G. Better equation to be created once FETs arrive.
+	}
+  if('D' == note){
+	turns = (freqDiff - 1)/13;
+  	}
+  if('A' == note){
+	turns = (freqDiff - 1)/13;
+  	}
+  if('E' == note){
+	turns = (freqDiff - 1)/13;
+  	}
+  if(turns == 0){
+	perror("Error!");
+  	} 
+  double time = turns/speed;
+  return time;
+
+}
+

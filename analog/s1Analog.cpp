@@ -12,7 +12,7 @@
 #define MAP_SIZE 4096UL
 #define MAP_MASK (MAP_SIZE - 1)
 
-const int NUM_CYCLES = 4096;
+const int NUM_CYCLES = 8192;
 const int PEAK_LIMIT = 500;
 const double ONE_MIL = 1000000.0;
 
@@ -28,7 +28,9 @@ int main() {
 //  off_t ain = 0x44e0d000;
   off_t ain = 0x54c00000; */
 
-  char strIn [35] = "/sys/devices/ocp.3/helper.15/AIN0";
+/* CHANGE THIS SO THAT YOU GET THE RAW VALUES FROM /sys/bus/iio/devices/iio\:device0/asldkfjalksjdlkfjasdf */
+  char strIn [50] = "/sys/bus/iio/devices/iio:device0/in_voltage0_raw";
+//  char strIn [35] = "/sys/devices/ocp.3/helper.15/AIN0";
 //  char str2In [35] = "/sys/devices/ocp.3/helper.15/AIN1";
 //  char str3In [35] = "/sys/devices/ocp.3/helper.15/AIN2";
 //  char str4In [35] = "/sys/devices/ocp.3/helper.15/AIN3";
@@ -41,7 +43,8 @@ int main() {
   
   cout << strIn << endl;
   
-  int strHandle = open(strIn, O_RDONLY /* | O_SYNC */);
+  int strHandle = open(strIn, O_RDONLY | O_SYNC);
+  perror("Result");
 //  int triggerHandle = open(trigger, O_WRONLY);
 //  unsigned long * address = 0x44e0d000;
 //  unsigned long * address = 0x54c00000;
@@ -66,12 +69,12 @@ int main() {
 //    heart();
 
 //    poll(&strFile, 1, -1);
-    aIn = getAnalog(1, /* virt_addr); */ strHandle);  // strFile.fd); 
+    aIn = getAnalog(1, /* virt_addr); */ strHandle);  // strFile.fd);
     lseek(strHandle, 0, SEEK_SET);
 /*    write(triggerHandle, ONE, 1);
     lseek(triggerHandle, 0, SEEK_SET); */
 
-    waveform[i] = aIn;
+    waveform[i] = aIn * 1800 / 4096;
 
 //    usleep(680);    
     

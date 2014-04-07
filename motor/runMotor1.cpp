@@ -21,6 +21,8 @@ int main() {
 //  char fwdPath [29] = "/sys/class/gpio/gpio26/value"; // P8 Pin 14
 //  char bwdPath [29] = "/sys/class/gpio/gpio46/value"; // P8 Pin 16
 //  char brake [29] = "/sys/class/gpio/gpio65/value"; // P8 Pin 18
+
+/*
   for (int i = 0; i < 200; i++) {
     cout << "Running forward" << endl;
     motorControl(bwdPath, 500000); // Forward 60 seconds.
@@ -29,4 +31,7 @@ int main() {
     motorControl(bwdPath, 500000); // Backward 5 seconds.
     motorControl(brake, 1000000);
   }
+*/
+  cout << "The amount of time required to turn the motor is: " << motorTune(5, 'G') << endl;
+  
 }
