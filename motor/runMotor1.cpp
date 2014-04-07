@@ -34,4 +34,20 @@ int main() {
 */
   cout << "The amount of time required to turn the motor is: " << motorTune(5, 'G') << endl;
   
+  double time = motorTune(5, 'G');
+
+  if(time < 0){
+	cout << "Running Backward" << endl;
+	time = time * -1000000;
+	motorControl(bwdPath, time);
+	cout << "using double for unsigned worked!";
+  	motorControl(brake, 1000000);
+	}
+  if(time > 0){
+	cout << "Running Forward" << endl;
+	time = time * 1000000;
+	motorControl(fwdPath, time);
+	cout << "using double for unsigned worked!";
+	motorControl(brake, 1000000);
+	}
 }
