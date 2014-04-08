@@ -12,12 +12,14 @@
 #define MAP_SIZE 4096UL
 #define MAP_MASK (MAP_SIZE - 1)
 
-const int NUM_CYCLES = 8192;
+const int NUM_CYCLES = 4096;
 const int PEAK_LIMIT = 500;
 const double ONE_MIL = 1000000.0;
+const double ONE_BIL = 1000000000.0;
 
 int main() {
-  timeval startTime, endTime, runTime;
+  timespec startTime, endTime, runTime;
+//  timeval startTime, endTime, runTime;
   double waveform[NUM_CYCLES];
   double FFT[NUM_CYCLES];
   double aIn;
@@ -28,9 +30,8 @@ int main() {
 //  off_t ain = 0x44e0d000;
   off_t ain = 0x54c00000; */
 
-/* CHANGE THIS SO THAT YOU GET THE RAW VALUES FROM /sys/bus/iio/devices/iio\:device0/asldkfjalksjdlkfjasdf */
-  char strIn [50] = "/sys/bus/iio/devices/iio:device0/in_voltage0_raw";
-//  char strIn [35] = "/sys/devices/ocp.3/helper.15/AIN0";
+//  char strIn [50] = "/sys/bus/iio/devices/iio:device0/in_voltage0_raw";
+  char strIn [35] = "/sys/devices/ocp.3/helper.15/AIN0";
 //  char str2In [35] = "/sys/devices/ocp.3/helper.15/AIN1";
 //  char str3In [35] = "/sys/devices/ocp.3/helper.15/AIN2";
 //  char str4In [35] = "/sys/devices/ocp.3/helper.15/AIN3";
@@ -62,7 +63,7 @@ int main() {
   strFile.events = POLLIN;
   strFile.revents = POLLIN;
 
-  gettimeofday(&startTime, NULL);
+  clock_gettime(CLOCK_MONOTONIC, &startTime);
 
   for (int i = 0; i < NUM_CYCLES; i++) {
 
@@ -92,9 +93,11 @@ int main() {
     
   }
   
-  gettimeofday(&endTime, NULL);
-  timersub(&endTime,&startTime,&runTime);
-  totalSec = runTime.tv_sec + runTime.tv_usec / ONE_MIL;
+  clock_gettime(CLOCK_MONOTONIC,&endTime);
+  runTime.tv_sec = endTime.tv_sec - startTime.tv_sec;
+  runTime.tv_nsec = endTime.tv_nsec - startTime.tv_nsec;
+//  timersub(&endTime,&startTime,&runTime);
+  totalSec = runTime.tv_sec + runTime.tv_nsec / ONE_BIL;
   avgSec = totalSec / NUM_CYCLES;
   cout << "Total runtime is: " << totalSec << endl;
   cout << "Average sample time is: " << avgSec << endl;
