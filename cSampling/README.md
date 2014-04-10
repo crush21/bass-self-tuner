@@ -1,3 +1,11 @@
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+This folder is taken from https://github.com/ZubairLK/adc-iio-continuous-sampling-userspace
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
 This is a userspace application which accesses the adc via /dev/iio in continuous sampling mode.
 
 The application scans the scan_elements folder in /dev/iio/devices/iio:deviceX/scan_elements for enabled channels.

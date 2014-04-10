@@ -16,14 +16,17 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #include <fcntl.h>
-#include <fftw3.h>
+//#include <fftw3.h>
+#include <octave/oct.h>
+#include <octave/builtin-defun-decls.h>
+#include <octave/ov.h>
 
-using namespace std;
+//using namespace std;
 
 double getAnalog(unsigned stringNum, /* unsigned long * strAddress) {  */ int strHandle) {
   char analogBuffer [5];
   double aVal;
-  stringstream ss;
+  std::stringstream ss;
 /*  for (int i = 0; i < 4; i++) {
     analogBuffer[i] = *(strAddress + i);
   } */
@@ -48,30 +51,32 @@ void heart() {
   int isOn = 0;
   char LEDBrightness [50] = "/sys/class/leds/beaglebone:green:usr0/brightness";
   if((LEDHandle = fopen(LEDBrightness, "r+")) != NULL){
-    fread(onOff, sizeof(char), 1, LEDHandle);
+    std::fread(onOff, sizeof(char), 1, LEDHandle);
     isOn = onOff[0] % 2;
-//    isOn = atoi(onOff);
+//    isOn = std::atoi(onOff);
     if (isOn == 0) {
-      fwrite("1", sizeof(char), 1, LEDHandle);
+      std::fwrite("1", sizeof(char), 1, LEDHandle);
     } else {
-      fwrite("0", sizeof(char), 1, LEDHandle);
+      std::fwrite("0", sizeof(char), 1, LEDHandle);
     }
     fclose(LEDHandle);
   }
 }
 
-double getFrequency(double *FFT, int size, int limit, const double& time) {
+double getFrequency(double *FFT, int size, int limit, const double& sampleFreq) {
   double *max = FFT;
   int index = 0;
   double frequency;
-  for (int i = 0; i < limit; i++) {
+  for (int i = 1; i < limit; i++) {
+    std::cout << *(FFT + i) << std::endl;
+//    sleep(2);
     if (*(FFT + i) > *max) {
       max = FFT + i;
       index = i;
     }
   }
-  cout << "Highest index is: " << index << endl;
-  frequency = index / time;
+  std::cout << "Highest index is: " << index << std::endl;
+  frequency = index * sampleFreq / size;
   return frequency;
 }
 

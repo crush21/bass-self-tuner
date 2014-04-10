@@ -22,9 +22,11 @@ int main() {
 //  timeval startTime, endTime, runTime;
   double waveform[NUM_CYCLES];
   double FFT[NUM_CYCLES];
+  octave_value_list octFFT;
+  octave_value_list octWave;
   double aIn;
   double totalSec, avgSec;
-  fftw_plan fftPlan;
+//  fftw_plan fftPlan;
 /*  char * strAddr; */
 /*  unsigned long * map_base, * virt_addr;
 //  off_t ain = 0x44e0d000;
@@ -40,12 +42,12 @@ int main() {
 /*  char trigger [40] = "/sys/bus/devices/trigger0/trigger_now";
   char * ONE = "1"; */
 
-  cout << "\nStarting program to read analog signals.\n" << endl;
+  std::cout << "\nStarting program to read analog signals.\n" << std::endl;
   
-  cout << strIn << endl;
+  std::cout << strIn << std::endl;
   
   int strHandle = open(strIn, O_RDONLY | O_SYNC);
-  perror("Result");
+  std::perror("Result");
 //  int triggerHandle = open(trigger, O_WRONLY);
 //  unsigned long * address = 0x44e0d000;
 //  unsigned long * address = 0x54c00000;
@@ -54,9 +56,9 @@ int main() {
 
   virt_addr = map_base + (ain & MAP_MASK);
 
-  cout << "Address: " << (unsigned long*)virt_addr << endl; */
+  std::cout << "Address: " << (unsigned long*)virt_addr << std::endl; */
 
-  cout << "\nEntering the loop..." << endl;
+  std::cout << "\nEntering the loop..." << std::endl;
 
   pollfd strFile;
   strFile.fd = strHandle;
@@ -75,7 +77,8 @@ int main() {
 /*    write(triggerHandle, ONE, 1);
     lseek(triggerHandle, 0, SEEK_SET); */
 
-    waveform[i] = aIn * 1800 / 4096;
+//    waveform[i] = aIn;
+    octWave.append(octave_value(aIn));
 
 //    usleep(680);    
     
@@ -99,21 +102,38 @@ int main() {
 //  timersub(&endTime,&startTime,&runTime);
   totalSec = runTime.tv_sec + runTime.tv_nsec / ONE_BIL;
   avgSec = totalSec / NUM_CYCLES;
-  cout << "Total runtime is: " << totalSec << endl;
-  cout << "Average sample time is: " << avgSec << endl;
+  std::cout << "Total runtime is: " << totalSec << std::endl;
+  std::cout << "Average sample time is: " << avgSec << std::endl;
 //  close(triggerHandle);
   close(strHandle);
-  fftPlan = fftw_plan_r2r_1d(NUM_CYCLES, waveform, FFT, FFTW_R2HC, FFTW_DESTROY_INPUT);
-//  cout << "Made it here!" << endl;
-  fftw_execute(fftPlan);
 
-  ofstream FFTfile;
-  ofstream wavFile;
+
+
+
+  octFFT = Ffft(octWave, NUM_CYCLES - 1);
+  octave_value anOctVal;
+  for (int i = 0; i < NUM_CYCLES; i++) {
+    anOctVal = octFFT(index);
+    std::cout << anOctVal.type_name() << std::endl;
+    std::cout << anOctVal.class_name() << std::endl;
+    FFT[i] = abs(anOctVal.double_value());
+  }
+
+
+
+
+
+//  fftPlan = fftw_plan_r2r_1d(NUM_CYCLES, waveform, FFT, FFTW_R2HC, FFTW_DESTROY_INPUT);
+//  std::cout << "Made it here!" << std::endl;
+//  fftw_execute(fftPlan);
+
+  std::fstream FFTfile;
+  std::ofstream wavFile;
   FFTfile.open(FFTout);
   wavFile.open(waveOut);
   for (int i = 0; i < (NUM_CYCLES / 2 + 1); i++) {
-    FFTfile << FFT[i] << endl;
-    wavFile << waveform[i] << endl;
+    FFTfile << FFT[i] << std::endl;
+    wavFile << waveform[i] << std::endl;
   }
   FFTfile.close();
   wavFile.close();
@@ -129,16 +149,17 @@ int main() {
     }
   }
   avg = avg / NUM_CYCLES;
-  cout << "Average: " << avg << endl;
-  cout << "FFT[0]: " << FFT[0] << endl;
+  std::cout << "Average: " << avg << std::endl;
+  std::cout << "FFT[0]: " << FFT[0] << std::endl;
   if (avg == FFT[0]) {
-    cout << "Success! FFT[0] is the average!" << endl;
+    std::cout << "Success! FFT[0] is the average!" << std::endl;
   }
 */
   FFT[0] = 0;
-  double frequency = getFrequency(FFT, NUM_CYCLES, PEAK_LIMIT, totalSec);
+  double sampleFrequency = 1 / avgSec;
+  double frequency = getFrequency(FFT, NUM_CYCLES - 1, PEAK_LIMIT, sampleFrequency);
   double ideal = 97.99;
-  cout << "Frequency: " << frequency << endl;
-  cout << "Cent Difference: " << getCents(frequency, ideal) << endl;
+  std::cout << "Frequency: " << frequency << std::endl;
+  std::cout << "Cent Difference: " << getCents(frequency, ideal) << std::endl;
   return 0;
 }
