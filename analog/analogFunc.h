@@ -16,10 +16,13 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #include <fcntl.h>
-//#include <fftw3.h>
+#include <fftw3.h>
+/*
 #include <octave/oct.h>
+#include <octave/oct-fftw.h>
 #include <octave/builtin-defun-decls.h>
 #include <octave/ov.h>
+*/
 
 //using namespace std;
 
@@ -51,24 +54,24 @@ void heart() {
   int isOn = 0;
   char LEDBrightness [50] = "/sys/class/leds/beaglebone:green:usr0/brightness";
   if((LEDHandle = fopen(LEDBrightness, "r+")) != NULL){
-    std::fread(onOff, sizeof(char), 1, LEDHandle);
+    fread(onOff, sizeof(char), 1, LEDHandle);
     isOn = onOff[0] % 2;
 //    isOn = std::atoi(onOff);
     if (isOn == 0) {
-      std::fwrite("1", sizeof(char), 1, LEDHandle);
+      fwrite("1", sizeof(char), 1, LEDHandle);
     } else {
-      std::fwrite("0", sizeof(char), 1, LEDHandle);
+      fwrite("0", sizeof(char), 1, LEDHandle);
     }
     fclose(LEDHandle);
   }
 }
 
 double getFrequency(double *FFT, int size, int limit, const double& sampleFreq) {
-  double *max = FFT;
+  double * max = FFT;
   int index = 0;
   double frequency;
   for (int i = 1; i < limit; i++) {
-    std::cout << *(FFT + i) << std::endl;
+//    std::cout << *(FFT + i) << std::endl;
 //    sleep(2);
     if (*(FFT + i) > *max) {
       max = FFT + i;

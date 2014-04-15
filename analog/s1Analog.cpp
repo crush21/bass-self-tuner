@@ -12,8 +12,8 @@
 #define MAP_SIZE 4096UL
 #define MAP_MASK (MAP_SIZE - 1)
 
-const int NUM_CYCLES = 4096;
-const int PEAK_LIMIT = 500;
+const int NUM_CYCLES = 1024;
+const int PEAK_LIMIT = NUM_CYCLES / 8;
 const double ONE_MIL = 1000000.0;
 const double ONE_BIL = 1000000000.0;
 
@@ -21,12 +21,15 @@ int main() {
   timespec startTime, endTime, runTime;
 //  timeval startTime, endTime, runTime;
   double waveform[NUM_CYCLES];
-  double FFT[NUM_CYCLES];
+  double FFTdouble[NUM_CYCLES];
+  fftw_complex FFT[NUM_CYCLES];
+/*
   octave_value_list octFFT;
   octave_value_list octWave;
+*/
   double aIn;
   double totalSec, avgSec;
-//  fftw_plan fftPlan;
+  fftw_plan fftPlan;
 /*  char * strAddr; */
 /*  unsigned long * map_base, * virt_addr;
 //  off_t ain = 0x44e0d000;
@@ -59,12 +62,12 @@ int main() {
   std::cout << "Address: " << (unsigned long*)virt_addr << std::endl; */
 
   std::cout << "\nEntering the loop..." << std::endl;
-
+/*
   pollfd strFile;
   strFile.fd = strHandle;
   strFile.events = POLLIN;
   strFile.revents = POLLIN;
-
+*/
   clock_gettime(CLOCK_MONOTONIC, &startTime);
 
   for (int i = 0; i < NUM_CYCLES; i++) {
@@ -77,8 +80,9 @@ int main() {
 /*    write(triggerHandle, ONE, 1);
     lseek(triggerHandle, 0, SEEK_SET); */
 
-//    waveform[i] = aIn;
-    octWave.append(octave_value(aIn));
+    waveform[i] = aIn;
+
+//    octWave.append(octave_value(aIn));
 
 //    usleep(680);    
     
@@ -109,55 +113,47 @@ int main() {
 
 
 
-
+/*
   octFFT = Ffft(octWave, NUM_CYCLES - 1);
   octave_value anOctVal;
   for (int i = 0; i < NUM_CYCLES; i++) {
-    anOctVal = octFFT(index);
+    anOctVal = octFFT(i);
     std::cout << anOctVal.type_name() << std::endl;
     std::cout << anOctVal.class_name() << std::endl;
     FFT[i] = abs(anOctVal.double_value());
   }
-
-
-
-
-
-//  fftPlan = fftw_plan_r2r_1d(NUM_CYCLES, waveform, FFT, FFTW_R2HC, FFTW_DESTROY_INPUT);
-//  std::cout << "Made it here!" << std::endl;
-//  fftw_execute(fftPlan);
-
-  std::fstream FFTfile;
-  std::ofstream wavFile;
-  FFTfile.open(FFTout);
-  wavFile.open(waveOut);
-  for (int i = 0; i < (NUM_CYCLES / 2 + 1); i++) {
-    FFTfile << FFT[i] << std::endl;
-    wavFile << waveform[i] << std::endl;
-  }
-  FFTfile.close();
-  wavFile.close();
-
-// Check average of FFT with DC value ( FFT[0] )
-/*
-  double avg = 0;
-  for (int j = 1; j < (NUM_CYCLES / 2 + 1); j++) {
-    if (FFT[j] < 0) {
-      avg -= FFT[j];
-    } else {
-      avg += FFT[j];
-    }
-  }
-  avg = avg / NUM_CYCLES;
-  std::cout << "Average: " << avg << std::endl;
-  std::cout << "FFT[0]: " << FFT[0] << std::endl;
-  if (avg == FFT[0]) {
-    std::cout << "Success! FFT[0] is the average!" << std::endl;
-  }
 */
-  FFT[0] = 0;
+
+
+
+
+  fftPlan = fftw_plan_dft_r2c_1d(NUM_CYCLES, waveform, FFT, FFTW_DESTROY_INPUT | FFTW_MEASURE);
+  std::cout << "Made it here!" << std::endl;
+  fftw_execute(fftPlan);
+
+// Write waveform and FFT result to files.
+  std::ofstream wavFile;
+  std::fstream FFTfile;
+  wavFile.open(waveOut);
+  FFTfile.open(FFTout);
+  for (int i = 0; i < (NUM_CYCLES / 2 + 1); i++) {
+    wavFile << waveform[i] << std::endl;
+    FFTfile << FFT[i][0] << std::endl;
+  }
+  wavFile.close();
+  FFTfile.close();
+
+  for (int j = 1; j < (NUM_CYCLES); j++) {
+    FFTdouble[j] = fabs(FFT[j][0]);
+/*    if (FFT[j] < 0) {
+      FFTdouble[j] = -1 * FFT[j];
+    } else {
+      FFTdouble[j] = FFT[j];
+    } */
+  }
+
   double sampleFrequency = 1 / avgSec;
-  double frequency = getFrequency(FFT, NUM_CYCLES - 1, PEAK_LIMIT, sampleFrequency);
+  double frequency = getFrequency(FFTdouble, NUM_CYCLES - 1, PEAK_LIMIT, sampleFrequency);
   double ideal = 97.99;
   std::cout << "Frequency: " << frequency << std::endl;
   std::cout << "Cent Difference: " << getCents(frequency, ideal) << std::endl;
