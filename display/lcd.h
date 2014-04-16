@@ -13,6 +13,7 @@
 
 using namespace std;
 
+// LCD Data Bit files
 const char RS [29] = "/sys/class/gpio/gpio2/value";
 const char CLK [29] = "/sys/class/gpio/gpio3/value";
 const char DATA7 [29] = "/sys/class/gpio/gpio14/value";
@@ -23,6 +24,14 @@ const char DATA3 [29] = "/sys/class/gpio/gpio15/value";
 const char DATA2 [29] = "/sys/class/gpio/gpio31/value";
 const char DATA1 [29] = "/sys/class/gpio/gpio60/value";
 const char DATA0 [29] = "/sys/class/gpio/gpio30/value";
+
+// LCD Navigation Bit files
+const char * leftData = "/sys/class/gpio/gpio20/value";
+const char * rightData = "/sys/class/gpio/gpio7/value";
+const char * upData = "/sys/class/gpio/gpio125/value";
+const char * downData = "/sys/class/gpio/gpio122/value";
+const char * enterData = "/sys/class/gpio/gpio14/value";
+
 const char * ON = "1";
 const char * OFF = "0";
 
@@ -226,3 +235,65 @@ void startScreen() {
   writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
 }
 
+/* Called if left pushbutton is pressed during navigation loop.
+ * Receives:	 current position.
+ * Returns:	 new position, one to the left.
+ * Restrictions: max currentPos is 4.
+ */
+int moveLeft(int currentPos) {
+  int curPos = currentPos;
+  if (curPos > 4) {
+    curPos = 0;
+  }
+  switch (curPos) {
+// Arrow currently at position 0.
+    case 0:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
+      writeArrow();
+      break;
+// Arrow currently at position 1.
+    case 1:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
+      writeArrow();
+      break;
+// Arrow currently at position 2.
+    case 2:
+      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
+      writeArrow();
+      break;
+// Arrow currently at position 3.
+    case 3:
+      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
+      writeArrow();
+      break;
+// Arrow currently at position 4.
+    case 4:
+      setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
+      writeArrow();
+      break;
+// Reset arrow to position 0 and clear remaining positions.
+    default:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
+      writeArrow();
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      return 0;
+  }
+  return (curPos + 1) % 5;
+}

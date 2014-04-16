@@ -4,52 +4,39 @@
 
 #include "lcd.h"
 
-const char * left = "/sys/class/gpio/gpio20";
-const char * right = "/sys/class/gpio/gpio7";
-const char * up = "/sys/class/gpio/gpio125";
-const char * down = "/sys/class/gpio/gpio122";
-const char * enter = "/sys/class/gpio/gpio14";
 const char * ZERO = "0";
 const char * ONE = "1";
 
 int main() {
-  clearScreen();
+  int leftFile = open(leftData, O_RDONLY);
+/*  int rightFile = open(rightData, O_RDONLY);
+  int upFile = open(upData, O_RDONLY);
+  int downFile = open(downData, O_RDONLY);
+  int enterFile = open(enterData, O_RDONLY); */
   int stringNum = 1;
-  setDDRAM(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
-  startScreen(); /*
-  int leftFile = open(left, O_RDONLY);
-  int rightFile = open(right, O_RDONLY);
-  int upFile = open(up, O_RDONLY);
-  int downFile = open(down, O_RDONLY);
-  int enterFile = open(enter, O_RDONLY); */
-  for (int i = 0; i < 4; i++) {
-/*    if () {
+  char leftPush [1];
+/*  char rightPush [1];
+  char upPush [1];
+  char downPush [1];
+  char enterPush [1]; */
 
-    } */
-    setDDRAM(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
-    writeArrow();
-    sleep(1);
-    setDDRAM(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
-    writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);
-    setDDRAM(ZERO, ZERO, ZERO, ZERO, ZERO, ONE, ONE);
-    writeArrow();
-    sleep(1);
-    setDDRAM(ZERO, ZERO, ZERO, ZERO, ZERO, ONE, ONE);
-    writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);
-    setDDRAM(ZERO, ZERO, ZERO, ZERO, ONE, ONE, ZERO);
-    writeArrow();
-    sleep(1);
-    setDDRAM(ZERO, ZERO, ZERO, ZERO, ONE, ONE, ZERO);
-    writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);
-    setDDRAM(ZERO, ZERO, ZERO, ONE, ZERO, ZERO, ONE);
-    writeArrow();
-    sleep(1);
-    setDDRAM(ZERO, ZERO, ZERO, ONE, ZERO, ZERO, ONE);
-    writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);
-    setDDRAM(ZERO, ZERO, ZERO, ONE, ONE, ZERO, ZERO);
-    writeArrow();
-    sleep(1);
-    setDDRAM(ZERO, ZERO, ZERO, ONE, ONE, ZERO, ZERO);
-    writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);
+  clearScreen();
+  setDDRAM(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
+  startScreen();
+  int i = 0;
+  bool isOn = false;
+  while (i < 20) {
+    read(leftFile, leftPush, 1);
+    if ((leftPush[0] == '1') && (!isOn)) {
+      cout << "In the if!" << endl;
+      stringNum = moveLeft(stringNum);
+      isOn = true;
+    }
+    lseek(leftFile, SEEK_SET, 0);
+    if ((leftPush[0] == '0') && (isOn)) {
+      i++;
+      isOn = false;
+    }
   }
+  close(leftFile);
 }
