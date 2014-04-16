@@ -32,6 +32,15 @@ LCD Pins
 "14" = P9_26 - 14
 
 
+Navigation Pins
+------------------
+"20" = P9_41	- Navigation Left
+"7" = P9_42	- Navigation Right
+"125" = P9_27	- Navigation Up
+"122" = P9_30	- Navigation Down
+"14" = P9_26	- Navigation Enter
+
+
 Motor Control Pins
 ------------------
 "66" = P8_07 - Motor 1 FWD

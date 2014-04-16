@@ -128,7 +128,7 @@ int main() {
 
 
   fftPlan = fftw_plan_dft_r2c_1d(NUM_CYCLES, waveform, FFT, FFTW_DESTROY_INPUT | FFTW_MEASURE);
-  std::cout << "Made it here!" << std::endl;
+//  std::cout << "Made it here!" << std::endl;
   fftw_execute(fftPlan);
 
 // Write waveform and FFT result to files.

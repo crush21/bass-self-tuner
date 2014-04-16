@@ -108,8 +108,8 @@ void clearScreen() {
   close(handle);
 }
 
-void setDDRAM(char * addr6, char * addr5, char * addr4,
-	      char * addr3, char * addr2, char * addr1, char * addr0) {
+void setDDRAM(const char * addr6, const char * addr5, const char * addr4,
+	      const char * addr3, const char * addr2, const char * addr1, const char * addr0) {
   int handle = open(RS, O_WRONLY);
   write(handle, OFF, 1);
   close(handle);
@@ -146,8 +146,8 @@ void setDDRAM(char * addr6, char * addr5, char * addr4,
   close(handle);
 }
 
-void writeChar(char * dB7, char * dB6, char * dB5, char * dB4,
-	       char * dB3, char * dB2, char * dB1, char * dB0) {
+void writeChar(const char * dB7, const char * dB6, const char * dB5, const char * dB4,
+	       const char * dB3, const char * dB2, const char * dB1, const char * dB0) {
   int handle = open(RS, O_WRONLY);
   write(handle, ON, 1);
   close(handle);
@@ -184,40 +184,45 @@ void writeChar(char * dB7, char * dB6, char * dB5, char * dB4,
   close(handle);
 }
 
-void startScreen() {
-  setDDRAM(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
-  writeChar(ZERO, ONE, ONE, ONE, ONE, ONE, ONE, ZERO);		// "->"
-  writeChar(ZERO, ONE, ZERO, ZERO, ZERO, ONE, ZERO, ONE);	// "E"
-  writeChar(ZERO, ONE, ONE, ZERO, ZERO, ZERO, ONE, ZERO);	// "b"
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO, ONE);	// "A"
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ONE, ZERO, ZERO, ZERO, ONE, ZERO, ZERO);	// "D"
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ONE, ZERO, ZERO, ZERO, ONE, ONE, ONE);	// "G"
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ONE, ZERO, ZERO, ZERO, ONE, ONE, ONE);	// "G"
-  writeChar(ZERO, ONE, ZERO, ZERO, ONE, ONE, ONE, ONE);		// "O"
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ONE);	// "!"
-
-  setDDRAM(ONE, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ONE, ZERO, ZERO, ZERO, ONE);	// "1"
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ONE, ZERO, ZERO, ONE, ZERO);	// "2"
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ONE, ZERO, ZERO, ONE, ONE);	// "3"
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ONE, ZERO, ONE, ZERO, ZERO);	// "4"
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
+void writeArrow() {
+  writeChar(OFF, ON, ON, ON, ON, ON, ON, OFF);
 }
+
+void startScreen() {
+  setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
+  writeArrow();							// "->"
+  writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);	// "E"
+  writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);	// "b"
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
+  writeChar(OFF, ON, OFF, OFF, OFF, OFF, OFF, ON);	// "A"
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
+  writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, OFF);	// "D"
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
+  writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, ON);	// "G"
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
+  writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, ON);	// "G"
+  writeChar(OFF, ON, OFF, OFF, ON, ON, ON, ON);		// "O"
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, ON);	// "!"
+
+  setDDRAM(ON, OFF, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
+  writeChar(OFF, OFF, ON, ON, OFF, OFF, OFF, ON);	// "1"
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
+  writeChar(OFF, OFF, ON, ON, OFF, OFF, ON, OFF);	// "2"
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
+  writeChar(OFF, OFF, ON, ON, OFF, OFF, ON, ON);	// "3"
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
+  writeChar(OFF, OFF, ON, ON, OFF, ON, OFF, OFF);	// "4"
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
+}
+
