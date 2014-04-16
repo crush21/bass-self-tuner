@@ -4,6 +4,7 @@
  */
 
 #include <iostream>
+#include <string>
 #include <unistd.h>
 #include <cstdlib>
 #include <cstdio>
@@ -107,7 +108,8 @@ void clearScreen() {
   close(handle);
 }
 
-void setDDRAM(char * addr6, char * addr5, char * addr4, char * addr3, char * addr2, char * addr1, char * addr0) {
+void setDDRAM(char * addr6, char * addr5, char * addr4,
+	      char * addr3, char * addr2, char * addr1, char * addr0) {
   int handle = open(RS, O_WRONLY);
   write(handle, OFF, 1);
   close(handle);
@@ -144,51 +146,8 @@ void setDDRAM(char * addr6, char * addr5, char * addr4, char * addr3, char * add
   close(handle);
 }
 
-/*
-void getCharArray(char* charArray, char* address, int arraySize) {
-  char char0 = address[0];
-  char char1 = address[1];
-  cout << "getCharArray..." << endl;
-  for (int i = 0; i < arraySize; i++) {
-    cout << "In the for loop!" << endl;
-    if (i > 3) {
-      cout << "In the greater if!" << endl;
-      charArray[i] = char1 % 2;
-      cout << "Bit " << i << ": " << charArray[i] << endl;
-      char1 = char1 / 2;
-    } else {
-      cout << "In the lesser if!" << endl;
-      charArray[i] = char0 % 2;
-      cout << "Bit " << i << ": " << charArray[i] << endl;
-      char0 = char0 / 2;
-    }
-  }
-}
-*/
-
-void writeChar(char * dB7, char * dB6, char * dB5, char * dB4, char * dB3, char * dB2, char * dB1, char * dB0) {
-/*  char dataBits[8];
-  getCharArray(dataBits, character, 8);
-  char * dB7 = &dataBits[7];
-  char * dB6 = &dataBits[6];
-  char * dB5 = &dataBits[5];
-  char * dB4 = &dataBits[4];
-  char * dB3 = &dataBits[3];
-  char * dB2 = &dataBits[2];
-  char * dB1 = &dataBits[1];
-  char * dB0 = &dataBits[0]; */
-/*  for (int i = 7; i >= 0; i--) {
-//    cout << "Bit " << i << ": " << *(character + i) << endl;
-//    cout << "Bit " << i << ": " << dataBits[i] << endl;
-  } */
-/*  cout << "Bit 7: " << *dB7 << endl;
-  cout << "Bit 6: " << *dB6 << endl;
-  cout << "Bit 5: " << *dB5 << endl;
-  cout << "Bit 4: " << *dB4 << endl;
-  cout << "Bit 3: " << *dB3 << endl;
-  cout << "Bit 2: " << *dB2 << endl;
-  cout << "Bit 1: " << *dB1 << endl;
-  cout << "Bit 0: " << *dB0 << endl; */
+void writeChar(char * dB7, char * dB6, char * dB5, char * dB4,
+	       char * dB3, char * dB2, char * dB1, char * dB0) {
   int handle = open(RS, O_WRONLY);
   write(handle, ON, 1);
   close(handle);
@@ -223,4 +182,42 @@ void writeChar(char * dB7, char * dB6, char * dB5, char * dB4, char * dB3, char 
   lseek(handle, 0, SEEK_SET);
   write(handle, ON, 1);
   close(handle);
+}
+
+void startScreen() {
+  setDDRAM(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
+  writeChar(ZERO, ONE, ONE, ONE, ONE, ONE, ONE, ZERO);		// "->"
+  writeChar(ZERO, ONE, ZERO, ZERO, ZERO, ONE, ZERO, ONE);	// "E"
+  writeChar(ZERO, ONE, ONE, ZERO, ZERO, ZERO, ONE, ZERO);	// "b"
+  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
+  writeChar(ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO, ONE);	// "A"
+  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
+  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
+  writeChar(ZERO, ONE, ZERO, ZERO, ZERO, ONE, ZERO, ZERO);	// "D"
+  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
+  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
+  writeChar(ZERO, ONE, ZERO, ZERO, ZERO, ONE, ONE, ONE);	// "G"
+  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
+  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
+  writeChar(ZERO, ONE, ZERO, ZERO, ZERO, ONE, ONE, ONE);	// "G"
+  writeChar(ZERO, ONE, ZERO, ZERO, ONE, ONE, ONE, ONE);		// "O"
+  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ONE);	// "!"
+
+  setDDRAM(ONE, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
+  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
+  writeChar(ZERO, ZERO, ONE, ONE, ZERO, ZERO, ZERO, ONE);	// "1"
+  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
+  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
+  writeChar(ZERO, ZERO, ONE, ONE, ZERO, ZERO, ONE, ZERO);	// "2"
+  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
+  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
+  writeChar(ZERO, ZERO, ONE, ONE, ZERO, ZERO, ONE, ONE);	// "3"
+  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
+  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
+  writeChar(ZERO, ZERO, ONE, ONE, ZERO, ONE, ZERO, ZERO);	// "4"
+  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
+  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
+  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
+  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
+  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
 }

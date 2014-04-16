@@ -4,48 +4,24 @@
 
 #include "lcd.h"
 
+const char left = "/sys/class/gpio/gpio";
+const char right = "/sys/class/gpio/gpio";
+const char up = "/sys/class/gpio/gpio";
+const char down = "/sys/class/gpio/gpio";
+const char enter = "/sys/class/gpio/gpio";
+
 int main() {
   clearScreen();
   char * ZERO = "0";
   char * ONE = "1";
+  string address;
+  setDDRAM(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
+  address = "0x0000000";
+  startScreen();
   
-  setDDRAM(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
-/* Have to do this twice, or the top row will be offset by one character to the left.
- * Still trying to figure out why this is so.
- */
-  setDDRAM(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
-  writeChar(ZERO, ONE, ONE, ONE, ONE, ONE, ONE, ZERO);		// "->"
-  writeChar(ZERO, ONE, ZERO, ZERO, ZERO, ONE, ZERO, ONE);	// "E"
-  writeChar(ZERO, ONE, ONE, ZERO, ZERO, ZERO, ONE, ZERO);	// "b"
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO, ONE);	// "A"
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ONE, ZERO, ZERO, ZERO, ONE, ZERO, ZERO);	// "D"
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ONE, ZERO, ZERO, ZERO, ONE, ONE, ONE);	// "G"
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ONE, ZERO, ZERO, ZERO, ONE, ONE, ONE);	// "G"
-  writeChar(ZERO, ONE, ZERO, ZERO, ONE, ONE, ONE, ONE);		// "O"
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ONE);	// "!"
-
-  setDDRAM(ONE, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ONE, ZERO, ZERO, ZERO, ONE);	// "1"
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ONE, ZERO, ZERO, ONE, ZERO);	// "2"
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ONE, ZERO, ZERO, ONE, ONE);	// "3"
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ONE, ZERO, ONE, ZERO, ZERO);	// "4"
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
-  writeChar(ZERO, ZERO, ONE, ZERO, ZERO, ZERO, ZERO, ZERO);	// " "
+  while (1) {
+    if () {
+      
+    }
+  }
 }
