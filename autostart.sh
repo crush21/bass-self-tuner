@@ -109,6 +109,15 @@ echo "Done!"
 echo "Initializing LCD Screen..."
 echo 20 > /sys/class/gpio/export
 echo in > /sys/class/gpio/gpio20/direction
+echo 7 > /sys/class/gpio/export
+echo in > /sys/class/gpio/gpio7/direction
+echo 117 > /sys/class/gpio/export
+echo in > /sys/class/gpio/gpio117/direction
+echo 122 > /sys/class/gpio/export
+echo in > /sys/class/gpio/gpio122/direction
+echo 125 > /sys/class/gpio/export
+echo in > /sys/class/gpio/gpio125/direction
+
 
 # Function Set 8 bits
 echo 0 > /sys/class/gpio/gpio2/value
@@ -207,6 +216,3 @@ echo 0 > /sys/class/gpio/gpio30/value
 
 echo 0 > /sys/class/gpio/gpio3/value
 echo 1 > /sys/class/gpio/gpio3/value
-
-
-/root/code/lcd

@@ -30,11 +30,19 @@ const char * leftData = "/sys/class/gpio/gpio20/value";
 const char * rightData = "/sys/class/gpio/gpio7/value";
 const char * upData = "/sys/class/gpio/gpio125/value";
 const char * downData = "/sys/class/gpio/gpio122/value";
-const char * enterData = "/sys/class/gpio/gpio14/value";
+const char * enterData = "/sys/class/gpio/gpio117/value";
 
 const char * ON = "1";
 const char * OFF = "0";
 
+/* Called to easily setup the LCD screen.
+ * dispOn is display on bit.
+ * cursorOn is cursor display bit.
+ * blinkOn is cursor blink bit.
+ * Receives:	 Characters representing 0 or 1.
+ * Returns:	 Nothing.
+ * Restrictions: Characters must be 0 or 1.
+ */
 void dispCtrl(char* dispOn, char* cursorOn, char* blinkOn) {
   if ((atoi(dispOn) > 1) || (atoi(cursorOn) > 1) || (atoi(blinkOn) > 1)) {
     cout << "Error: Parameter is greater than 1." << endl;
@@ -80,6 +88,11 @@ void dispCtrl(char* dispOn, char* cursorOn, char* blinkOn) {
   }
 }
 
+/* Clears the LCD screen.
+ * Receives:	 Nothing.
+ * Returns:	 Nothing.
+ * Restrictions: None.
+ */
 void clearScreen() {
   int handle = open(RS, O_WRONLY);
   write(handle, OFF, 1);
@@ -117,6 +130,11 @@ void clearScreen() {
   close(handle);
 }
 
+/* Called to set the current position on the LCD screen.
+ * Receives:	 Seven bits determining position on the LCD.
+ * Returns:	 Nothing.
+ * Restrictions: None. LCD range is 0x00 (upper left corner) to 0x1F (lower right corner)
+ */
 void setDDRAM(const char * addr6, const char * addr5, const char * addr4,
 	      const char * addr3, const char * addr2, const char * addr1, const char * addr0) {
   int handle = open(RS, O_WRONLY);
@@ -155,6 +173,11 @@ void setDDRAM(const char * addr6, const char * addr5, const char * addr4,
   close(handle);
 }
 
+/* Called write a character to the LCD.
+ * Receives:	 A binary representation of a character based on HD44780.
+ * Returns:	 Nothing.
+ * Restrictions: None. Just know what character you want to write in binary.
+ */
 void writeChar(const char * dB7, const char * dB6, const char * dB5, const char * dB4,
 	       const char * dB3, const char * dB2, const char * dB1, const char * dB0) {
   int handle = open(RS, O_WRONLY);
@@ -193,10 +216,20 @@ void writeChar(const char * dB7, const char * dB6, const char * dB5, const char 
   close(handle);
 }
 
+/* Called to easily write an arrow to the LCD.
+ * Receives:	 Nothing.
+ * Returns:	 Nothing.
+ * Restrictions: None.
+ */
 void writeArrow() {
   writeChar(OFF, ON, ON, ON, ON, ON, ON, OFF);
 }
 
+/* Called to reset the screen to the start.
+ * Receives:	 Nothing.
+ * Returns:	 Nothing.
+ * Restrictions: None.
+ */
 void startScreen() {
   setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
   writeArrow();							// "->"
@@ -283,8 +316,6 @@ int moveLeft(int currentPos) {
       break;
 // Reset arrow to position 0 and clear remaining positions.
     default:
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
-      writeArrow();
       setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
       writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
       setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
@@ -293,7 +324,84 @@ int moveLeft(int currentPos) {
       writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
       setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
       writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
+      writeArrow();
+      return 0;
+  }
+  if ((curPos - 1) < 0) {
+    curPos = 5;
+  }
+  return (curPos - 1) % 5;
+}
+
+/* Called if right pushbutton is pressed during navigation loop.
+ * Receives:	 current position.
+ * Returns:	 new position, one to the right.
+ * Restrictions: max currentPos is 4.
+ */
+int moveRight(int currentPos) {
+  int curPos = currentPos;
+  if (curPos > 4) {
+    curPos = 0;
+  }
+  switch (curPos) {
+// Arrow currently at position 0.
+    case 0:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
+      writeArrow();
+      break;
+// Arrow currently at position 1.
+    case 1:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
+      writeArrow();
+      break;
+// Arrow currently at position 2.
+    case 2:
+      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
+      writeArrow();
+      break;
+// Arrow currently at position 3.
+    case 3:
+      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
+      writeArrow();
+      break;
+// Arrow currently at position 4.
+    case 4:
+      setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
+      writeArrow();
+      break;
+// Reset arrow to position 0 and clear remaining positions.
+    default:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
+      writeArrow();
       return 0;
   }
   return (curPos + 1) % 5;
+}
+
+/* Called if enter pushbutton is pressed during navigation loop.
+ * Receives:	 current position and whether on or off.
+ * Returns:	 1 if on, 0 if off.
+ * Restrictions: None.
+ */
+int hitEnter(int noteNum) {
+  
 }
