@@ -397,11 +397,133 @@ int moveRight(int currentPos) {
   return (curPos + 1) % 5;
 }
 
+/* Called if up pushbutton is pressed during navigation loop.
+ * Receives:	 current position.
+ * Returns:	 new position, one up.
+ * Restrictions: max currentPos is 4, max currentNote is 7.
+ */
+int moveUp(int currentNote, int currentPos) {
+  int curPos = currentPos;
+  int curNote = currentNote;
+  if (curNote > 7) {
+    curNote = 4;
+  }
+  switch (curPos) {
+// Arrow currently at position 0.
+    case 0:
+      switch (curNote) {
+	setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
+	writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+	setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
+	writeArrow();
+	break;
+      }
+// Arrow currently at position 1.
+    case 1:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
+      writeArrow();
+      break;
+// Arrow currently at position 2.
+    case 2:
+      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
+      writeArrow();
+      break;
+// Arrow currently at position 3.
+    case 3:
+      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
+      writeArrow();
+      break;
+// Arrow currently at position 4.
+    case 4:
+      setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
+      writeArrow();
+      break;
+// Reset arrow to position 0 and clear remaining positions.
+    default:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      return 0;
+  }
+  return (curNote + 1) % 8;
+}
+
+/* Called if right pushbutton is pressed during navigation loop.
+ * Receives:	 current position.
+ * Returns:	 new position, one to the right.
+ * Restrictions: max currentPos is 4.
+ */
+int moveRight(int currentPos) {
+  int curPos = currentPos;
+  if (curPos > 4) {
+    curPos = 0;
+  }
+  switch (curPos) {
+// Arrow currently at position 0.
+    case 0:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
+      writeArrow();
+      break;
+// Arrow currently at position 1.
+    case 1:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
+      writeArrow();
+      break;
+// Arrow currently at position 2.
+    case 2:
+      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
+      writeArrow();
+      break;
+// Arrow currently at position 3.
+    case 3:
+      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
+      writeArrow();
+      break;
+// Arrow currently at position 4.
+    case 4:
+      setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
+      writeArrow();
+      break;
+// Reset arrow to position 0 and clear remaining positions.
+    default:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
+      writeArrow();
+      return 0;
+  }
+  return (curPos + 1) % 5;
+}
+
 /* Called if enter pushbutton is pressed during navigation loop.
  * Receives:	 current position and whether on or off.
  * Returns:	 1 if on, 0 if off.
  * Restrictions: None.
  */
-int hitEnter(int noteNum) {
+int tuningSequence(int firstString, int secondString,
+		   int thirdString, int fourthString) {
   
 }
