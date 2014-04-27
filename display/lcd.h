@@ -11,7 +11,7 @@
 //#include <cmath>
 #include <fcntl.h>
 
-using namespace std;
+//using namespace std;
 
 // LCD Data Bit files
 const char RS [29] = "/sys/class/gpio/gpio2/value";
@@ -28,9 +28,9 @@ const char DATA0 [29] = "/sys/class/gpio/gpio30/value";
 // LCD Navigation Bit files
 const char * leftData = "/sys/class/gpio/gpio20/value";
 const char * rightData = "/sys/class/gpio/gpio7/value";
-const char * upData = "/sys/class/gpio/gpio125/value";
-const char * downData = "/sys/class/gpio/gpio122/value";
-const char * enterData = "/sys/class/gpio/gpio117/value";
+const char * enterData = "/sys/class/gpio/gpio70/value";
+const char * upData = "/sys/class/gpio/gpio71/value";
+const char * downData = "/sys/class/gpio/gpio72/value";
 
 const char * ON = "1";
 const char * OFF = "0";
@@ -45,7 +45,7 @@ const char * OFF = "0";
  */
 void dispCtrl(char* dispOn, char* cursorOn, char* blinkOn) {
   if ((atoi(dispOn) > 1) || (atoi(cursorOn) > 1) || (atoi(blinkOn) > 1)) {
-    cout << "Error: Parameter is greater than 1." << endl;
+    std::cout << "Error: Parameter is greater than 1." << std::endl;
     return;
   } else {
     int handle = open(RS, O_WRONLY);
@@ -223,6 +223,46 @@ void writeChar(const char * dB7, const char * dB6, const char * dB5, const char 
  */
 void writeArrow() {
   writeChar(OFF, ON, ON, ON, ON, ON, ON, OFF);
+}
+
+/* Called to write the "1" to the screen during the motor sequence.
+ * Receives:	 Nothing.
+ * Returns:	 Nothing.
+ * Restrictions: None.
+ */
+void writeOne() {
+  setDDRAM(ON, OFF, OFF, OFF, OFF, OFF, ON);
+  writeChar(OFF, OFF, ON, ON, OFF, OFF, OFF, ON);	// "1"
+}
+
+/* Called to write the "2" to the screen during the motor sequence.
+ * Receives:	 Nothing.
+ * Returns:	 Nothing.
+ * Restrictions: None.
+ */
+void writeTwo() {
+  setDDRAM(ON, OFF, OFF, OFF, ON, OFF, OFF);
+  writeChar(OFF, OFF, ON, ON, OFF, OFF, ON, OFF);	// "2"
+}
+
+/* Called to write the "3" to the screen during the motor sequence.
+ * Receives:	 Nothing.
+ * Returns:	 Nothing.
+ * Restrictions: None.
+ */
+void writeThree() {
+  setDDRAM(ON, OFF, OFF, OFF, ON, ON, ON);
+  writeChar(OFF, OFF, ON, ON, OFF, OFF, ON, ON);	// "3"
+}
+
+/* Called to write the "4" to the screen during the motor sequence.
+ * Receives:	 Nothing.
+ * Returns:	 Nothing.
+ * Restrictions: None.
+ */
+void writeFour() {
+  setDDRAM(ON, OFF, OFF, ON, OFF, ON, OFF);
+  writeChar(OFF, OFF, ON, ON, OFF, ON, OFF, OFF);	// "4"
 }
 
 /* Called to reset the screen to the start.
@@ -455,12 +495,12 @@ int moveUp(int currentNote, int currentPos) {
   return (curNote + 1) % 8;
 }
 
-/* Called if right pushbutton is pressed during navigation loop.
+/* Called if down pushbutton is pressed during navigation loop.
  * Receives:	 current position.
- * Returns:	 new position, one to the right.
- * Restrictions: max currentPos is 4.
+ * Returns:	 new position, one down.
+ * Restrictions: max currentPos is 7.
  */
-int moveRight(int currentPos) {
+int moveDown(int currentPos) {
   int curPos = currentPos;
   if (curPos > 4) {
     curPos = 0;
@@ -518,6 +558,31 @@ int moveRight(int currentPos) {
   return (curPos + 1) % 5;
 }
 
+/* Clears bottom row of LCD.
+ * Receives:	 Nothing.
+ * Returns:	 Nothing.
+ * Restrictions: None.
+ */
+void clearBottomRow() {
+  setDDRAM(ON, OFF, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+}
+
 /* Called if enter pushbutton is pressed during navigation loop.
  * Receives:	 current position and whether on or off.
  * Returns:	 1 if on, 0 if off.
@@ -525,5 +590,14 @@ int moveRight(int currentPos) {
  */
 int tuningSequence(int firstString, int secondString,
 		   int thirdString, int fourthString) {
-  
+  clearBottomRow();
+  sleep(1);
+  writeOne();
+  sleep(2);
+  writeTwo();
+  sleep(2);
+  writeThree();
+  sleep(2);
+  writeFour();
+  return 0;
 }

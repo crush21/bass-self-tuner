@@ -111,12 +111,12 @@ echo 20 > /sys/class/gpio/export
 echo in > /sys/class/gpio/gpio20/direction
 echo 7 > /sys/class/gpio/export
 echo in > /sys/class/gpio/gpio7/direction
-echo 117 > /sys/class/gpio/export
-echo in > /sys/class/gpio/gpio117/direction
-echo 122 > /sys/class/gpio/export
-echo in > /sys/class/gpio/gpio122/direction
-echo 125 > /sys/class/gpio/export
-echo in > /sys/class/gpio/gpio125/direction
+echo 70 > /sys/class/gpio/export
+echo in > /sys/class/gpio/gpio70/direction
+echo 71 > /sys/class/gpio/export
+echo in > /sys/class/gpio/gpio71/direction
+echo 72 > /sys/class/gpio/export
+echo in > /sys/class/gpio/gpio72/direction
 
 
 # Function Set 8 bits
