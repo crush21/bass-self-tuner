@@ -12,13 +12,13 @@ int main() {
   int leftFile = open(leftData, O_RDONLY);
   int rightFile = open(rightData, O_RDONLY);
   int enterFile = open(enterData, O_RDONLY);
-//  int upFile = open(upData, O_RDONLY);
-//  int downFile = open(downData, O_RDONLY);
+  int upFile = open(upData, O_RDONLY);
+  int downFile = open(downData, O_RDONLY);
   char leftPush [1];
   char rightPush [1]; 
   char enterPush [1];
-/*  char upPush [1];
-  char downPush [1]; */
+  char upPush [1];
+  char downPush [1];
 /* The following integers represent the strings
  * from lowest to highest. The range for each
  * note is 8 half-steps. The standard note
@@ -27,9 +27,9 @@ int main() {
  * ranges from C (0) to G (7).
  */
   int string1 = 4; // Holds "note" of E string
-  int string2 = 4; // Holds "note" of A string
-  int string3 = 4; // Holds "note" of D string
-  int string4 = 4; // Holds "note" of G string
+  int string2 = 9; // Holds "note" of A string
+  int string3 = 14; // Holds "note" of D string
+  int string4 = 19; // Holds "note" of G string
   
   clearScreen();
   setDDRAM(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
@@ -40,10 +40,10 @@ int main() {
     read(leftFile, leftPush, 1);
     read(rightFile, rightPush, 1);
     read(enterFile, enterPush, 1);
-//    read(upFile, upPush, 1);
-//    read(downFile, downPush, 1);
+    read(upFile, upPush, 1);
+    read(downFile, downPush, 1);
     if (!isOn) {
-      std::cout << "           " << enterPush[0] << std::endl;
+      std::cout << "         " << upPush[0] << std::endl;
       std::cout << "Not on!" << std::endl;
       if (leftPush[0] == '1') {
         std::cout << "Left push!" << std::endl;
@@ -59,38 +59,38 @@ int main() {
 	if (stringNum == 4) {
 	  tuningSequence(string1, string2, string3, string4);
 	}
-/*
-      } else if (upPush[0] == '1') {
-	  tuningSequence(string1, string2, string3, string4);
+        isOn = true;
+      } else if (upPush[0] == '0') {
 	if (stringNum == 0) {
-//	  moveUp(string1);
+          string1 = moveUpStr1(string1);
 	} else if (stringNum == 1) {
-//	  moveUp(string2);
+          string2 = moveUpStr2(string2);
 	} else if (stringNum == 2) {
-//	  moveUp(string3);
+          string3 = moveUpStr3(string3);
 	} else if (stringNum == 3) {
-//	  moveUp(string4);
+          string4 = moveUpStr4(string4);
         }
-      } else if (downPush[0] == '1') {
-	  tuningSequence(string1, string2, string3, string4);
+        isOn = true;
+      } else if (downPush[0] == '0') {
 	if (stringNum == 0) {
-//	  moveDown(string1);
+          string1 = moveDownStr1(string1);
 	} else if (stringNum == 1) {
-//	  moveDown(string2);
+          string2 = moveDownStr2(string2);
 	} else if (stringNum == 2) {
-//	  moveDown(string3);
+          string3 = moveDownStr3(string3);
 	} else if (stringNum == 3) {
-//	  moveDown(string4);
-        } */
+          string4 = moveDownStr4(string4);
+        }
+        isOn = true;
       }
     } else {
-/*      std::cout << "Is on!" << std::endl;
+      std::cout << "Is on!" << std::endl;
       std::cout << leftPush[0] << " " << rightPush[0] << " " 
                 << enterPush[0] << " " << upPush[0] << " "
-                << downPush[0] << std::endl; */
+                << downPush[0] << std::endl;
       if ((leftPush[0] == '0') && (rightPush[0] == '0') &&
-	  (enterPush[0] == '0') /* && (upPush[0] == '0') &&
-	  (downPush[0] == '0') */ ) {
+	  (enterPush[0] == '0') && (upPush[0] == '1') &&
+	  (downPush[0] == '1')) {
         std::cout << "All off!" << std::endl;
         i++;
         isOn = false;
@@ -99,12 +99,12 @@ int main() {
     lseek(leftFile, SEEK_SET, 0);
     lseek(rightFile, SEEK_SET, 0);
     lseek(enterFile, SEEK_SET, 0);
-//    lseek(upFile, SEEK_SET, 0);
-//    lseek(downFile, SEEK_SET, 0);
+    lseek(upFile, SEEK_SET, 0);
+    lseek(downFile, SEEK_SET, 0);
   }
   close(leftFile);
   close(rightFile);
   close(enterFile);
-//  close(upFile);
-//  close(downFile);
+  close(upFile);
+  close(downFile);
 }

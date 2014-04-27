@@ -391,8 +391,7 @@ int moveRight(int currentPos) {
       writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
       setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
       writeArrow();
-      break;
-// Arrow currently at position 1.
+      break; // Arrow currently at position 1.
     case 1:
       setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
       writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
@@ -437,125 +436,348 @@ int moveRight(int currentPos) {
   return (curPos + 1) % 5;
 }
 
-/* Called if up pushbutton is pressed during navigation loop.
+/* Called if up pushbutton is pressed during navigation loop
+ * and string 1 is selected.
  * Receives:	 current position.
  * Returns:	 new position, one up.
  * Restrictions: max currentPos is 4, max currentNote is 7.
  */
-int moveUp(int currentNote, int currentPos) {
-  int curPos = currentPos;
+int moveUpStr1(int currentNote) {
   int curNote = currentNote;
   if (curNote > 7) {
     curNote = 4;
   }
-  switch (curPos) {
-// Arrow currently at position 0.
+  switch (curNote) {
     case 0:
-      switch (curNote) {
-	setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
-	writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-	setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
-	writeArrow();
-	break;
-      }
-// Arrow currently at position 1.
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, OFF);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+      break;
     case 1:
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, OFF);
       writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
-      writeArrow();
       break;
-// Arrow currently at position 2.
     case 2:
-      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
-      writeArrow();
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
       break;
-// Arrow currently at position 3.
     case 3:
-      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
       writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
-      writeArrow();
       break;
-// Arrow currently at position 4.
     case 4:
-      setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, OFF);
       writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
-      writeArrow();
       break;
-// Reset arrow to position 0 and clear remaining positions.
-    default:
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
+    case 5:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, ON);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+      break;
+    case 6:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, ON);
       writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      return 0;
+      break;
+    case 7:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, OFF, ON, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+    default:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      return 4;
   }
   return (curNote + 1) % 8;
 }
 
-/* Called if down pushbutton is pressed during navigation loop.
+/* Called if up pushbutton is pressed during navigation loop
+ * and string 1 is selected.
+ * Receives:	 current position.
+ * Returns:	 new position, one up.
+ * Restrictions: max currentPos is 4, max currentNote is 7.
+ */
+int moveUpStr1(int currentNote) {
+  int curNote = currentNote;
+  if (curNote > 12) {
+    curNote = 9;
+  }
+  switch (curNote) {
+// Case 5: C to F.
+    case 5:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, OFF);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+      break;
+// Case 6: C to F.
+    case 6:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Case 7: C to F.
+    case 7:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+      break;
+// Case 8: C to F.
+    case 8:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Case 9: C to F.
+    case 9:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Case 10: Bb to B.
+    case 10:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, ON);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+      break;
+// Case 11: B to C.
+    case 11:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Case 12: C to F.
+    case 12;
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, OFF, ON, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Reset note to A.
+    default:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      return 9;
+  }
+  return (curNote + 1) % 8 + 5;
+}
+
+/* Called if up pushbutton is pressed during navigation loop
+ * and string 1 is selected.
+ * Receives:	 current position.
+ * Returns:	 new position, one up.
+ * Restrictions: max currentPos is 4, max currentNote is 7.
+ */
+int moveUpStr1(int currentNote) {
+  int curNote = currentNote;
+  if (curNote > 7) {
+    curNote = 4;
+  }
+  switch (curNote) {
+// Arrow currently at position 0.
+    case 0:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, OFF);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+      break;
+// Arrow currently at position 1.
+    case 1:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Arrow currently at position 2.
+    case 2:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+      break;
+// Arrow currently at position 3.
+    case 3:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Arrow currently at position 4.
+    case 4:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Arrow currently at position 5.
+    case 5:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, ON);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+      break;
+// Arrow currently at position 6.
+    case 6:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Arrow currently at position 7.
+    case 7:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, OFF, ON, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Reset arrow to position 4 and clear remaining positions.
+    default:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      return 4;
+  }
+  return (curNote + 1) % 8 + 10;
+}
+
+/* Called if up pushbutton is pressed during navigation loop
+ * and string 1 is selected.
+ * Receives:	 current position.
+ * Returns:	 new position, one up.
+ * Restrictions: max currentPos is 4, max currentNote is 7.
+ */
+int moveUpStr1(int currentNote) {
+  int curNote = currentNote;
+  if (curNote > 7) {
+    curNote = 4;
+  }
+  switch (curNote) {
+// Arrow currently at position 0.
+    case 0:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, OFF);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+      break;
+// Arrow currently at position 1.
+    case 1:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Arrow currently at position 2.
+    case 2:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+      break;
+// Arrow currently at position 3.
+    case 3:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Arrow currently at position 4.
+    case 4:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Arrow currently at position 5.
+    case 5:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, ON);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+      break;
+// Arrow currently at position 6.
+    case 6:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Arrow currently at position 7.
+    case 7:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, OFF, ON, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Reset arrow to position 4 and clear remaining positions.
+    default:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      return 4;
+  }
+  return (curNote + 1) % 8 + 15;
+}
+
+/* Called if down pushbutton is pressed during navigation loop
+ * and string 1 is selected.
  * Receives:	 current position.
  * Returns:	 new position, one down.
  * Restrictions: max currentPos is 7.
  */
-int moveDown(int currentPos) {
-  int curPos = currentPos;
-  if (curPos > 4) {
-    curPos = 0;
+int moveDownStr1(int currentNote) {
+  int curNote = currentNote;
+  if (curNote > 7) {
+    curNote = 4;
   }
-  switch (curPos) {
-// Arrow currently at position 0.
-    case 0:
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
-      writeArrow();
-      break;
-// Arrow currently at position 1.
-    case 1:
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
-      writeArrow();
-      break;
+  switch (curNote) {
 // Arrow currently at position 2.
     case 2:
-      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
-      writeArrow();
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, OFF);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
       break;
 // Arrow currently at position 3.
     case 3:
-      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, OFF);
       writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
-      writeArrow();
       break;
 // Arrow currently at position 4.
     case 4:
-      setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
-      writeArrow();
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
       break;
-// Reset arrow to position 0 and clear remaining positions.
+// Arrow currently at position 5.
+    case 5:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Arrow currently at position 6.
+    case 6:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Arrow currently at position 7.
+    case 7:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, ON);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+      break;
+// Arrow currently at position 0.
+    case 0:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Arrow currently at position 1.
+    case 1:
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, OFF, ON, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Reset arrow to position 4 and clear remaining positions.
     default:
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
+      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
       writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
-      writeArrow();
-      return 0;
+      return 4;
   }
-  return (curPos + 1) % 5;
+  if ((curNote - 1) < 0) {
+    curNote = 8;
+  }
+  return (curNote - 1) % 8;
 }
 
 /* Clears bottom row of LCD.
