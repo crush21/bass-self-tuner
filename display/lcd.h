@@ -440,14 +440,10 @@ int moveRight(int currentPos) {
  * and string 1 is selected.
  * Receives:	 current position.
  * Returns:	 new position, one up.
- * Restrictions: max currentPos is 4, max currentNote is 7.
+ * Restrictions: max currentNote is 7, minimum is 0.
  */
 int moveUpStr1(int currentNote) {
-  int curNote = currentNote;
-  if (curNote > 7) {
-    return 4;
-  }
-  switch (curNote) {
+  switch (currentNote) {
 // Case 0: C to Db.
     case 0:
       setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
@@ -503,21 +499,17 @@ int moveUpStr1(int currentNote) {
       writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
       return 4;
   }
-  return (curNote + 1) % 8;
+  return (currentNote + 1) % 8;
 }
 
 /* Called if up pushbutton is pressed during navigation loop
  * and string 2 is selected.
  * Receives:	 current position.
  * Returns:	 new position, one up.
- * Restrictions: max currentNote is 12.
+ * Restrictions: max currentNote is 12, minimum is 5.
  */
 int moveUpStr2(int currentNote) {
-  int curNote = currentNote;
-  if (curNote > 12) {
-    return 9;
-  }
-  switch (curNote) {
+  switch (currentNote) {
 // Case 5: F to Gb.
     case 5:
       setDDRAM(OFF, OFF, OFF, OFF, ON, OFF, OFF);
@@ -573,24 +565,20 @@ int moveUpStr2(int currentNote) {
       writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
       return 9;
   }
-  if (curNote > 11) {
-    curNote = 4;
+  if (currentNote > 11) {
+    currentNote = 4;
   }
-  return (curNote + 1);
+  return (currentNote + 1);
 }
 
 /* Called if up pushbutton is pressed during navigation loop
  * and string 3 is selected.
  * Receives:	 current position.
  * Returns:	 new position, one up.
- * Restrictions: max currentNote is 17.
+ * Restrictions: max currentNote is 17, minimum is 10.
  */
 int moveUpStr3(int currentNote) {
-  int curNote = currentNote;
-  if (curNote > 17) {
-    return 14;
-  }
-  switch (curNote) {
+  switch (currentNote) {
 // Case 10: Bb to B.
     case 10:
       setDDRAM(OFF, OFF, OFF, OFF, ON, ON, ON);
@@ -646,24 +634,20 @@ int moveUpStr3(int currentNote) {
       writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
       return 14;
   }
-  if (curNote > 16) {
-    curNote = 9;
+  if (currentNote > 16) {
+    currentNote = 9;
   }
-  return (curNote + 1);
+  return (currentNote + 1);
 }
 
 /* Called if up pushbutton is pressed during navigation loop
  * and string 4 is selected.
  * Receives:	 current position.
  * Returns:	 new position, one up.
- * Restrictions: max currentNote is 22.
+ * Restrictions: max currentNote is 22, minimum is 15.
  */
 int moveUpStr4(int currentNote) {
-  int curNote = currentNote;
-  if (curNote > 22) {
-    curNote = 19;
-  }
-  switch (curNote) {
+  switch (currentNote) {
 // Case 15: Eb to E.
     case 15:
       setDDRAM(OFF, OFF, OFF, ON, OFF, ON, OFF);
@@ -717,26 +701,22 @@ int moveUpStr4(int currentNote) {
       setDDRAM(OFF, OFF, OFF, ON, OFF, ON, OFF);
       writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, ON);
       writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      return 4;
+      return 19;
   }
-  if (curNote > 21) {
-    curNote = 14;
+  if (currentNote > 21) {
+    currentNote = 14;
   }
-  return (curNote + 1);
+  return (currentNote + 1);
 }
 
 /* Called if down pushbutton is pressed during navigation loop
  * and string 1 is selected.
  * Receives:	 current position.
  * Returns:	 new position, one down.
- * Restrictions: max currentPos is 7.
+ * Restrictions: max currentPos is 7, minimum is 0.
  */
 int moveDownStr1(int currentNote) {
-  int curNote = currentNote;
-  if (curNote > 7) {
-    curNote = 4;
-  }
-  switch (curNote) {
+  switch (currentNote) {
 // Case 0: C to G.
     case 0:
       setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
@@ -792,10 +772,218 @@ int moveDownStr1(int currentNote) {
       writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
       return 4;
   }
-  if ((curNote - 1) < 0) {
-    curNote = 8;
+  if (currentNote < 1) {
+    currentNote = 8;
   }
-  return (curNote - 1) % 8;
+  return (currentNote - 1);
+}
+
+/* Called if down pushbutton is pressed during navigation loop
+ * and string 2 is selected.
+ * Receives:	 current position.
+ * Returns:	 new position, one down.
+ * Restrictions: max currentNote is 12, minimum is 5.
+ */
+int moveDownStr2(int currentNote) {
+  switch (currentNote) {
+// Case 5: F to C.
+  case 5:
+    setDDRAM(OFF, OFF, OFF, OFF, ON, OFF, OFF);
+    writeChar(OFF, ON, OFF, OFF, OFF, OFF, ON, ON);
+    writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+    break;
+// Case 6: Gb to F.
+  case 6:
+    setDDRAM(OFF, OFF, OFF, OFF, ON, OFF, OFF);
+    writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, OFF);
+    writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+    break;
+// Case 7: G to Gb.
+  case 7:
+    setDDRAM(OFF, OFF, OFF, OFF, ON, OFF, OFF);
+    writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, ON);
+    writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+    break;
+// Case 8: Ab to G.
+  case 8:
+    setDDRAM(OFF, OFF, OFF, OFF, ON, OFF, OFF);
+    writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, ON);
+    writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+    break;
+// Case 9: A to Ab.
+  case 9:
+    setDDRAM(OFF, OFF, OFF, OFF, ON, OFF, OFF);
+    writeChar(OFF, ON, OFF, OFF, OFF, OFF, OFF, ON);
+    writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+    break;
+// Case 10: Bb to A.
+  case 10:
+    setDDRAM(OFF, OFF, OFF, OFF, ON, OFF, OFF);
+    writeChar(OFF, ON, OFF, OFF, OFF, OFF, OFF, ON);
+    writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+    break;
+// Case 11: B to Bb.
+  case 11:
+    setDDRAM(OFF, OFF, OFF, OFF, ON, OFF, OFF);
+    writeChar(OFF, ON, OFF, OFF, OFF, OFF, ON, OFF);
+    writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+    break;
+// Case 12: C to B.
+  case 12:
+    setDDRAM(OFF, OFF, OFF, OFF, ON, OFF, OFF);
+    writeChar(OFF, ON, OFF, OFF, OFF, OFF, ON, OFF);
+    writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+    break;
+// Reset note to A.
+  default:
+    setDDRAM(OFF, OFF, OFF, OFF, ON, OFF, OFF);
+    writeChar(OFF, ON, OFF, OFF, OFF, OFF, OFF, ON);
+    writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+    return 9;
+  }
+  if (currentNote < 6) {
+    currentNote = 13;
+  }
+  return (currentNote - 1);
+}
+
+/* Called if down pushbutton is pressed during navigation loop
+ * and string 3 is selected.
+ * Receives:	 current position.
+ * Returns:	 new position, one down.
+ * Restrictions: max currentNote is 17, minimum is 10.
+ */
+int moveUpStr3(int currentNote) {
+  switch (currentNote) {
+// Case 10: Bb to F.
+    case 10:
+      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Case 11: B to Bb.
+    case 11:
+      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, OFF, ON, OFF);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+      break;
+// Case 12: C to B.
+    case 12:
+      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, OFF, ON, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Case 13: Db to C.
+    case 13:
+      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, OFF, ON, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Case 14: D to Db.
+    case 14:
+      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, OFF);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+      break;
+// Case 15: Eb to D.
+    case 15:
+      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Case 16: E to Eb.
+    case 16:
+      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+      break;
+// Case 17: F to E.
+    case 17:
+      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Reset note to D.
+    default:
+      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, ON);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      return 14;
+  }
+  if (currentNote < 11) {
+    currentNote = 18;
+  }
+  return (currentNote - 1);
+}
+
+/* Called if down pushbutton is pressed during navigation loop
+ * and string 4 is selected.
+ * Receives:	 current position.
+ * Returns:	 new position, one down.
+ * Restrictions: max currentNote is 22, minimum is 15.
+ */
+int moveDownStr4(int currentNote) {
+  int currentNote = currentNote;
+  switch (currentNote) {
+// Case 15: Eb to Bb.
+    case 15:
+      setDDRAM(OFF, OFF, OFF, ON, OFF, ON, OFF);
+      writeChar(OFF, ON, OFF, OFF, OFF, OFF, ON, OFF);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+      break;
+// Case 16: E to Eb.
+    case 16:
+      setDDRAM(OFF, OFF, OFF, ON, OFF, ON, OFF);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+      break;
+// Case 17: F to E.
+    case 17:
+      setDDRAM(OFF, OFF, OFF, ON, OFF, ON, OFF);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Case 18: Gb to F.
+    case 18:
+      setDDRAM(OFF, OFF, OFF, ON, OFF, ON, OFF);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, OFF);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Case 19: G to Gb.
+    case 19:
+      setDDRAM(OFF, OFF, OFF, ON, OFF, ON, OFF);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, ON);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+      break;
+// Case 20: Ab to G.
+    case 20:
+      setDDRAM(OFF, OFF, OFF, ON, OFF, ON, OFF);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Case 21: A to Ab.
+    case 21:
+      setDDRAM(OFF, OFF, OFF, ON, OFF, ON, OFF);
+      writeChar(OFF, ON, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
+      break;
+// Case 22: Bb to A.
+    case 22:
+      setDDRAM(OFF, OFF, OFF, ON, OFF, ON, OFF);
+      writeChar(OFF, ON, OFF, OFF, OFF, OFF, OFF, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      break;
+// Reset note to G.
+    default:
+      setDDRAM(OFF, OFF, OFF, ON, OFF, ON, OFF);
+      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, ON);
+      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+      return 19;
+  }
+  if (currentNote < 16) {
+    currentNote = 23;
+  }
+  return (currentNote - 1);
 }
 
 /* Clears bottom row of LCD.
