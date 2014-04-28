@@ -50,15 +50,19 @@ Motor Control Pins
 ------------------
 "66" = P8_07 - Motor 1 FWD
 "69" = P8_09 - Motor 1 REV
+"45" = P8_11 - Motor 1 ENA*
 
 "67" = P8_08 - Motor 2 FWD
 "68" = P8_10 - Motor 2 REV
+"44" = P8_12 - Motor 2 ENA*
 
 "23" = P8_13 - Motor 3 FWD
 "47" = P8_15 - Motor 3 REV
+"27" = P8_17 - Motor 3 ENA*
 
 "26" = P8_14 - Motor 4 FWD
 "46" = P8_16 - Motor 4 REV
+"65" = P8_18 - Motor 4 ENA*
 
 
 Analog Inputs
