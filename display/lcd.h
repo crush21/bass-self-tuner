@@ -853,7 +853,7 @@ int moveDownStr2(int currentNote) {
  * Returns:	 new position, one down.
  * Restrictions: max currentNote is 17, minimum is 10.
  */
-int moveUpStr3(int currentNote) {
+int moveDownStr3(int currentNote) {
   switch (currentNote) {
 // Case 10: Bb to F.
     case 10:
@@ -923,7 +923,6 @@ int moveUpStr3(int currentNote) {
  * Restrictions: max currentNote is 22, minimum is 15.
  */
 int moveDownStr4(int currentNote) {
-  int currentNote = currentNote;
   switch (currentNote) {
 // Case 15: Eb to Bb.
     case 15:

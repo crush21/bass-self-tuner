@@ -17,33 +17,26 @@ const int PEAK_LIMIT = NUM_CYCLES / 8;
 const double ONE_MIL = 1000000.0;
 const double ONE_BIL = 1000000000.0;
 
-int main() {
+int main(int argc, char *argv[]) {
   timespec startTime, endTime, runTime;
-//  timeval startTime, endTime, runTime;
   double waveform[NUM_CYCLES];
   double FFTdouble[NUM_CYCLES];
   fftw_complex FFT[NUM_CYCLES];
-/*
-  octave_value_list octFFT;
-  octave_value_list octWave;
-*/
   double aIn;
   double totalSec, avgSec;
   fftw_plan fftPlan;
-/*  char * strAddr; */
-/*  unsigned long * map_base, * virt_addr;
-//  off_t ain = 0x44e0d000;
-  off_t ain = 0x54c00000; */
 
-//  char strIn [50] = "/sys/bus/iio/devices/iio:device0/in_voltage0_raw";
   char strIn [35] = "/sys/devices/ocp.3/helper.15/AIN0";
 //  char str2In [35] = "/sys/devices/ocp.3/helper.15/AIN1";
 //  char str3In [35] = "/sys/devices/ocp.3/helper.15/AIN2";
 //  char str4In [35] = "/sys/devices/ocp.3/helper.15/AIN3";
   char FFTout [35] = "/root/code/output.txt";
   char waveOut [35] = "/root/code/waveform.txt";
-/*  char trigger [40] = "/sys/bus/devices/trigger0/trigger_now";
-  char * ONE = "1"; */
+
+  if ((argc < 4) || (argc > 4)) {
+    printf("You must provide four arguments.\n");
+    
+  }
 
   std::cout << "\nStarting program to read analog signals.\n" << std::endl;
   
@@ -51,15 +44,6 @@ int main() {
   
   int strHandle = open(strIn, O_RDONLY | O_SYNC);
   std::perror("Result");
-//  int triggerHandle = open(trigger, O_WRONLY);
-//  unsigned long * address = 0x44e0d000;
-//  unsigned long * address = 0x54c00000;
-//  strAddr = (int*)mmap(0, getpagesize(), PROT_READ, MAP_SHARED, strHandle, 0x44e0d000 & ~MAP_MASK);
-/*  map_base = (unsigned long*)mmap(0, 16, PROT_READ, MAP_SHARED, strHandle, ain);
-
-  virt_addr = map_base + (ain & MAP_MASK);
-
-  std::cout << "Address: " << (unsigned long*)virt_addr << std::endl; */
 
   std::cout << "\nEntering the loop..." << std::endl;
 /*

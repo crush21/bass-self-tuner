@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Code to get an analog signal from analog inputs
+ * Code that runs the motors for tuning the bass.
  * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Written by Cheyn Rushing
+ * Written by Chris Diemer and Cheyn Rushing
  */
 
 #include "motorFunc.h"

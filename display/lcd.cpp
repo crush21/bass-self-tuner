@@ -76,11 +76,11 @@ int main() {
 	if (stringNum == 0) {
           string1 = moveDownStr1(string1);
 	} else if (stringNum == 1) {
-//          string2 = moveDownStr2(string2);
+          string2 = moveDownStr2(string2);
 	} else if (stringNum == 2) {
-//          string3 = moveDownStr3(string3);
+          string3 = moveDownStr3(string3);
 	} else if (stringNum == 3) {
-//          string4 = moveDownStr4(string4);
+          string4 = moveDownStr4(string4);
         }
         isOn = true;
       }

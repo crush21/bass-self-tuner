@@ -22,6 +22,9 @@ echo "Done!"
 echo "Initializing Digital GPIO..."
 
 echo "Motor Control Pins..."
+echo 87 > /sys/class/gpio/export
+echo in > /sys/class/gpio/gpio87/direction
+
 # Motor 1
 echo 66 > /sys/class/gpio/export
 echo high > /sys/class/gpio/gpio66/direction
