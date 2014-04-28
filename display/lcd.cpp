@@ -43,17 +43,17 @@ int main() {
     read(upFile, upPush, 1);
     read(downFile, downPush, 1);
     if (!isOn) {
-      std::cout << "         " << upPush[0] << std::endl;
-      std::cout << "Not on!" << std::endl;
+//      std::cout << "         " << upPush[0] << std::endl;
+//      std::cout << "Not on!" << std::endl;
       if (leftPush[0] == '1') {
-        std::cout << "Left push!" << std::endl;
+//        std::cout << "Left push!" << std::endl;
         stringNum = moveLeft(stringNum);
-        std::cout << "String num after left is: " << stringNum << std::endl;
+//        std::cout << "String num after left is: " << stringNum << std::endl;
         isOn = true;
       } else if (rightPush[0] == '1') {
-        std::cout << "Right push!" << std::endl;
+//        std::cout << "Right push!" << std::endl;
         stringNum = moveRight(stringNum);
-        std::cout << "String num after right is: " << stringNum << std::endl;
+//        std::cout << "String num after right is: " << stringNum << std::endl;
         isOn = true;
       } else if (enterPush[0] == '1') {
 	if (stringNum == 4) {
@@ -65,6 +65,7 @@ int main() {
           string1 = moveUpStr1(string1);
 	} else if (stringNum == 1) {
           string2 = moveUpStr2(string2);
+          std::cout << string2 << std::endl;
 	} else if (stringNum == 2) {
           string3 = moveUpStr3(string3);
 	} else if (stringNum == 3) {
@@ -75,23 +76,23 @@ int main() {
 	if (stringNum == 0) {
           string1 = moveDownStr1(string1);
 	} else if (stringNum == 1) {
-          string2 = moveDownStr2(string2);
+//          string2 = moveDownStr2(string2);
 	} else if (stringNum == 2) {
-          string3 = moveDownStr3(string3);
+//          string3 = moveDownStr3(string3);
 	} else if (stringNum == 3) {
-          string4 = moveDownStr4(string4);
+//          string4 = moveDownStr4(string4);
         }
         isOn = true;
       }
     } else {
-      std::cout << "Is on!" << std::endl;
-      std::cout << leftPush[0] << " " << rightPush[0] << " " 
-                << enterPush[0] << " " << upPush[0] << " "
-                << downPush[0] << std::endl;
+//      std::cout << "Is on!" << std::endl;
+//      std::cout << leftPush[0] << " " << rightPush[0] << " " 
+//                << enterPush[0] << " " << upPush[0] << " "
+//                << downPush[0] << std::endl;
       if ((leftPush[0] == '0') && (rightPush[0] == '0') &&
 	  (enterPush[0] == '0') && (upPush[0] == '1') &&
 	  (downPush[0] == '1')) {
-        std::cout << "All off!" << std::endl;
+//        std::cout << "All off!" << std::endl;
         i++;
         isOn = false;
       }
