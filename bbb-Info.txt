@@ -1,4 +1,8 @@
+bbb-Info.txt contains information about the BeagleBone Black pin use,
+related to the peripherals the pins are connected to.
 
+Pins are used for the LCD screen, pushbuttons, motor control,
+and analog inputs.
 
 LCD Pins
 -------------
@@ -58,6 +62,14 @@ Motor Control Pins
 "26" = P8_14 - Motor 4 FWD
 "46" = P8_16 - Motor 4 REV
 "65" = P8_18 - Motor 4 ENA*
+
+
+Analog Inputs
+-------------
+AIN0 = P9_39
+AIN1 = P9_40
+AIN2 = P9_37
+AIN3 = P9_38
 
 
 Custom Flat Character
