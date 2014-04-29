@@ -274,7 +274,7 @@ void startScreen() {
   setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
   writeArrow();							// "->"
   writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);	// "E"
-  writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);	// "b"
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
   writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
   writeChar(OFF, ON, OFF, OFF, OFF, OFF, OFF, ON);	// "A"
   writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);	// " "
@@ -1022,7 +1022,7 @@ int tuningSequence(int firstString, int secondString,
   int child_status;
   const char * cmd = "/root/code/s1Analog";
   char firstNote [2];
-  sprintf(firstNote, "%d", firstString);
+  sprintf(firstNote, "%d", thirdString);
   std::cout << firstNote[0] << firstNote[1] << std::endl;
   clearBottomRow();
   childProcess = vfork();
