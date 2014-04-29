@@ -8,8 +8,8 @@
 #include <unistd.h>
 #include <cstdlib>
 #include <cstdio>
-//#include <cmath>
 #include <fcntl.h>
+#include <sys/wait.h>
 
 //using namespace std;
 
@@ -1017,8 +1017,23 @@ void clearBottomRow() {
  */
 int tuningSequence(int firstString, int secondString,
 		   int thirdString, int fourthString) {
+  pid_t childProcess;
+  pid_t waiting;
+  int child_status;
+  const char * cmd = "/root/code/s1Analog";
+  char firstNote [2];
+  sprintf(firstNote, "%d", firstString);
+  std::cout << firstNote[0] << firstNote[1] << std::endl;
   clearBottomRow();
-  sleep(1);
+  childProcess = vfork();
+  if (childProcess == 0) {
+    execlp(cmd,"/root/code",reinterpret_cast<const char *>(firstNote),(char*)NULL);
+    std::cout << "Child!" << std::endl;
+  } else {
+    do {
+      waiting = wait(&child_status);
+    } while (waiting != childProcess);
+  }
   writeOne();
   sleep(2);
   writeTwo();

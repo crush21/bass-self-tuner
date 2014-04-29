@@ -12,7 +12,7 @@
 #define MAP_SIZE 4096UL
 #define MAP_MASK (MAP_SIZE - 1)
 
-const int NUM_CYCLES = 1024;
+const int NUM_CYCLES = 512;
 const int PEAK_LIMIT = NUM_CYCLES / 8;
 const double ONE_MIL = 1000000.0;
 const double ONE_BIL = 1000000000.0;
@@ -22,20 +22,27 @@ int main(int argc, char *argv[]) {
   double waveform[NUM_CYCLES];
   double FFTdouble[NUM_CYCLES];
   fftw_complex FFT[NUM_CYCLES];
-  double aIn;
+//  double aIn;
   double totalSec, avgSec;
   fftw_plan fftPlan;
 
-  char strIn [35] = "/sys/devices/ocp.3/helper.15/AIN0";
+  char strIn [35] = "/sys/devices/ocp.3/helper.12/AIN0"; // Changed from helper.15 to helper.12
+//  char strIn [35] = "/sys/devices/ocp.3/helper.15/AIN0";
 //  char str2In [35] = "/sys/devices/ocp.3/helper.15/AIN1";
 //  char str3In [35] = "/sys/devices/ocp.3/helper.15/AIN2";
 //  char str4In [35] = "/sys/devices/ocp.3/helper.15/AIN3";
-  char FFTout [35] = "/root/code/output.txt";
-  char waveOut [35] = "/root/code/waveform.txt";
+//  char FFTout [35] = "/root/code/output.txt";
+//  char waveOut [35] = "/root/code/waveform.txt";
 
-  if ((argc < 4) || (argc > 4)) {
-    printf("You must provide four arguments.\n");
-    
+  if (argc != 2) {
+    printf("\nYou must provide one argument.\n");
+    printf("The argument represents a note for a string.\n");
+    printf("The note starts at 0 = C and increases by one half step\n");
+    printf("For every integer increase of 1, to a maximum of 7 = G.\n\n");
+    printf("Usage: s1Analog noteNum\n");
+    printf("noteNum:\n");
+    printf("  Must be between 0 and 7.\n");
+    exit(0);
   }
 
   std::cout << "\nStarting program to read analog signals.\n" << std::endl;
@@ -56,19 +63,13 @@ int main(int argc, char *argv[]) {
 
   for (int i = 0; i < NUM_CYCLES; i++) {
 
-//    heart();
-
 //    poll(&strFile, 1, -1);
-    aIn = getAnalog(1, /* virt_addr); */ strHandle);  // strFile.fd);
+    waveform[i] = getAnalog(1, strHandle);
     lseek(strHandle, 0, SEEK_SET);
-/*    write(triggerHandle, ONE, 1);
-    lseek(triggerHandle, 0, SEEK_SET); */
 
-    waveform[i] = aIn;
+//    waveform[i] = aIn;
 
-//    octWave.append(octave_value(aIn));
-
-//    usleep(680);    
+//    usleep(680);
     
 //    heart();
 
@@ -87,34 +88,17 @@ int main(int argc, char *argv[]) {
   clock_gettime(CLOCK_MONOTONIC,&endTime);
   runTime.tv_sec = endTime.tv_sec - startTime.tv_sec;
   runTime.tv_nsec = endTime.tv_nsec - startTime.tv_nsec;
-//  timersub(&endTime,&startTime,&runTime);
   totalSec = runTime.tv_sec + runTime.tv_nsec / ONE_BIL;
   avgSec = totalSec / NUM_CYCLES;
   std::cout << "Total runtime is: " << totalSec << std::endl;
   std::cout << "Average sample time is: " << avgSec << std::endl;
-//  close(triggerHandle);
   close(strHandle);
-
-
-
-/*
-  octFFT = Ffft(octWave, NUM_CYCLES - 1);
-  octave_value anOctVal;
-  for (int i = 0; i < NUM_CYCLES; i++) {
-    anOctVal = octFFT(i);
-    std::cout << anOctVal.type_name() << std::endl;
-    std::cout << anOctVal.class_name() << std::endl;
-    FFT[i] = abs(anOctVal.double_value());
-  }
-*/
-
-
-
 
   fftPlan = fftw_plan_dft_r2c_1d(NUM_CYCLES, waveform, FFT, FFTW_DESTROY_INPUT | FFTW_MEASURE);
 //  std::cout << "Made it here!" << std::endl;
   fftw_execute(fftPlan);
 
+/* Not necessary, but keeping for debugging purposes.
 // Write waveform and FFT result to files.
   std::ofstream wavFile;
   std::fstream FFTfile;
@@ -126,20 +110,18 @@ int main(int argc, char *argv[]) {
   }
   wavFile.close();
   FFTfile.close();
+*/
 
   for (int j = 1; j < (NUM_CYCLES); j++) {
     FFTdouble[j] = fabs(FFT[j][0]);
-/*    if (FFT[j] < 0) {
-      FFTdouble[j] = -1 * FFT[j];
-    } else {
-      FFTdouble[j] = FFT[j];
-    } */
   }
 
   double sampleFrequency = 1 / avgSec;
   double frequency = getFrequency(FFTdouble, NUM_CYCLES - 1, PEAK_LIMIT, sampleFrequency);
-  double ideal = 97.99;
+  int noteNum = atoi(argv[1]);
+  double idealFreq = translateFrequency(noteNum);
   std::cout << "Frequency: " << frequency << std::endl;
-  std::cout << "Cent Difference: " << getCents(frequency, ideal) << std::endl;
+  std::cout << "Cent Difference: " << getCents(frequency, idealFreq) << std::endl;
+  // Insert motor call.
   return 0;
 }
