@@ -35,9 +35,9 @@ int main(int argc, char *argv[]) {
     printf("The argument represents a note for a string.\n");
     printf("The note starts at 0 = C and increases by one half step\n");
     printf("For every integer increase of 1, to a maximum of 7 = G.\n\n");
-    printf("Usage: s1Analog noteNum\n");
+    printf("Usage: s2Analog noteNum\n");
     printf("noteNum:\n");
-    printf("  Must be between 0 and 7.\n");
+    printf("  Must be between 5 and 12.\n");
     exit(0);
   }
 

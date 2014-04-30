@@ -26,18 +26,18 @@ int main(int argc, char *argv[]) {
   double totalSec, avgSec;
   fftw_plan fftPlan;
 
-  char strIn [35] = "/sys/devices/ocp.3/helper.12/AIN3"; // Changed from helper.15 to helper.12
-//  char FFTout [35] = "/root/code/output.txt";
-//  char waveOut [35] = "/root/code/waveform.txt";
+  char strIn [35] = "/sys/devices/ocp.3/helper.12/AIN4"; // Changed from helper.15 to helper.12
+  char FFTout [35] = "/root/code/output.txt";
+  char waveOut [35] = "/root/code/waveform.txt";
 
   if (argc != 2) {
     printf("\nYou must provide one argument.\n");
     printf("The argument represents a note for a string.\n");
     printf("The note starts at 0 = C and increases by one half step\n");
     printf("For every integer increase of 1, to a maximum of 7 = G.\n\n");
-    printf("Usage: s1Analog noteNum\n");
+    printf("Usage: s4Analog noteNum\n");
     printf("noteNum:\n");
-    printf("  Must be between 0 and 7.\n");
+    printf("  Must be between 15 and 22.\n");
     exit(0);
   }
 
