@@ -31,6 +31,7 @@ int main() {
   int string3 = 14; // Holds "note" of D string
   int string4 = 19; // Holds "note" of G string
   
+  dispCtrl(ONE, ZERO, ZERO);
   clearScreen();
   setDDRAM(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
   startScreen();

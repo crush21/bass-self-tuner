@@ -12,21 +12,41 @@ const char INPIN [29] = "/sys/class/gpio/gpio87/value";
 int Handle = open(INPIN, O_RDONLY);
 
 
-char Value1 [2];
-char Value2;
+char ReadValue1 [2];
+char LastRead [2];
+char ReadValue2;
 int counter = 0;
+timespec startTime, lastTime;
+double runTime;
+double debounceTime = .2;
+lastTime.tv_sec = 0;
+lastTime.tv_nsec = 0;
+
+read(Handle, LastRead, 1);
+lseek(Handle, 0, SEEK_SET);
 
 
 while(1){
-Value2 = Value1[0];
-read(Handle, Value1, 1);
+ReadValue2 = ReadValue1[0];
+read(Handle, ReadValue1, 1);
 lseek(Handle, 0, SEEK_SET);
+clock_gettime(CLOCK_MONOTONIC,&startTime);
 
-if ( Value1[0] != Value2){
- counter++;
+if ( ReadValue1[0] != ReadValue2){
+double nTime = (startTime.tv_nsec - lastTime.tv_nsec);
+double sTime = (startTime.tv_sec - lastTime.tv_sec);
+runTime = sTime + nTime/1000000000.0;
+cout << "runTime: " << runTime << endl;
 
- cout << "the counter is at: "  << counter << endl;
+	if(runTime > debounceTime){
+		if(ReadValue1[0] != LastRead[0]){
+		clock_gettime(CLOCK_MONOTONIC,&lastTime);
+		counter++;
+		cout << "counter: " << counter << endl;
+		}
+	}
 }
+
 
 }
 }

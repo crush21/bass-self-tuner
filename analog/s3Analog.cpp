@@ -9,58 +9,63 @@
 #include <fstream>
 #include <poll.h>
 
-  const int NUM_CYCLES = 4096;
-  const int PEAK_LIMIT = 500;
-  const double ONE_MIL = 1000000.0;
+#define MAP_SIZE 4096UL
+#define MAP_MASK (MAP_SIZE - 1)
 
-int main() {
-  timeval startTime, endTime, runTime;
+const int NUM_CYCLES = 1024;
+const int PEAK_LIMIT = NUM_CYCLES / 8;
+const double ONE_MIL = 1000000.0;
+const double ONE_BIL = 1000000000.0;
+
+int main(int argc, char *argv[]) {
+  timespec startTime, endTime, runTime;
   double waveform[NUM_CYCLES];
-  double FFT[NUM_CYCLES];
-  double aIn;
+  double FFTdouble[NUM_CYCLES];
+  fftw_complex FFT[NUM_CYCLES];
+//  double aIn;
   double totalSec, avgSec;
   fftw_plan fftPlan;
-//  char * strAddr;
 
-  char strIn [35] = "/sys/devices/ocp.3/helper.15/AIN0";
-//  char str2In [35] = "/sys/devices/ocp.3/helper.15/AIN1";
-//  char str3In [35] = "/sys/devices/ocp.3/helper.15/AIN2";
-//  char str4In [35] = "/sys/devices/ocp.3/helper.15/AIN3";
-  char FFTout [35] = "/root/code/str1/output.txt";
-  char waveOut [35] = "/root/code/str1/waveform.txt";
+  char strIn [35] = "/sys/devices/ocp.3/helper.12/AIN2"; // Changed from helper.15 to helper.12
+//  char FFTout [35] = "/root/code/output.txt";
+//  char waveOut [35] = "/root/code/waveform.txt";
 
-  cout << "\nStarting program to read analog signals.\n" << endl;
+  if (argc != 2) {
+    printf("\nYou must provide one argument.\n");
+    printf("The argument represents a note for a string.\n");
+    printf("The note starts at 0 = C and increases by one half step\n");
+    printf("For every integer increase of 1, to a maximum of 7 = G.\n\n");
+    printf("Usage: s1Analog noteNum\n");
+    printf("noteNum:\n");
+    printf("  Must be between 0 and 7.\n");
+    exit(0);
+  }
+
+  std::cout << "\nStarting program to read analog signals.\n" << std::endl;
   
-  cout << strIn << endl;
+  std::cout << strIn << std::endl;
   
-  /* Open a file once before the while loop, to
-   * "initialize" the files to update. I do not
-   * understand why this is so. A bug in the driver?
-   */
-  
-  int strHandle = open(strIn, O_RDONLY);
-//  strAddr = (char*)mmap(NULL, 1, PROT_READ, MAP_SHARED, strHandle, 0);
+  int strHandle = open(strIn, O_RDONLY | O_SYNC);
+  std::perror("Result");
 
-  cout << "\nEntering infinite loop..." << endl;
-
+  std::cout << "\nEntering the loop..." << std::endl;
+/*
   pollfd strFile;
   strFile.fd = strHandle;
   strFile.events = POLLIN;
   strFile.revents = POLLIN;
-
-  gettimeofday(&startTime, NULL);
+*/
+  clock_gettime(CLOCK_MONOTONIC, &startTime);
 
   for (int i = 0; i < NUM_CYCLES; i++) {
 
-//    heart();
-
-    poll(&strFile, 1, -1);
-    aIn = getAnalog(1, /* strAddr); */ strFile.fd);
+//    poll(&strFile, 1, -1);
+    waveform[i] = getAnalog(1, strHandle);
     lseek(strHandle, 0, SEEK_SET);
 
-    waveform[i] = aIn;
+//    waveform[i] = aIn;
 
-//    usleep(680);    
+//    usleep(680);
     
 //    heart();
 
@@ -76,49 +81,43 @@ int main() {
     
   }
   
-  gettimeofday(&endTime, NULL);
-  timersub(&endTime,&startTime,&runTime);
-  totalSec = runTime.tv_sec + runTime.tv_usec / ONE_MIL;
+  clock_gettime(CLOCK_MONOTONIC,&endTime);
+  runTime.tv_sec = endTime.tv_sec - startTime.tv_sec;
+  runTime.tv_nsec = endTime.tv_nsec - startTime.tv_nsec;
+  totalSec = runTime.tv_sec + runTime.tv_nsec / ONE_BIL;
   avgSec = totalSec / NUM_CYCLES;
-  cout << "Total runtime is: " << totalSec << endl;
-  cout << "Average sample time is: " << avgSec << endl;
-//  close(strHandle);
-  fftPlan = fftw_plan_r2r_1d(NUM_CYCLES, waveform, FFT, FFTW_R2HC, FFTW_DESTROY_INPUT);
-//  cout << "Made it here!" << endl;
+  std::cout << "Total runtime is: " << totalSec << std::endl;
+  std::cout << "Average sample time is: " << avgSec << std::endl;
+  close(strHandle);
+
+  fftPlan = fftw_plan_dft_r2c_1d(NUM_CYCLES, waveform, FFT, FFTW_DESTROY_INPUT | FFTW_MEASURE);
+//  std::cout << "Made it here!" << std::endl;
   fftw_execute(fftPlan);
 
-  ofstream FFTfile;
-  ofstream wavFile;
-  FFTfile.open(FFTout);
+/* Not necessary, but keeping for debugging purposes.
+// Write waveform and FFT result to files.
+  std::ofstream wavFile;
+  std::fstream FFTfile;
   wavFile.open(waveOut);
+  FFTfile.open(FFTout);
   for (int i = 0; i < (NUM_CYCLES / 2 + 1); i++) {
-    FFTfile << FFT[i] << endl;
-    wavFile << waveform[i] << endl;
+    wavFile << waveform[i] << std::endl;
+    FFTfile << FFT[i][0] << std::endl;
   }
-  FFTfile.close();
   wavFile.close();
-
-// Check average of FFT with DC value ( FFT[0] )
-/*
-  double avg = 0;
-  for (int j = 1; j < (NUM_CYCLES / 2 + 1); j++) {
-    if (FFT[j] < 0) {
-      avg -= FFT[j];
-    } else {
-      avg += FFT[j];
-    }
-  }
-  avg = avg / NUM_CYCLES;
-  cout << "Average: " << avg << endl;
-  cout << "FFT[0]: " << FFT[0] << endl;
-  if (avg == FFT[0]) {
-    cout << "Success! FFT[0] is the average!" << endl;
-  }
+  FFTfile.close();
 */
-  FFT[0] = 0;
-  double frequency = getFrequency(FFT, NUM_CYCLES / 2 + 1, PEAK_LIMIT, totalSec);
-  double ideal = 97.99;
-  cout << "Frequency: " << frequency << endl;
-  cout << "Cent Difference: " << getCents(frequency, ideal) << endl;
+
+  for (int j = 1; j < (NUM_CYCLES); j++) {
+    FFTdouble[j] = fabs(FFT[j][0]);
+  }
+
+  double sampleFrequency = 1 / avgSec;
+  double frequency = getFrequency(FFTdouble, NUM_CYCLES - 1, PEAK_LIMIT, sampleFrequency);
+  int noteNum = atoi(argv[1]);
+  double idealFreq = translateFrequency(noteNum);
+  std::cout << "Frequency: " << frequency << std::endl;
+  std::cout << "Cent Difference: " << getCents(frequency, idealFreq) << std::endl;
+  // Insert motor call.
   return 0;
 }

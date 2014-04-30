@@ -43,7 +43,7 @@ const char * OFF = "0";
  * Returns:	 Nothing.
  * Restrictions: Characters must be 0 or 1.
  */
-void dispCtrl(char* dispOn, char* cursorOn, char* blinkOn) {
+void dispCtrl(const char * dispOn, const char * cursorOn, const char * blinkOn) {
   if ((atoi(dispOn) > 1) || (atoi(cursorOn) > 1) || (atoi(blinkOn) > 1)) {
     std::cout << "Error: Parameter is greater than 1." << std::endl;
     return;
@@ -1017,29 +1017,78 @@ void clearBottomRow() {
  */
 int tuningSequence(int firstString, int secondString,
 		   int thirdString, int fourthString) {
-  pid_t childProcess;
+  pid_t childProcess1;
+  pid_t childProcess2;
+  pid_t childProcess3;
+  pid_t childProcess4;
   pid_t waiting;
-  int child_status;
-  const char * cmd = "/root/code/s1Analog";
+  int child_status1;
+  int child_status2;
+  int child_status3;
+  int child_status4;
   char firstNote [2];
-  sprintf(firstNote, "%d", thirdString);
+  char secondNote [2];
+  char thirdNote [2];
+  char fourthNote [2];
+  const char * cmd1 = "/root/code/s1Analog";
+  const char * cmd2 = "/root/code/s2Analog";
+  const char * cmd3 = "/root/code/s3Analog";
+  const char * cmd4 = "/root/code/s4Analog";
+
+  sprintf(firstNote, "%d", firstString);
   std::cout << firstNote[0] << firstNote[1] << std::endl;
   clearBottomRow();
-  childProcess = vfork();
-  if (childProcess == 0) {
-    execlp(cmd,"/root/code",reinterpret_cast<const char *>(firstNote),(char*)NULL);
+  childProcess1 = vfork();
+  if (childProcess1 == 0) {
+    execlp(cmd1,"/root/code",reinterpret_cast<const char *>(firstNote),(char*)NULL);
     std::cout << "Child!" << std::endl;
   } else {
     do {
-      waiting = wait(&child_status);
-    } while (waiting != childProcess);
+      waiting = wait(&child_status1);
+    } while (waiting != childProcess1);
   }
   writeOne();
-  sleep(2);
+
+  sprintf(secondNote, "%d", secondString);
+  std::cout << secondNote[0] << secondNote[1] << std::endl;
+  clearBottomRow();
+  childProcess2 = vfork();
+  if (childProcess2 == 0) {
+    execlp(cmd2,"/root/code",reinterpret_cast<const char *>(secondNote),(char*)NULL);
+    std::cout << "Child!" << std::endl;
+  } else {
+    do {
+      waiting = wait(&child_status2);
+    } while (waiting != childProcess2);
+  }
   writeTwo();
-  sleep(2);
+
+  sprintf(thirdNote, "%d", thirdString);
+  std::cout << thirdNote[0] << thirdNote[1] << std::endl;
+  clearBottomRow();
+  childProcess3 = vfork();
+  if (childProcess3 == 0) {
+    execlp(cmd3,"/root/code",reinterpret_cast<const char *>(thirdNote),(char*)NULL);
+    std::cout << "Child!" << std::endl;
+  } else {
+    do {
+      waiting = wait(&child_status3);
+    } while (waiting != childProcess3);
+  }
   writeThree();
-  sleep(2);
+
+  sprintf(fourthNote, "%d", fourthString);
+  std::cout << fourthNote[0] << fourthNote[1] << std::endl;
+  clearBottomRow();
+  childProcess4 = vfork();
+  if (childProcess4 == 0) {
+    execlp(cmd4,"/root/code",reinterpret_cast<const char *>(fourthNote),(char*)NULL);
+    std::cout << "Child!" << std::endl;
+  } else {
+    do {
+      waiting = wait(&child_status4);
+    } while (waiting != childProcess4);
+  }
   writeFour();
   return 0;
 }
