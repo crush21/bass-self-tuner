@@ -52,11 +52,15 @@ int motorTune(double freqDiff, char note){				//speed of motor changes if it is 
 
 int encoder(char note, int turns){
 
+const char INPIN [29] = "/sys/class/gpio/gpio87/value";
+
+/*
 if(note == 'D'){
 	const char INPIN [29] = "/sys/class/gpio/gpio87/value";
 } else{
 	cout << "Invalid string" << endl;
 }
+*/
 
 int Handle = open(INPIN, O_RDONLY);
 

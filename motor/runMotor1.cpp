@@ -47,18 +47,19 @@ int main(int argc, char * argv[]) {
 double freqDiff = 26;
 int turns = motorTune(freqDiff, 'D');
 while(encoder('D',turns)){
-	int handle = open(fwdPath, O_WRONLY);
-	write(handle, "1", 1);
+	int handle1 = open(fwdPath, O_WRONLY);
+	write(handle1, "1", 1);
+	lseek(handle1, 0, SEEK_SET);
 }
-
-write(handle, "0", 1);
-close(handle);
+int handle1 = open(fwdPath, O_WRONLY);
+write(handle1, "0", 1);
+close(handle1);
 //now break
-int handle = open(brake, O_WRONLY);
-write(handle, '1', 1);
+int handle2 = open(brake, O_WRONLY);
+write(handle2, "1", 1);
 usleep(1000000);
-write(handle, "0", 1);
-close(handle);
+write(handle2, "0", 1);
+close(handle2);
 
 cout << "Done tuning!" << endl;
 
