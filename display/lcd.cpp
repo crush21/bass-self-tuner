@@ -37,7 +37,7 @@ int main() {
   startScreen();
   int i = 0;
   bool isOn = false;
-  while (i < 40) {
+  while (1) {
     read(leftFile, leftPush, 1);
     read(rightFile, rightPush, 1);
     read(enterFile, enterPush, 1);
