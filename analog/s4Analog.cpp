@@ -100,7 +100,7 @@ int main(int argc, char *argv[]) {
   std::fstream FFTfile;
   wavFile.open(waveOut);
   FFTfile.open(FFTout);
-  for (int i = 0; i < (NUM_CYCLES / 2 + 1); i++) {
+  for (int i = 0; i < NUM_CYCLES; i++) {
     wavFile << waveform[i] << std::endl;
     FFTfile << FFT[i][0] << std::endl;
   }

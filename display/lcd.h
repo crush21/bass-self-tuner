@@ -1034,7 +1034,7 @@ int tuningSequence(int firstString, int secondString,
   const char * cmd2 = "/root/code/s2Analog";
   const char * cmd3 = "/root/code/s3Analog";
   const char * cmd4 = "/root/code/s4Analog";
-
+/*
   sprintf(firstNote, "%d", firstString);
   std::cout << firstNote[0] << firstNote[1] << std::endl;
   clearBottomRow();
@@ -1048,7 +1048,7 @@ int tuningSequence(int firstString, int secondString,
     } while (waiting != childProcess1);
   }
   writeOne();
-
+  
   sprintf(secondNote, "%d", secondString);
   std::cout << secondNote[0] << secondNote[1] << std::endl;
   clearBottomRow();
@@ -1076,7 +1076,7 @@ int tuningSequence(int firstString, int secondString,
     } while (waiting != childProcess3);
   }
   writeThree();
-
+*/
   sprintf(fourthNote, "%d", fourthString);
   std::cout << fourthNote[0] << fourthNote[1] << std::endl;
   clearBottomRow();
