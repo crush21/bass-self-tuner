@@ -34,7 +34,7 @@ int motorTune(double freqDiff, char note){				//speed of motor changes if it is 
 	turns = (freqDiff - 1.3595)/13.076;				//an oversimplified linear equation representing G. Better equation to be created once FETs arrive.
 	}
   if('D' == note){
-	turns = (freqDiff - 1)/13;
+	turns = (freqDiff)/13;
   	}
   if('A' == note){
 	turns = (freqDiff - 1)/13;
@@ -50,7 +50,7 @@ int motorTune(double freqDiff, char note){				//speed of motor changes if it is 
 
 }
 
-char encoder(char note, int turns){
+int encoder(char note, int turns){
 
 if(note == 'D'){
 	const char INPIN [29] = "/sys/class/gpio/gpio87/value";
@@ -91,7 +91,7 @@ runTime = sTime + nTime/1000000000.0;
 		if(ReadValue1[0] != LastRead[0]){
 		clock_gettime(CLOCK_MONOTONIC,&lastTime);
 		counter++;
-		cout << "counter: " << counter << endl;
+	//	cout << "counter: " << counter << endl;
 		}
 	}
 }
@@ -99,5 +99,5 @@ runTime = sTime + nTime/1000000000.0;
 
 }
 
-return 1;
+return 0;
 }
