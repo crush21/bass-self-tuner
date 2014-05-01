@@ -14,8 +14,8 @@
 
 # Initialize analog input pins
 echo "Initializing Analog Inputs..."
-echo BB-ADC > /sys/devices/bone_capemgr.9/slots
-# echo cape-bone-iio > /sys/devices/bone_capemgr.9/slots
+# echo BB-ADC > /sys/devices/bone_capemgr.9/slots
+echo cape-bone-iio > /sys/devices/bone_capemgr.9/slots
 echo "Done!"
 
 # Initialize digital General Purpose Input/Output (GPIO) pins

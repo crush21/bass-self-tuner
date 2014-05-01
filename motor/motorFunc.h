@@ -51,3 +51,10 @@ double motorTune(double freqDiff, char note){				//speed of motor changes if it 
 
 }
 
+double encoder(pin){
+
+
+
+
+
+}

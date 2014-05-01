@@ -9,7 +9,7 @@
 #include <fstream>
 #include <poll.h>
 
-const int NUM_CYCLES = 1500;
+const int NUM_CYCLES = 2048;
 const int PEAK_LIMIT = NUM_CYCLES / 8;
 const double ONE_MIL = 1000000.0;
 const double ONE_BIL = 1000000000.0;
@@ -23,7 +23,8 @@ int main(int argc, char *argv[]) {
   double totalSec, avgSec;
   fftw_plan fftPlan;
 
-  char strIn [35] = "/sys/devices/ocp.3/helper.12/AIN4"; // Changed from helper.15 to helper.12
+//  char strIn [35] = "/sys/devices/ocp.3/helper.12/AIN4"; // Changed from helper.15 to helper.12
+  char strIn [50] = "/sys/bus/iio/devices/iio:device0/in_voltage4_raw"; // Changed from helper.15 to helper.12
   char FFTout [35] = "/root/code/output.txt";
   char waveOut [35] = "/root/code/waveform.txt";
 
