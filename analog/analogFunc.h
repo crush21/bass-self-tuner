@@ -86,7 +86,7 @@ double getFrequency(double *FFT, int size, int limit, const double& sampleFreq) 
     }
   }
   std::cout << "Highest index is: " << index << std::endl;
-  frequency = index * sampleFreq / size;
+  frequency = (index + 1) * sampleFreq / size;
   return frequency;
 }
 

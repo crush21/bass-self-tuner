@@ -9,10 +9,7 @@
 #include <fstream>
 #include <poll.h>
 
-#define MAP_SIZE 4096UL
-#define MAP_MASK (MAP_SIZE - 1)
-
-const int NUM_CYCLES = 1024;
+const int NUM_CYCLES = 1500;
 const int PEAK_LIMIT = NUM_CYCLES / 8;
 const double ONE_MIL = 1000000.0;
 const double ONE_BIL = 1000000000.0;
@@ -49,18 +46,18 @@ int main(int argc, char *argv[]) {
   std::perror("Result");
 
   std::cout << "\nEntering the loop..." << std::endl;
-/*
+
   pollfd strFile;
   strFile.fd = strHandle;
   strFile.events = POLLIN;
   strFile.revents = POLLIN;
-*/
+
   clock_gettime(CLOCK_MONOTONIC, &startTime);
 
   for (int i = 0; i < NUM_CYCLES; i++) {
 
-//    poll(&strFile, 1, -1);
-    waveform[i] = getAnalog(1, strHandle);
+    poll(&strFile, 1, -1);
+    waveform[i] = getAnalog(1, strFile.fd);
     lseek(strHandle, 0, SEEK_SET);
 
 //    waveform[i] = aIn;
