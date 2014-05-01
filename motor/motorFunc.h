@@ -27,9 +27,8 @@ void motorControl(char * file, unsigned time) {
   close(handle);
 }
 
-double motorTune(double freqDiff, char note){				//speed of motor changes if it is up or down, equation for string changes between strings. , char note
-  double speed = 1; 							//speed of motor: Turns/Sec
-  double turns = 0;
+int motorTune(double freqDiff, char note){				//speed of motor changes if it is up or down, equation for string changes between strings. , char note
+  int turns;
 
   if('G'== note){
 	turns = (freqDiff - 1.3595)/13.076;				//an oversimplified linear equation representing G. Better equation to be created once FETs arrive.
@@ -44,19 +43,22 @@ double motorTune(double freqDiff, char note){				//speed of motor changes if it 
 	turns = (freqDiff - 1)/13;
   	}
   if(turns == 0){
-	perror("Error!");
+	perror("In tune!");
   	} 
-  double time = turns/speed;
-  return time;
+
+  return turns;
 
 }
 
-double encoder(pin){
+char encoder(char note, int turns){
 
-const char INPIN [29] = "/sys/class/gpio/gpio87/value";
+if(note == 'D'){
+	const char INPIN [29] = "/sys/class/gpio/gpio87/value";
+} else{
+	cout << "Invalid string" << endl;
+}
 
 int Handle = open(INPIN, O_RDONLY);
-
 
 char ReadValue1 [2];
 char LastRead [2];
@@ -71,8 +73,9 @@ lastTime.tv_nsec = 0;
 read(Handle, LastRead, 1);
 lseek(Handle, 0, SEEK_SET);
 
+int ticks = turns * 2;  //2 is the number of breaks on the head of the drill
 
-while(1){
+while(counter != ticks){
 ReadValue2 = ReadValue1[0];
 read(Handle, ReadValue1, 1);
 lseek(Handle, 0, SEEK_SET);
@@ -96,6 +99,5 @@ runTime = sTime + nTime/1000000000.0;
 
 }
 
-
-
+return 1;
 }
