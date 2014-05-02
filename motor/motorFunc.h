@@ -99,7 +99,7 @@ void encoder(const int stringNum, double turns){
   int counter = 0;
   timespec startTime, lastTime;
   double runTime;
-  double debounceTime = .25;
+  double debounceTime = .10;
   lastTime.tv_sec = 0;
   lastTime.tv_nsec = 0;
   
@@ -118,7 +118,7 @@ void encoder(const int stringNum, double turns){
       double nTime = (startTime.tv_nsec - lastTime.tv_nsec);
       double sTime = (startTime.tv_sec - lastTime.tv_sec);
       runTime = sTime + nTime/1000000000.0;
-      //cout << "runTime: " << runTime << endl;
+      cout << "runTime: " << runTime << endl;
 
       if (runTime > debounceTime) {
         if (!firstLoop) {

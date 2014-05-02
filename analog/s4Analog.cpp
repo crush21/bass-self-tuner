@@ -97,8 +97,12 @@ int main(int argc, char *argv[]) {
   double frequency = getFrequency(FFTdouble, NUM_CYCLES - 1, PEAK_LIMIT, sampleFrequency);
   int noteNum = atoi(argv[1]);
   double idealFreq = translateFrequency(noteNum);
+  double freqDiff = frequency - idealFreq;
+  double centDiff = getCents(frequency, idealFreq);
   std::cout << "Frequency: " << frequency << std::endl;
-  std::cout << "Cent Difference: " << getCents(frequency, idealFreq) << std::endl;
-  callMotor(STRING4, frequency - idealFreq);
+  std::cout << "Cent Difference: " << centDiff << std::endl;
+  if (fabs(centDiff) > 5) {
+    callMotor(STRING4, freqDiff);
+  }
   return 0;
 }

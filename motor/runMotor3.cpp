@@ -30,16 +30,6 @@ int main(int argc, char * argv[]) {
     printf(" measured and ideal frequencies.\n");
     exit(0);
   }
-/*
-  for (int i = 0; i < 200; i++) {
-    cout << "Running forward" << endl;
-    motorControl(BWDPATH, 500000); // Forward 60 seconds.
-    motorControl(brake, 1000000); // Brake for 1 second.
-    cout << "Running backward" << endl;
-    motorControl(BWDPATH, 500000); // Backward 5 seconds.
-    motorControl(brake, 1000000);
-  }
-*/
 
   freqDiff = strtod(argv[1], NULL); // Convert argument to double.
 
