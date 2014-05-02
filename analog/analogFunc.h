@@ -13,7 +13,13 @@
 //#include <errno.h>
 #include <sys/time.h>
 #include <fcntl.h>
+#include <sys/wait.h>
 #include <fftw3.h>
+
+const int STRING1 = 0;
+const int STRING2 = 1;
+const int STRING3 = 2;
+const int STRING4 = 3;
 
 /* Gets the analog voltage given by the specified file.
  * Receives:
@@ -32,8 +38,8 @@ double getAnalog(unsigned stringNum, int strHandle) {
   }
   analogBuffer[4] = '\0';
   ss >> aVal;
-/*  cout << "String " << stringNum << " Voltage Reading: "
-       << aVal << endl; */
+/*  std::cout << "String " << stringNum << " Voltage Reading: "
+       << aVal << std::endl; */
   return aVal;
 }
 
@@ -115,4 +121,59 @@ double translateFrequency(int noteNumber) {
  */
   int offset = 4;
   return (pow(pow(2,1/12.0), noteNumber + offset - 49) * 440);
+}
+
+int callMotor(const int stringNum, double freqDiff) {
+  pid_t childProcess;
+  pid_t waiting;
+  int child_status;
+  const char * CMD1 = "/root/code/runMotor1";
+  const char * CMD2 = "/root/code/runMotor2";
+  const char * CMD3 = "/root/code/runMotor3";
+  const char * CMD4 = "/root/code/runMotor4";
+  char freqStr [8];
+
+  sprintf(freqStr, "%f", freqDiff);
+  if (stringNum == 0) {
+    childProcess = vfork();
+    if (childProcess == 0) {
+      execlp(CMD1, "/root/code", reinterpret_cast<const char *>(freqStr), (char*)NULL);
+      std::cout << "Child process!" << std::endl;
+    } else {
+      do {
+        waiting = wait(&child_status);
+      } while (waiting != childProcess);
+    }
+  } else if (stringNum == 1) {
+    childProcess = vfork();
+    if (childProcess == 0) {
+      execlp(CMD2, "/root/code", reinterpret_cast<const char *>(freqStr), (char*)NULL);
+      std::cout << "Child process!" << std::endl;
+    } else {
+      do {
+        waiting = wait(&child_status);
+      } while (waiting != childProcess);
+    }
+  } else if (stringNum == 2) {
+    childProcess = vfork();
+    if (childProcess == 0) {
+      execlp(CMD3, "/root/code", reinterpret_cast<const char *>(freqStr), (char*)NULL);
+      std::cout << "Child process!" << std::endl;
+    } else {
+      do {
+        waiting = wait(&child_status);
+      } while (waiting != childProcess);
+    }
+  } else if (stringNum == 3) {
+    childProcess = vfork();
+    if (childProcess == 0) {
+      execlp(CMD4, "/root/code", reinterpret_cast<const char *>(freqStr), (char*)NULL);
+      std::cout << "Child process!" << std::endl;
+    } else {
+      do {
+        waiting = wait(&child_status);
+      } while (waiting != childProcess);
+    }
+  }
+  return 0;
 }

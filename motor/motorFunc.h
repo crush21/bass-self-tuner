@@ -61,19 +61,26 @@ double motorTune(double freqDiff, const int stringNum) {	// speed of motor chang
 
 }
 
-int encoder(char note, double turns){
+void encoder(const int stringNum, double turns){
 
-  const char INPIN [29] = "/sys/class/gpio/gpio87/value";
+  const char ENCODER1 [29] = "/sys/class/gpio/gpio87/value";
+  const char ENCODER2 [29] = "/sys/class/gpio/gpio89/value";
+  const char ENCODER3 [29] = "/sys/class/gpio/gpio10/value";
+  const char ENCODER4 [29] = "/sys/class/gpio/gpio11/value";
+  int Handle;
 
-/*
-if(note == 'D'){
-	const char INPIN [29] = "/sys/class/gpio/gpio87/value";
-} else{
-	cout << "Invalid string" << endl;
-}
-*/
-
-  int Handle = open(INPIN, O_RDONLY);
+  if (stringNum == 0) {
+    Handle = open(ENCODER1, O_RDONLY);
+  } else if (stringNum == 1) {
+    Handle = open(ENCODER2, O_RDONLY);
+  } else if (stringNum == 2) {
+    Handle = open(ENCODER3, O_RDONLY);
+  } else if (stringNum == 3) {
+    Handle = open(ENCODER4, O_RDONLY);
+  } else {
+    cout << "Invalid string" << endl;
+    exit(0);
+  }
 
   bool firstLoop = true;
   char ReadValue1 [2];
@@ -117,5 +124,4 @@ if(note == 'D'){
     ReadValue2 = ReadValue1[0];
   }
 
-  return 0;
 }

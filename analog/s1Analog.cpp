@@ -19,11 +19,10 @@ int main(int argc, char *argv[]) {
   double waveform[NUM_CYCLES];
   double FFTdouble[NUM_CYCLES];
   fftw_complex FFT[NUM_CYCLES];
-//  double aIn;
   double totalSec, avgSec;
   fftw_plan fftPlan;
 
-  char strIn [35] = "/sys/devices/ocp.3/helper.12/AIN0"; // Changed from helper.15 to helper.12
+  char strIn [50] = "/sys/bus/iio/devices/iio:device0/in_voltage0_raw"; // Changed from helper.15 to helper.12
 //  char FFTout [35] = "/root/code/output.txt";
 //  char waveOut [35] = "/root/code/waveform.txt";
 
@@ -57,25 +56,9 @@ int main(int argc, char *argv[]) {
   for (int i = 0; i < NUM_CYCLES; i++) {
 
     poll(&strFile, 1, -1);
-    waveform[i] = getAnalog(1, strFile.fd);
+    waveform[i] = getAnalog(STRING1, strFile.fd);
     lseek(strHandle, 0, SEEK_SET);
 
-//    waveform[i] = aIn;
-
-//    usleep(680);
-    
-//    heart();
-
-//    aIn2 = getAnalog(2, str2In);
-    
-//    heart();
-    
-//    aIn3 = getAnalog(3, str3In);
-    
-//    heart();
-    
-//    aIn4 = getAnalog(4, str4In);
-    
   }
   
   clock_gettime(CLOCK_MONOTONIC,&endTime);
