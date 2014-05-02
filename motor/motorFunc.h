@@ -43,15 +43,25 @@ double motorTune(double freqDiff, const int stringNum) {	// speed of motor chang
   double turns = 0.0;
 
   if(stringNum == 3){
-    turns = (freqDiff - 1.3595)/13.076;				//an oversimplified linear equation representing G. Better equation to be created once FETs arrive.
+    if (freqDiff < 0) {
+      turns = (freqDiff + 1.3595)/13.076;
+    } else {
+      turns = (freqDiff - 1.3595)/13.076;				//an oversimplified linear equation representing G. Better equation to be created once FETs arrive.
+    }
   } else if (stringNum == 2){
-    turns = (freqDiff)/13.0;
+      turns = (freqDiff)/13.0;
   } else if (stringNum == 1){
-    turns = (freqDiff)/13.0;
-//    turns = (freqDiff - 1)/13.0;
+    if (freqDiff < 0) {
+      turns = (freqDiff + 1)/13.0;
+    } else {
+      turns = (freqDiff - 1)/13.0;
+    }
   } else if (stringNum == 0){
-    turns = (freqDiff)/13.0;
-//    turns = (freqDiff - 1)/13.0;
+    if (freqDiff < 0) {
+      turns = (freqDiff + 1)/13.0;
+    } else {
+      turns = (freqDiff - 1)/13.0;
+    }
   }
   if(turns == 0){
     perror("In tune!");

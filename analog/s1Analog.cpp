@@ -98,6 +98,6 @@ int main(int argc, char *argv[]) {
   double idealFreq = translateFrequency(noteNum);
   std::cout << "Frequency: " << frequency << std::endl;
   std::cout << "Cent Difference: " << getCents(frequency, idealFreq) << std::endl;
-  // Insert motor call.
+  callMotor(STRING1, frequency - idealFreq);
   return 0;
 }

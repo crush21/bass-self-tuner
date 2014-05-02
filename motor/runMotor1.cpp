@@ -30,28 +30,27 @@ int main(int argc, char * argv[]) {
     printf(" measured and ideal frequencies.\n");
     exit(0);
   }
-/*
-  for (int i = 0; i < 200; i++) {
-    cout << "Running forward" << endl;
-    motorControl(BWDPATH, 500000); // Forward 60 seconds.
-    motorControl(brake, 1000000); // Brake for 1 second.
-    cout << "Running backward" << endl;
-    motorControl(BWDPATH, 500000); // Backward 5 seconds.
-    motorControl(brake, 1000000);
-  }
-*/
 
   freqDiff = strtod(argv[1], NULL); // Convert argument to double.
 
   cout << "motorTune: Done" << endl;
   double turns = motorTune(freqDiff, STRING1);
   cout << "Turns: " << turns << endl;
-  motorStart(FWDPATH);
-  cout << "motor turned on" << endl;
-  encoder(STRING1,turns);
-  cout << "turning off motor" << endl;
-  motorStop(FWDPATH);
-  usleep(1000000);
+  if (turns > 0) {
+    motorStart(FWDPATH);
+    cout << "motor forward" << endl;
+    encoder(STRING1,turns);
+    cout << "turning off motor" << endl;
+    motorStop(FWDPATH);
+    usleep(1000000);
+  } else if (turns < 0) {
+    motorStart(BWDPATH);
+    cout << "motor backward" << endl;
+    encoder(STRING1,turns);
+    cout << "turning off motor" << endl;
+    motorStop(BWDPATH);
+    usleep(1000000);    
+  }
 
   cout << "Done tuning!" << endl;
   return 0;
