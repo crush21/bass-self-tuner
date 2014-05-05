@@ -16,6 +16,15 @@
 
 using namespace std;
 
+const char FWDPATH1 [29] = "/sys/class/gpio/gpio69/value"; // P8 Pin 7
+const char REVPATH1 [29] = "/sys/class/gpio/gpio66/value"; // P8 Pin 9
+const char FWDPATH2 [29] = "/sys/class/gpio/gpio67/value"; // P8 Pin 8
+const char REVPATH2 [29] = "/sys/class/gpio/gpio68/value"; // P8 Pin 10
+const char FWDPATH3 [29] = "/sys/class/gpio/gpio23/value"; // P8 Pin 13
+const char REVPATH3 [29] = "/sys/class/gpio/gpio47/value"; // P8 Pin 15
+const char FWDPATH4 [29] = "/sys/class/gpio/gpio26/value"; // P8 Pin 14
+const char REVPATH4 [29] = "/sys/class/gpio/gpio46/value"; // P8 Pin 16
+
 const int STRING1 = 0;
 const int STRING2 = 1;
 const int STRING3 = 2;
@@ -65,7 +74,7 @@ double motorTune(double freqDiff, const int stringNum) {	// speed of motor chang
   }
   if(turns == 0){
     perror("In tune!");
-  } 
+  }
 
   return turns;
 
@@ -102,12 +111,14 @@ void encoder(const int stringNum, double turns){
   double debounceTime = .10;
   lastTime.tv_sec = 0;
   lastTime.tv_nsec = 0;
-  
+
   ReadValue2 = ReadValue1[0];
   read(Handle, LastRead, 1);
   lseek(Handle, 0, SEEK_SET);
 
-  int ticks = turns / RES;  //2 is the number of breaks on the head of the drill
+  int ticks = turns / RES;  // 4 is the number of switches on the head of the drill
+  double timeTicks = turns / RES;
+  double overTicks = timeTicks - ticks;
 
   while (counter != ticks) {
     read(Handle, ReadValue1, 1);

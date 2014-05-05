@@ -14,16 +14,16 @@
 //using namespace std;
 
 // LCD Data Bit files
-const char RS [29] = "/sys/class/gpio/gpio2/value";
-const char CLK [29] = "/sys/class/gpio/gpio3/value";
-const char DATA7 [29] = "/sys/class/gpio/gpio14/value";
-const char DATA6 [29] = "/sys/class/gpio/gpio49/value";
+const char RS [29] = "/sys/class/gpio/gpio30/value";
+const char CLK [29] = "/sys/class/gpio/gpio60/value";
+const char DATA7 [29] = "/sys/class/gpio/gpio31/value";
+const char DATA6 [29] = "/sys/class/gpio/gpio48/value";
 const char DATA5 [29] = "/sys/class/gpio/gpio51/value";
-const char DATA4 [29] = "/sys/class/gpio/gpio48/value";
-const char DATA3 [29] = "/sys/class/gpio/gpio15/value";
-const char DATA2 [29] = "/sys/class/gpio/gpio31/value";
-const char DATA1 [29] = "/sys/class/gpio/gpio60/value";
-const char DATA0 [29] = "/sys/class/gpio/gpio30/value";
+const char DATA4 [29] = "/sys/class/gpio/gpio3/value";
+const char DATA3 [29] = "/sys/class/gpio/gpio2/value";
+const char DATA2 [29] = "/sys/class/gpio/gpio49/value";
+const char DATA1 [29] = "/sys/class/gpio/gpio15/value";
+const char DATA0 [29] = "/sys/class/gpio/gpio14/value";
 
 // LCD Navigation Bit files
 const char * leftData = "/sys/class/gpio/gpio20/value";
@@ -34,6 +34,117 @@ const char * downData = "/sys/class/gpio/gpio72/value";
 
 const char * ON = "1";
 const char * OFF = "0";
+
+/* Sets the length of data (8-bit or 4-bit), and
+ * curDir is cursor direction (1 = right).
+ * shift is whether to shift display (1 = shift).
+ * Receives:	 Characters representing 0 or 1.
+ * Returns:	 Nothing.
+ * Restrictions: Characters must be 0 or 1.
+ */
+void entryMode(const char * curDir, const char * shift) {
+  if ((atoi(curDir) > 1) || (atoi(shift) > 1)) {
+    std::cout << "Error: Parameter is greater than 1." << std::endl;
+    return;
+  } else {
+    int handle = open(RS, O_WRONLY);
+    write(handle, OFF, 1);
+    close(handle);
+    handle = open(DATA7, O_WRONLY);
+    write(handle, OFF, 1);
+    close(handle);
+    handle = open(DATA6, O_WRONLY);
+    write(handle, OFF, 1);
+    close(handle);
+    handle = open(DATA5, O_WRONLY);
+    write(handle, OFF, 1);
+    close(handle);
+    handle = open(DATA4, O_WRONLY);
+    write(handle, OFF, 1);
+    close(handle);
+    handle = open(DATA3, O_WRONLY);
+    write(handle, OFF, 1);
+    close(handle);
+    handle = open(DATA2, O_WRONLY);
+    write(handle, ON, 1);
+    close(handle);
+    handle = open(DATA1, O_WRONLY);
+    write(handle, curDir, 1);
+    close(handle);
+    handle = open(DATA0, O_WRONLY);
+    write(handle, shift, 1);
+    close(handle);
+    handle = open(CLK, O_WRONLY);
+// Clock three times to set data length.
+    write(handle, ON, 1);
+    lseek(handle, 0, SEEK_SET);
+    write(handle, OFF, 1);
+    lseek(handle, 0, SEEK_SET);
+    write(handle, ON, 1);
+    close(handle);
+  }
+}
+
+/* Sets the length of data (8-bit or 4-bit), and
+ * sets the number of lines to display (2 or 1).
+ * Function may also set the font type, but this
+ * is not implemented or necessary.
+ * dataLen is data length bit (1 = 8-bit).
+ * numLines is number of lines bit (1 = 2 lines).
+ * Receives:	 Characters representing 0 or 1.
+ * Returns:	 Nothing.
+ * Restrictions: Characters must be 0 or 1.
+ */
+void functionSet(const char * dataLen, const char * numLines) {
+  if ((atoi(dataLen) > 1) || (atoi(numLines) > 1)) {
+    std::cout << "Error: Parameter is greater than 1." << std::endl;
+    return;
+  } else {
+    int handle = open(RS, O_WRONLY);
+    write(handle, OFF, 1);
+    close(handle);
+    handle = open(DATA7, O_WRONLY);
+    write(handle, OFF, 1);
+    close(handle);
+    handle = open(DATA6, O_WRONLY);
+    write(handle, OFF, 1);
+    close(handle);
+    handle = open(DATA5, O_WRONLY);
+    write(handle, ON, 1);
+    close(handle);
+    handle = open(DATA4, O_WRONLY);
+    write(handle, dataLen, 1);
+    close(handle);
+    handle = open(DATA3, O_WRONLY);
+    write(handle, numLines, 1);
+    close(handle);
+    handle = open(DATA2, O_WRONLY);
+    write(handle, OFF, 1);
+    close(handle);
+    handle = open(DATA1, O_WRONLY);
+    write(handle, OFF, 1);
+    close(handle);
+    handle = open(DATA0, O_WRONLY);
+    write(handle, OFF, 1);
+    close(handle);
+    handle = open(CLK, O_WRONLY);
+// Clock three times to set data length.
+    write(handle, ON, 1);
+    lseek(handle, 0, SEEK_SET);
+    write(handle, OFF, 1);
+    lseek(handle, 0, SEEK_SET);
+    write(handle, ON, 1);
+    lseek(handle, 0, SEEK_SET);
+    write(handle, OFF, 1);
+    lseek(handle, 0, SEEK_SET);
+    write(handle, ON, 1);
+    lseek(handle, 0, SEEK_SET);
+    write(handle, OFF, 1);
+    lseek(handle, 0, SEEK_SET);
+    write(handle, ON, 1);
+    close(handle);
+  }
+}
 
 /* Called to easily setup the LCD screen.
  * dispOn is display on bit.

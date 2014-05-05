@@ -30,8 +30,10 @@ int main() {
   int string2 = 9; // Holds "note" of A string
   int string3 = 14; // Holds "note" of D string
   int string4 = 19; // Holds "note" of G string
-  
+
+  functionSet(ONE, ONE);
   dispCtrl(ONE, ZERO, ZERO);
+  entryMode(ONE, ZERO);
   clearScreen();
   setDDRAM(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
   startScreen();

@@ -130,7 +130,7 @@ echo in > /sys/class/gpio/gpio71/direction
 echo 72 > /sys/class/gpio/export
 echo in > /sys/class/gpio/gpio72/direction
 
-
+: '
 # Function Set 8 bits
 echo 0 > /sys/class/gpio/gpio2/value
 
@@ -228,3 +228,4 @@ echo 0 > /sys/class/gpio/gpio30/value
 
 echo 0 > /sys/class/gpio/gpio3/value
 echo 1 > /sys/class/gpio/gpio3/value
+'
