@@ -28,17 +28,17 @@ int main(int argc, char * argv[]) {
   double turns = motorTune(freqDiff, STRING1);
   cout << "Turns: " << turns << endl;
   if (turns > 0) {
-    motorStart(FWDPATH);
+    motorStart(FWDPATH1);
     cout << "motor forward" << endl;
     encoder(STRING1,turns);
     cout << "turning off motor" << endl;
-    motorStop(FWDPATH);
+    motorStop(FWDPATH1);
   } else if (turns < 0) {
-    motorStart(BWDPATH);
+    motorStart(REVPATH1);
     cout << "motor backward" << endl;
     encoder(STRING1,turns);
     cout << "turning off motor" << endl;
-    motorStop(BWDPATH);
+    motorStop(REVPATH1);
   }
 
   cout << "Done tuning!" << endl;
