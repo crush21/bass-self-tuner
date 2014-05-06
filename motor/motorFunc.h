@@ -80,7 +80,7 @@ double motorTune(double freqDiff, const int stringNum) {	// speed of motor chang
 
 }
 
-void encoder(const int stringNum, double turns){
+void turnMotor(const int stringNum, double turns){
 
   const char ENCODER1 [29] = "/sys/class/gpio/gpio87/value";
   const char ENCODER2 [29] = "/sys/class/gpio/gpio89/value";
@@ -111,16 +111,24 @@ void encoder(const int stringNum, double turns){
   lastTime.tv_sec = 0;
   lastTime.tv_nsec = 0;
 
+  int ticks = turns / RES;  
+//  double timeTicks = turns / RES;
+//  double overTicks = timeTicks - ticks;
+
   read(Handle, LastRead, 1);
   lseek(Handle, 0, SEEK_SET);
   read(Handle, ReadValue1, 1);
   lseek(Handle, 0, SEEK_SET);
   ReadValue2 = ReadValue1[0];
 
-  int ticks = turns / RES;  
-//  double timeTicks = turns / RES;
-//  double overTicks = timeTicks - ticks;
-
+  if (turns > 0) {
+    motorStart(FWDPATH1);
+    cout << "motor forward" << endl;
+  } else if (turns < 0) {
+    motorStart(REVPATH1);
+    cout << "motor backward" << endl;
+  }
+  
   cout << "Turns: " << turns << endl;
 
   while (counter != ticks) {
@@ -144,5 +152,17 @@ void encoder(const int stringNum, double turns){
     }
     ReadValue2 = ReadValue1[0];
   }
-
+  
+    cout << "turning off motor" << endl;
+    if (turns > 0) {
+      motorStart(REVPATH1);
+      usleep(500000);
+      motorStop(REVPATH1);
+      motorStop(FWDPATH1);
+    } else if (turns < 0) {
+      motorStart(FWDPATH1);
+      usleep(500000);
+      motorStop(FWDPATH1);
+      motorStop(REVPATH1);
+    }
 }
