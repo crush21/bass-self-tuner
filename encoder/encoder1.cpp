@@ -18,7 +18,7 @@ char ReadValue2;
 int counter = 0;
 timespec startTime, lastTime;
 double runTime;
-double debounceTime = .3;
+double debounceTime = 0;
 lastTime.tv_sec = 0;
 lastTime.tv_nsec = 0;
 
@@ -37,7 +37,7 @@ double nTime = (startTime.tv_nsec - lastTime.tv_nsec);
 double sTime = (startTime.tv_sec - lastTime.tv_sec);
 runTime = sTime + nTime/1000000000.0;
 cout << "runTime: " << runTime << endl;
-cout << "NOTE FOR CHRIS: HI" << endl;
+
 	if(runTime > debounceTime){
 		if(ReadValue1[0] != LastRead[0]){
 		clock_gettime(CLOCK_MONOTONIC,&lastTime);

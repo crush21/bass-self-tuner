@@ -16,8 +16,8 @@
 
 using namespace std;
 
-const char FWDPATH1 [29] = "/sys/class/gpio/gpio69/value"; // P8 Pin 7
-const char REVPATH1 [29] = "/sys/class/gpio/gpio66/value"; // P8 Pin 9
+const char FWDPATH1 [29] = "/sys/class/gpio/gpio30/value"; // P8 Pin 7
+const char REVPATH1 [29] = "/sys/class/gpio/gpio60/value"; // P8 Pin 9
 const char FWDPATH2 [29] = "/sys/class/gpio/gpio67/value"; // P8 Pin 8
 const char REVPATH2 [29] = "/sys/class/gpio/gpio68/value"; // P8 Pin 10
 const char FWDPATH3 [29] = "/sys/class/gpio/gpio23/value"; // P8 Pin 13
@@ -29,7 +29,7 @@ const int STRING1 = 0;
 const int STRING2 = 1;
 const int STRING3 = 2;
 const int STRING4 = 3;
-const double RES = 0.25; // Encoder resolution
+const double RES = 0.125; // Encoder resolution
 
 void motorStart(const char * file) {
   const char * start = "1";
@@ -108,7 +108,7 @@ void encoder(const int stringNum, double turns){
   int counter = 0;
   timespec startTime, lastTime;
   double runTime;
-  double debounceTime = .10;
+  double debounceTime = .08;
   lastTime.tv_sec = 0;
   lastTime.tv_nsec = 0;
 
@@ -126,6 +126,8 @@ void encoder(const int stringNum, double turns){
     clock_gettime(CLOCK_MONOTONIC,&startTime);
 
     if (ReadValue1[0] != ReadValue2) {
+      cout << ReadValue1[0] << endl;
+      cout << ReadValue2 << endl;
       double nTime = (startTime.tv_nsec - lastTime.tv_nsec);
       double sTime = (startTime.tv_sec - lastTime.tv_sec);
       runTime = sTime + nTime/1000000000.0;
@@ -136,7 +138,6 @@ void encoder(const int stringNum, double turns){
           clock_gettime(CLOCK_MONOTONIC,&lastTime);
           counter++;
           cout << "counter: " << counter << endl;
-          ReadValue2 = ReadValue1[0];
         } else {
           firstLoop = false;
         }
