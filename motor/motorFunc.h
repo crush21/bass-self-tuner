@@ -125,25 +125,21 @@ void encoder(const int stringNum, double turns){
     lseek(Handle, 0, SEEK_SET);
     clock_gettime(CLOCK_MONOTONIC,&startTime);
 
-    if (ReadValue1[0] != ReadValue2) {
-      cout << ReadValue1[0] << endl;
-      cout << ReadValue2 << endl;
+    if ( ReadValue1[0] != ReadValue2){
       double nTime = (startTime.tv_nsec - lastTime.tv_nsec);
       double sTime = (startTime.tv_sec - lastTime.tv_sec);
       runTime = sTime + nTime/1000000000.0;
       cout << "runTime: " << runTime << endl;
 
-      if (runTime > debounceTime) {
-        if (!firstLoop) {
-          clock_gettime(CLOCK_MONOTONIC,&lastTime);
-          counter++;
-          cout << "counter: " << counter << endl;
-        } else {
-          firstLoop = false;
-        }
-      }
+	    if(runTime > debounceTime){
+		    if(ReadValue1[0] != LastRead[0]){
+		      clock_gettime(CLOCK_MONOTONIC,&lastTime);
+		      counter++;
+		      cout << "counter: " << counter << endl;
+		    }
+	    }
     }
-    ReadValue2 = ReadValue1[0];
+//    ReadValue2 = ReadValue1[0];
   }
 
 }
