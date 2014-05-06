@@ -53,23 +53,23 @@ double motorTune(double freqDiff, const int stringNum) {	// speed of motor chang
 
   if(stringNum == 3){
     if (freqDiff < 0) {
-      turns = (freqDiff + 1.3595)/13.076;
+      turns = (freqDiff)/13.076;
     } else {
-      turns = (freqDiff - 1.3595)/13.076;				//an oversimplified linear equation representing G. Better equation to be created once FETs arrive.
+      turns = (freqDiff)/13.076;				//an oversimplified linear equation representing G. Better equation to be created once FETs arrive.
     }
   } else if (stringNum == 2){
       turns = (freqDiff)/13.0;
   } else if (stringNum == 1){
     if (freqDiff < 0) {
-      turns = (freqDiff + 1)/13.0;
+      turns = (freqDiff)/13.0;
     } else {
-      turns = (freqDiff - 1)/13.0;
+      turns = (freqDiff)/13.0;
     }
   } else if (stringNum == 0){
     if (freqDiff < 0) {
-      turns = (freqDiff + 1)/13.0;
+      turns = (freqDiff)/13.0;
     } else {
-      turns = (freqDiff - 1)/13.0;
+      turns = (freqDiff)/13.0;
     }
   }
   if(turns == 0){
@@ -108,7 +108,7 @@ void encoder(const int stringNum, double turns){
   int counter = 0;
   timespec startTime, lastTime;
   double runTime;
-  double debounceTime = .08;
+  double debounceTime = 0.001;
   lastTime.tv_sec = 0;
   lastTime.tv_nsec = 0;
 
@@ -116,11 +116,14 @@ void encoder(const int stringNum, double turns){
   read(Handle, LastRead, 1);
   lseek(Handle, 0, SEEK_SET);
 
-  int ticks = turns / RES;  // 4 is the number of switches on the head of the drill
+  int ticks = turns / RES;  
   double timeTicks = turns / RES;
   double overTicks = timeTicks - ticks;
 
+  cout << "Turns: " << turns << endl;
+
   while (counter != ticks) {
+    ReadValue2 = ReadValue1[0];
     read(Handle, ReadValue1, 1);
     lseek(Handle, 0, SEEK_SET);
     clock_gettime(CLOCK_MONOTONIC,&startTime);
@@ -132,14 +135,11 @@ void encoder(const int stringNum, double turns){
       cout << "runTime: " << runTime << endl;
 
 	    if(runTime > debounceTime){
-		    if(ReadValue1[0] != LastRead[0]){
-		      clock_gettime(CLOCK_MONOTONIC,&lastTime);
-		      counter++;
-		      cout << "counter: " << counter << endl;
-		    }
+	      clock_gettime(CLOCK_MONOTONIC,&lastTime);
+	      counter++;
+	      cout << "counter: " << counter << endl;
 	    }
     }
-//    ReadValue2 = ReadValue1[0];
   }
 
 }
