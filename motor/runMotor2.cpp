@@ -31,12 +31,16 @@ int main(int argc, char * argv[]) {
     cout << "motor forward" << endl;
     encoder(STRING2,turns);
     cout << "turning off motor" << endl;
+    motorStop(REVPATH2);
     motorStop(FWDPATH2);
   } else if (turns < 0) {
     motorStart(REVPATH2);
     cout << "motor backward" << endl;
     encoder(STRING2,turns);
     cout << "turning off motor" << endl;
+    motorStart(FWDPATH2);
+    usleep(500000);
+    motorStop(FWDPATH2);
     motorStop(REVPATH2);
   }
 

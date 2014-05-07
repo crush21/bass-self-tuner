@@ -10,7 +10,7 @@
 #include <poll.h>
 
 const int NUM_CYCLES = 1500;
-const int PEAK_LIMIT = NUM_CYCLES / 8;
+const int PEAK_LIMIT = NUM_CYCLES / 16;
 const double ONE_MIL = 1000000.0;
 const double ONE_BIL = 1000000000.0;
 
@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
   std::cout << "Frequency: " << frequency << std::endl;
   std::cout << "Cent Difference: " << centDiff << std::endl;
   if (fabs(centDiff) > 5) {
-    callMotor(STRING1, freqDiff);
+//    callMotor(STRING1, freqDiff);
   }
   return 0;
 }

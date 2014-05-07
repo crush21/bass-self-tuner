@@ -101,45 +101,48 @@ void encoder(const int stringNum, double turns){
     exit(0);
   }
 
-  bool firstLoop = true;
   char ReadValue1 [2];
   char LastRead [2];
   char ReadValue2;
   int counter = 0;
   timespec startTime, lastTime;
   double runTime;
-  double debounceTime = 0.001;
+  double debounceTime = 0;   // 0.0005;
   lastTime.tv_sec = 0;
   lastTime.tv_nsec = 0;
 
-  ReadValue2 = ReadValue1[0];
   read(Handle, LastRead, 1);
   lseek(Handle, 0, SEEK_SET);
+  read(Handle, ReadValue1, 1);
+  lseek(Handle, 0, SEEK_SET);
+  ReadValue2 = ReadValue1[0];
 
   int ticks = turns / RES;  
-  double timeTicks = turns / RES;
-  double overTicks = timeTicks - ticks;
+//  double timeTicks = turns / RES;
+//  double overTicks = timeTicks - ticks;
 
   cout << "Turns: " << turns << endl;
 
   while (counter != ticks) {
-    ReadValue2 = ReadValue1[0];
     read(Handle, ReadValue1, 1);
+    cout << ReadValue1[0] << " " << ReadValue2 << endl;
     lseek(Handle, 0, SEEK_SET);
     clock_gettime(CLOCK_MONOTONIC,&startTime);
 
     if ( ReadValue1[0] != ReadValue2){
+      cout << ReadValue1[0] << " " << ReadValue2 << endl;
       double nTime = (startTime.tv_nsec - lastTime.tv_nsec);
       double sTime = (startTime.tv_sec - lastTime.tv_sec);
       runTime = sTime + nTime/1000000000.0;
       cout << "runTime: " << runTime << endl;
-
-	    if(runTime > debounceTime){
-	      clock_gettime(CLOCK_MONOTONIC,&lastTime);
-	      counter++;
-	      cout << "counter: " << counter << endl;
-	    }
+      
+      //if(runTime > debounceTime){
+        clock_gettime(CLOCK_MONOTONIC,&lastTime);
+        counter++;
+        cout << "counter: " << counter << endl;
+      //}
     }
+    ReadValue2 = ReadValue1[0];
   }
 
 }

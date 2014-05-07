@@ -33,16 +33,16 @@ int main(int argc, char * argv[]) {
     cout << "turning off motor" << endl;
 // Turning on opposite direction "brakes" motor
     motorStart(REVPATH1);
-    usleep(1000000);
-    motorStop(FWDPATH1);
+    usleep(500000);
     motorStop(REVPATH1);
+    motorStop(FWDPATH1);
   } else if (turns < 0) {
     motorStart(REVPATH1);
     cout << "motor backward" << endl;
     encoder(STRING1,turns);
     cout << "turning off motor" << endl;
     motorStart(FWDPATH1);
-    usleep(1000000);
+    usleep(500000);
     motorStop(FWDPATH1);
     motorStop(REVPATH1);
   }

@@ -32,12 +32,18 @@ int main(int argc, char * argv[]) {
     cout << "motor forward" << endl;
     encoder(STRING3,turns);
     cout << "turning off motor" << endl;
+    motorStart(REVPATH3);
+    usleep(500000);    
     motorStop(FWDPATH3);
+    motorStop(REVPATH3);
   } else if (turns < 0) {
     motorStart(REVPATH3);
     cout << "motor backward" << endl;
     encoder(STRING3,turns);
     cout << "turning off motor" << endl;
+    motorStart(FWDPATH3);
+    usleep(500000);
+    motorStop(FWDPATH3);
     motorStop(REVPATH3);
   }
   cout << "Done tuning!" << endl;
