@@ -24,6 +24,8 @@ const char FWDPATH3 [29] = "/sys/class/gpio/gpio23/value"; // P8 Pin 13
 const char REVPATH3 [29] = "/sys/class/gpio/gpio47/value"; // P8 Pin 15
 const char FWDPATH4 [29] = "/sys/class/gpio/gpio26/value"; // P8 Pin 14
 const char REVPATH4 [29] = "/sys/class/gpio/gpio46/value"; // P8 Pin 16
+const char * START = "1";
+const char * STOP = "0";
 
 const int STRING1 = 0;
 const int STRING2 = 1;
@@ -32,17 +34,15 @@ const int STRING4 = 3;
 const double RES = 0.125; // Encoder resolution
 
 void motorStart(const char * file) {
-  const char * start = "1";
   int handle = open(file, O_WRONLY);
-  write(handle, start, 1);
+  write(handle, START, 1);
   perror("Result");
   close(handle);
 }
 
 void motorStop(const char * file) {
-  const char * stop = "0";
   int handle = open(file, O_WRONLY);
-  write(handle, stop, 1);
+  write(handle, STOP, 1);
   perror("Result");
   close(handle);
 }
@@ -105,11 +105,11 @@ void turnMotor(const int stringNum, double turns){
   char LastRead [2];
   char ReadValue2;
   int counter = 0;
-  timespec startTime, lastTime;
+/*  timespec startTime, lastTime;
   double runTime;
   double debounceTime = 0;   // 0.0005;
   lastTime.tv_sec = 0;
-  lastTime.tv_nsec = 0;
+  lastTime.tv_nsec = 0; */
 
   int ticks = turns / RES;  
 //  double timeTicks = turns / RES;
@@ -131,21 +131,21 @@ void turnMotor(const int stringNum, double turns){
   
   cout << "Turns: " << turns << endl;
 
-  while (counter != ticks) {
+  while (counter != abs(ticks)) {
     read(Handle, ReadValue1, 1);
-    cout << ReadValue1[0] << " " << ReadValue2 << endl;
+//    cout << ReadValue1[0] << " " << ReadValue2 << endl;
     lseek(Handle, 0, SEEK_SET);
-    clock_gettime(CLOCK_MONOTONIC,&startTime);
+//    clock_gettime(CLOCK_MONOTONIC,&startTime);
 
     if ( ReadValue1[0] != ReadValue2){
-      cout << ReadValue1[0] << " " << ReadValue2 << endl;
-      double nTime = (startTime.tv_nsec - lastTime.tv_nsec);
-      double sTime = (startTime.tv_sec - lastTime.tv_sec);
-      runTime = sTime + nTime/1000000000.0;
-      cout << "runTime: " << runTime << endl;
+//      cout << ReadValue1[0] << " " << ReadValue2 << endl;
+    //  double nTime = (startTime.tv_nsec - lastTime.tv_nsec);
+    //  double sTime = (startTime.tv_sec - lastTime.tv_sec);
+    //  runTime = sTime + nTime/1000000000.0;
+    //  cout << "runTime: " << runTime << endl;
       
       //if(runTime > debounceTime){
-        clock_gettime(CLOCK_MONOTONIC,&lastTime);
+      //  clock_gettime(CLOCK_MONOTONIC,&lastTime);
         counter++;
         cout << "counter: " << counter << endl;
       //}
@@ -153,7 +153,7 @@ void turnMotor(const int stringNum, double turns){
     ReadValue2 = ReadValue1[0];
   }
   
-    cout << "turning off motor" << endl;
+ //   cout << "turning off motor" << endl;
     if (turns > 0) {
       motorStart(REVPATH1);
       usleep(500000);
