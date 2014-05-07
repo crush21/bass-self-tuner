@@ -1,5 +1,52 @@
-bbb-Info.txt contains information about the BeagleBone Black pin use,
-related to the peripherals the pins are connected to.
+bbb-Info.txt contains information about the BeagleBone Black operating
+system and general-purpose input/output (GPIO) pin use.
+
+BeagleBone Black Information
+-----------------------------------
+
+The BeagleBone Black (BBB) is running Arch Linux ARM.
+This may be downloaded at http://archlinuxarm.org/
+
+
+The system is loaded with the base Arch Linux ARM 
+operating system with the following additional
+packages installed:
+
+fftw
+make
+gcc
+
+
+The following files are edited to allow additional
+GPIO access, as well as to autorun the tuning sequence:
+
+~/.bashrc	- This automatically connects the BBB
+		  to the internet and runs autostart.sh
+
+/boot/uEnv.txt	- This file "unloads" the HDMI cape
+		  that automatically loads on powerup.
+		  Add the following line to uEnv.txt:
+	optargs=quiet capemgr.disable_partno=BB-BONELT-HDMI,BB-BONELT-HDMIN
+
+/etc/systemd/system/getty@tty1.service.d/autologin.conf
+		- This file allows automatically logging
+		  into Arch Linux, which allows ~/.bashrc
+		  to be sourced automatically. This file
+		  contains the following:
+	[Service]
+	ExecStart=
+	ExecStart=-/usr/bin/agetty --noclear --autologin root %I 38400 linux
+		  These commands log in the user "root"
+		  on startup. This is used to run any
+		  code that requires root in autostart.sh.
+
+
+All of these files are located in this Github repository, and
+need only be moved to their proper location.
+
+
+GPIO
+-------------
 
 Pins are used for the LCD screen, pushbuttons, motor control,
 and analog inputs.
