@@ -45,7 +45,7 @@ GPIO access, as well as to autorun the tuning sequence:
 		  code that requires root in autostart.sh.
 
 
-All of these files are located in this Github repository, and
+All of these files are located in this Github repository under "files", and
 need only be moved to their proper location.
 
 
