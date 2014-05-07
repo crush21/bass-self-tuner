@@ -6,7 +6,8 @@ BeagleBone Black Information
 
 The BeagleBone Black (BBB) is running Arch Linux ARM.
 This may be downloaded at http://archlinuxarm.org/
-
+The Arch Linux ARM website also gives installation
+instructions.
 
 The system is loaded with the base Arch Linux ARM 
 operating system with the following additional
@@ -25,6 +26,9 @@ GPIO access, as well as to autorun the tuning sequence:
 
 /boot/uEnv.txt	- This file "unloads" the HDMI cape
 		  that automatically loads on powerup.
+		  In order to see this file, the boot
+		  partition (generally mmcblk0p1) must
+		  be mounted.
 		  Add the following line to uEnv.txt:
 	optargs=quiet capemgr.disable_partno=BB-BONELT-HDMI,BB-BONELT-HDMIN
 
