@@ -105,15 +105,15 @@ void turnMotor(const int stringNum, double turns){
   char LastRead [2];
   char ReadValue2;
   int counter = 0;
-/*  timespec startTime, lastTime;
+  timespec startTime, lastTime;
   double runTime;
-  double debounceTime = 0;   // 0.0005;
+  double debounceTime = 0.001;
   lastTime.tv_sec = 0;
-  lastTime.tv_nsec = 0; */
+  lastTime.tv_nsec = 0;
 
-  int ticks = turns / RES;  
-//  double timeTicks = turns / RES;
-//  double overTicks = timeTicks - ticks;
+  int ticks = turns / RES;
+  double timeTicks = turns / RES;
+  double overTicks = timeTicks - ticks;
 
   read(Handle, LastRead, 1);
   lseek(Handle, 0, SEEK_SET);
@@ -131,38 +131,41 @@ void turnMotor(const int stringNum, double turns){
   
   cout << "Turns: " << turns << endl;
 
+  clock_gettime(CLOCK_MONOTONIC,&lastTime);
   while (counter != abs(ticks)) {
     read(Handle, ReadValue1, 1);
-//    cout << ReadValue1[0] << " " << ReadValue2 << endl;
     lseek(Handle, 0, SEEK_SET);
-//    clock_gettime(CLOCK_MONOTONIC,&startTime);
+    clock_gettime(CLOCK_MONOTONIC,&startTime);
 
     if ( ReadValue1[0] != ReadValue2){
-//      cout << ReadValue1[0] << " " << ReadValue2 << endl;
-    //  double nTime = (startTime.tv_nsec - lastTime.tv_nsec);
-    //  double sTime = (startTime.tv_sec - lastTime.tv_sec);
-    //  runTime = sTime + nTime/1000000000.0;
-    //  cout << "runTime: " << runTime << endl;
+//    cout << ReadValue1[0] << " " << ReadValue2 << endl;
+      double nTime = (startTime.tv_nsec - lastTime.tv_nsec);
+      cout << "nTime: " << nTime << endl;
+      double sTime = (startTime.tv_sec - lastTime.tv_sec);
+      cout << "startTime: " << startTime.tv_sec << endl << "lastTime: " << lastTime.tv_sec << endl;
+      cout << "sTime: " << sTime << endl;
+      runTime = sTime + nTime/1000000000.0;
+      cout << "runTime: " << runTime << endl;
       
-      //if(runTime > debounceTime){
-      //  clock_gettime(CLOCK_MONOTONIC,&lastTime);
+      if(runTime > debounceTime){
+        clock_gettime(CLOCK_MONOTONIC,&lastTime);
         counter++;
         cout << "counter: " << counter << endl;
-      //}
+      }
     }
     ReadValue2 = ReadValue1[0];
   }
   
  //   cout << "turning off motor" << endl;
-    if (turns > 0) {
-      motorStart(REVPATH1);
-      usleep(500000);
-      motorStop(REVPATH1);
-      motorStop(FWDPATH1);
-    } else if (turns < 0) {
-      motorStart(FWDPATH1);
-      usleep(500000);
-      motorStop(FWDPATH1);
-      motorStop(REVPATH1);
-    }
+  if (turns > 0) {
+    motorStart(REVPATH1);
+    usleep(500000);
+    motorStop(REVPATH1);
+    motorStop(FWDPATH1);
+  } else if (turns < 0) {
+    motorStart(FWDPATH1);
+    usleep(500000);
+    motorStop(FWDPATH1);
+    motorStop(REVPATH1);
+  }
 }
