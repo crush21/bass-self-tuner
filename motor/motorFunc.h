@@ -94,13 +94,13 @@ void turnMotor(const int stringNum, double turns){
   char ReadValue2;
   int counter = 0;
   timespec startTime, lastTime;
-  long double runTime;
   double debounceTime = 0.025;
 
   int ticks = turns / RES;
   double timeTicks = turns / RES;
   double overTicks = timeTicks - ticks;
-  long double times [ticks];
+  long double times [abs(ticks)];
+  long double runTime;
   long double avgTime = 0;
   long double turnTime;
   long unsigned lastnSec;
@@ -118,7 +118,7 @@ void turnMotor(const int stringNum, double turns){
     motorStart(FWDPATH1);
     cout << "motor forward" << endl;
   } else if (turns < 0) {
-    ticks++;
+    ticks--;
     motorStart(REVPATH1);
     cout << "motor backward" << endl;
   }
@@ -139,9 +139,9 @@ void turnMotor(const int stringNum, double turns){
         startnSec = startTime.tv_nsec;
         lastSec = lastTime.tv_sec;
         lastnSec = lastTime.tv_nsec;
-        double nTime = (startnSec - lastnSec);
+        long double nTime = (startnSec - lastnSec);
         cout << "nTime: " << nTime << endl;
-        double sTime = (startSec - lastSec);
+        long double sTime = (startSec - lastSec);
         cout << "startTime: " << startSec << endl << "lastTime: " << lastSec << endl;
         cout << "sTime: " << sTime << endl;
         runTime = sTime + nTime/1000000000.0;
@@ -153,6 +153,7 @@ void turnMotor(const int stringNum, double turns){
             counter++;
             cout << "counter: " << counter << endl;
             times[counter - 1] = runTime;
+            cout << times[counter - 1] << endl;
           }
         }
       }
