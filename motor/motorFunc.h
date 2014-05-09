@@ -53,7 +53,7 @@ double motorTune(double freqDiff, const int stringNum) {	// speed of motor chang
   double turns = 0.0;
 
   if(stringNum == 3){
-      turns = (freqDiff)/13;
+      turns = (freqDiff)/15.92532;
   } else if (stringNum == 2){
       turns = (freqDiff)/13;
   } else if (stringNum == 1){
@@ -99,6 +99,7 @@ void turnMotor(const int stringNum, double turns){
 
   int ticks = turns / RES;
   double timeTicks = fabs(turns) / RES;
+  cout << "Ticks: " << ticks << endl;
   double overTicks = fabs(timeTicks) - abs(ticks);
   long double times [abs(ticks)];
   long double runTime;
@@ -199,12 +200,8 @@ void turnMotor(const int stringNum, double turns){
       motorStop(REVPATH1);
       motorStop(FWDPATH1);
     } else {
-      for (int i = 0; i < abs(ticks); i++) {
-        avgTime += times[i];
-      }
-      avgTime = (avgTime / abs(ticks)) * 1000000;
+      avgTime = 0.08 * 1000000;
       turnTime = overTicks * avgTime;
-      cout << overTicks << " " << avgTime << " " <<  turnTime << endl;
       motorStart(REVPATH1);
       usleep(turnTime);
       motorStart(FWDPATH1);

@@ -79,11 +79,11 @@ void heart() {
  * Returns: The fundamental frequency.
  * Restrictions: None.
  */
-double getFrequency(double *FFT, int size, int limit, const double& sampleFreq) {
+double getFrequency(double *FFT, int size, int lowLimit, int highLimit, const double& sampleFreq) {
   double * max = FFT;
   int index = 0;
   double frequency;
-  for (int i = 145; i < limit; i++) {
+  for (int i = lowLimit; i < highLimit; i++) {
 //    std::cout << *(FFT + i) << std::endl;
 //    sleep(2);
     if (*(FFT + i) > *max) {

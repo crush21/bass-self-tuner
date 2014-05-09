@@ -9,7 +9,8 @@
 #include <fstream>
 #include <poll.h>
 
-const int NUM_CYCLES = 1500;
+const int NUM_CYCLES = 4098;
+const int LOW_LIMIT = NUM_CYCLES / 64;
 const int PEAK_LIMIT = NUM_CYCLES / 16;
 const double ONE_MIL = 1000000.0;
 const double ONE_BIL = 1000000000.0;
@@ -96,7 +97,7 @@ int main(int argc, char *argv[]) {
   double frequency = getFrequency(FFTdouble, NUM_CYCLES - 1, PEAK_LIMIT, sampleFrequency);
   int noteNum = atoi(argv[1]);
   double idealFreq = translateFrequency(noteNum);
-  double freqDiff = frequency - idealFreq;
+  double freqDiff = idealFreq - frequency;
   double centDiff = getCents(frequency, idealFreq);
   std::cout << "Frequency: " << frequency << std::endl;
   std::cout << "Cent Difference: " << centDiff << std::endl;

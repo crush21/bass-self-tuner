@@ -1121,6 +1121,15 @@ void clearBottomRow() {
   writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
 }
 
+void writeStrum() {
+  setDDRAM(ON, OFF, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, ON, OFF, ON, OFF, OFF, ON, ON);
+  writeChar(OFF, ON, ON, ON, OFF, ON, OFF, OFF);
+  writeChar(OFF, ON, ON, ON, OFF, OFF, ON, OFF);
+  writeChar(OFF, ON, ON, ON, OFF, ON, OFF, ON);
+  writeChar(OFF, ON, ON, OFF, ON, ON, OFF, ON);
+}
+
 /* Called if enter pushbutton is pressed during navigation loop.
  * Receives:	 current position and whether on or off.
  * Returns:	 1 if on, 0 if off.
@@ -1128,78 +1137,104 @@ void clearBottomRow() {
  */
 int tuningSequence(int firstString, int secondString,
 		   int thirdString, int fourthString) {
-//  pid_t childProcess1;
-//  pid_t childProcess2;
-  pid_t childProcess3;
-//  pid_t childProcess4;
-  pid_t waiting;
-//  int child_status1;
-//  int child_status2;
-  int child_status3;
-//  int child_status4;
-//  char firstNote [2];
-//  char secondNote [2];
-  char thirdNote [2];
-//  char fourthNote [2];
-//  const char * CMD1 = "/root/code/s1Analog";
-//  const char * CMD2 = "/root/code/s2Analog";
-  const char * CMD3 = "/root/code/s3Analog";
-//  const char * CMD4 = "/root/code/s4Analog";
 /*
+  pid_t childProcess1;
+  pid_t childProcess2;
+  pid_t childProcess3;
+  pid_t childProcess4;
+  pid_t waiting;
+  int child_status1;
+  int child_status2;
+  int child_status3;
+  int child_status4;
+  char firstNote [2];
+  char secondNote [2];
+  char thirdNote [2];
+  char fourthNote [2];
+  const char * CMD1 = "/root/code/s1Analog";
+  const char * CMD2 = "/root/code/s2Analog";
+  const char * CMD3 = "/root/code/s3Analog";
+  const char * CMD4 = "/root/code/s4Analog";
+*/
+  clearBottomRow();
+  writeOne();
+/*
+  waiting = -1;
   sprintf(firstNote, "%d", firstString);
   std::cout << firstNote[0] << firstNote[1] << std::endl;
-  clearBottomRow();
-  childProcess1 = vfork();
-  if (childProcess1 == 0) {
-    execlp(CMD1,"/root/code",reinterpret_cast<const char *>(firstNote),(char*)NULL);
-    std::cout << "Child!" << std::endl;
-  } else {
-    do {
-      waiting = wait(&child_status1);
-    } while (waiting != childProcess1);
-  } */
-  writeOne();
-  /*
+  while (waiting != 1) {
+    childProcess1 = vfork();
+    if (childProcess1 == 0) {
+      execlp(CMD1,"/root/code",reinterpret_cast<const char *>(firstNote),(char*)NULL);
+      std::cout << "Child!" << std::endl;
+    } else {
+      do {
+        waiting = wait(&child_status1);
+        if (waiting == 1) {
+          break;
+        }
+      } while (waiting != childProcess1);
+    }
+  }
+*/
+  writeTwo();
+/*
+  waiting = -1;
   sprintf(secondNote, "%d", secondString);
   std::cout << secondNote[0] << secondNote[1] << std::endl;
-  clearBottomRow();
-  childProcess2 = vfork();
-  if (childProcess2 == 0) {
-    execlp(CMD2,"/root/code",reinterpret_cast<const char *>(secondNote),(char*)NULL);
-    std::cout << "Child!" << std::endl;
-  } else {
-    do {
-      waiting = wait(&child_status2);
-    } while (waiting != childProcess2);
-  } */
-  writeTwo();
-
-  sprintf(thirdNote, "%d", thirdString);
-  std::cout << thirdNote[0] << thirdNote[1] << std::endl;
-  clearBottomRow();
-  childProcess3 = vfork();
-  if (childProcess3 == 0) {
-    execlp(CMD3,"/root/code",reinterpret_cast<const char *>(thirdNote),(char*)NULL);
-    std::cout << "Child!" << std::endl;
-  } else {
-    do {
-      waiting = wait(&child_status3);
-    } while (waiting != childProcess3);
+  while (waiting != 1) {
+    childProcess2 = vfork();
+    if (childProcess2 == 0) {
+      execlp(CMD2,"/root/code",reinterpret_cast<const char *>(secondNote),(char*)NULL);
+      std::cout << "Child!" << std::endl;
+    } else {
+      do {
+        waiting = wait(&child_status2);
+        if (waiting == 1) {
+          break;
+        }
+      } while (waiting != childProcess2);
+    }
   }
+*/
   writeThree();
 /*
+  waiting = -1;
+  sprintf(thirdNote, "%d", thirdString);
+  std::cout << thirdNote[0] << thirdNote[1] << std::endl;
+  while (waiting != 1) {
+    childProcess3 = vfork();
+    if (childProcess3 == 0) {
+      execlp(CMD3,"/root/code",reinterpret_cast<const char *>(thirdNote),(char*)NULL);
+      std::cout << "Child!" << std::endl;
+    } else {
+      do {
+        waiting = wait(&child_status3);
+        if (waiting == 1) {
+          break;
+        }
+    } while (waiting != childProcess3);
+  }
+*/
+  writeFour();
+/*
+  waiting = -1;
   sprintf(fourthNote, "%d", fourthString);
   std::cout << fourthNote[0] << fourthNote[1] << std::endl;
-  clearBottomRow();
-  childProcess4 = vfork();
-  if (childProcess4 == 0) {
-    execlp(CMD4,"/root/code",reinterpret_cast<const char *>(fourthNote),(char*)NULL);
-    std::cout << "Child!" << std::endl;
-  } else {
-    do {
-      waiting = wait(&child_status4);
-    } while (waiting != childProcess4);
-  } */
-  writeFour();
+  while (waiting != 1) {
+    childProcess4 = vfork();
+    if (childProcess4 == 0) {
+      execlp(CMD4,"/root/code",reinterpret_cast<const char *>(fourthNote),(char*)NULL);
+      std::cout << "Child!" << std::endl;
+    } else {
+      do {
+        waiting = wait(&child_status4);
+        if (waiting == 1) {
+          break;
+        }
+      } while (waiting != childProcess4);
+    }
+  }
+*/
   return 0;
 }
