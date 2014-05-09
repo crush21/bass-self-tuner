@@ -1121,6 +1121,11 @@ void clearBottomRow() {
   writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
 }
 
+/* Writes the word "Strum" to the lower part of the LCD.
+ * Receives:	 current position and whether on or off.
+ * Returns:	 1 if on, 0 if off.
+ * Restrictions: None.
+ */
 void writeStrum() {
   setDDRAM(ON, OFF, OFF, OFF, OFF, OFF, OFF);
   writeChar(OFF, ON, OFF, ON, OFF, OFF, ON, ON);
@@ -1128,6 +1133,17 @@ void writeStrum() {
   writeChar(OFF, ON, ON, ON, OFF, OFF, ON, OFF);
   writeChar(OFF, ON, ON, ON, OFF, ON, OFF, ON);
   writeChar(OFF, ON, ON, OFF, ON, ON, OFF, ON);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
 }
 
 /* Called if enter pushbutton is pressed during navigation loop.
@@ -1165,6 +1181,7 @@ int tuningSequence(int firstString, int secondString,
   while (waiting != 1) {
     childProcess1 = vfork();
     if (childProcess1 == 0) {
+      writeStrum();
       execlp(CMD1,"/root/code",reinterpret_cast<const char *>(firstNote),(char*)NULL);
       std::cout << "Child!" << std::endl;
     } else {
@@ -1185,6 +1202,7 @@ int tuningSequence(int firstString, int secondString,
   while (waiting != 1) {
     childProcess2 = vfork();
     if (childProcess2 == 0) {
+      writeStrum();
       execlp(CMD2,"/root/code",reinterpret_cast<const char *>(secondNote),(char*)NULL);
       std::cout << "Child!" << std::endl;
     } else {
@@ -1205,6 +1223,7 @@ int tuningSequence(int firstString, int secondString,
   while (waiting != 1) {
     childProcess3 = vfork();
     if (childProcess3 == 0) {
+      writeStrum();
       execlp(CMD3,"/root/code",reinterpret_cast<const char *>(thirdNote),(char*)NULL);
       std::cout << "Child!" << std::endl;
     } else {
@@ -1224,6 +1243,7 @@ int tuningSequence(int firstString, int secondString,
   while (waiting != 1) {
     childProcess4 = vfork();
     if (childProcess4 == 0) {
+      writeStrum();
       execlp(CMD4,"/root/code",reinterpret_cast<const char *>(fourthNote),(char*)NULL);
       std::cout << "Child!" << std::endl;
     } else {
