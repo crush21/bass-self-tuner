@@ -75,7 +75,7 @@ void turnMotor(const int stringNum, double turns){
   const char ENCODER2 [29] = "/sys/class/gpio/gpio89/value";
   const char ENCODER3 [29] = "/sys/class/gpio/gpio10/value";
   const char ENCODER4 [29] = "/sys/class/gpio/gpio11/value";
-  int Handle;
+  int Handle, fwdHandle, revHandle;
 
   if (stringNum == 0) {
     Handle = open(ENCODER1, O_RDONLY);
@@ -90,12 +90,29 @@ void turnMotor(const int stringNum, double turns){
     exit(0);
   }
 
+  if (stringNum == 0) {
+    fwdHandle = open(FWDPATH1, O_WRONLY);
+    revHandle = open(REVPATH1, O_WRONLY);
+  } else if (stringNum == 1) {
+    fwdHandle = open(FWDPATH2, O_WRONLY);
+    revHandle = open(REVPATH2, O_WRONLY);
+  } else if (stringNum == 2) {
+    fwdHandle = open(FWDPATH3, O_WRONLY);
+    revHandle = open(REVPATH3, O_WRONLY);
+  } else if (stringNum == 3) {
+    fwdHandle = open(FWDPATH4, O_WRONLY);
+    revHandle = open(REVPATH4, O_WRONLY);
+  } else {
+    cout << "Invalid string" << endl;
+    exit(0);
+  }
+
   char ReadValue1 [2];
   char LastRead [2];
   char ReadValue2;
   int counter = 0;
   timespec startTime, lastTime;
-  double debounceTime = 0.025;
+  double debounceTime = 0.03;
 
   int ticks = turns / RES;
   double timeTicks = fabs(turns) / RES;
@@ -117,11 +134,13 @@ void turnMotor(const int stringNum, double turns){
   ReadValue2 = ReadValue1[0];
 
   if (turns > 0) {
-    motorStart(FWDPATH1);
+    write(fwdHandle, START, 1);
+    lseek(fwdHandle, SEEK_SET, 0);
     cout << "motor forward" << endl;
   } else if (turns < 0) {
     ticks--;
-    motorStart(REVPATH1);
+    write(revHandle, START, 1);
+    lseek(revHandle, SEEK_SET, 0);
     cout << "motor backward" << endl;
   }
   
@@ -152,13 +171,17 @@ void turnMotor(const int stringNum, double turns){
         if(runTime > debounceTime){
           if (ReadValue1[0] != LastRead[0]) {
             if (turns > 0) {
-              motorStart(REVPATH1);
+              write(revHandle, START, 1);
+              lseek(revHandle, SEEK_SET, 0);
               usleep(300000);
-              motorStop(REVPATH1);
+              write(revHandle, STOP, 1);
+              lseek(fwdHandle, SEEK_SET, 0);
             } else if (turns < 0) {
-              motorStart(FWDPATH1);
+              write(fwdHandle, START, 1);
+              lseek(fwdHandle, SEEK_SET, 0);
               usleep(300000);
-              motorStop(FWDPATH1);
+              write(fwdHandle, STOP, 1);
+              lseek(fwdHandle, SEEK_SET, 0);
             }
             clock_gettime(CLOCK_MONOTONIC_RAW,&lastTime);
             counter++;
@@ -174,15 +197,21 @@ void turnMotor(const int stringNum, double turns){
 
  //   cout << "turning off motor" << endl;
   if (turns > 0) {
-    motorStart(REVPATH1);
+    write(revHandle, START, 1);
+    lseek(revHandle, SEEK_SET, 0);
     usleep(300000);
-    motorStop(REVPATH1);
-    motorStop(FWDPATH1);
+    write(revHandle, STOP, 1);
+    write(fwdHandle, STOP, 1);
+    lseek(revHandle, SEEK_SET, 0);
+    lseek(fwdHandle, SEEK_SET, 0);
   } else if (turns < 0) {
-    motorStart(FWDPATH1);
+    write(fwdHandle, START, 1);
+    lseek(fwdHandle, SEEK_SET, 0);
     usleep(300000);
-    motorStop(FWDPATH1);
-    motorStop(REVPATH1);
+    write(fwdHandle, STOP, 1);
+    write(revHandle, STOP, 1);
+    lseek(revHandle, SEEK_SET, 0);
+    lseek(fwdHandle, SEEK_SET, 0);
   }
 
   if (overTicks > 0) {
@@ -193,21 +222,29 @@ void turnMotor(const int stringNum, double turns){
       avgTime = (avgTime / ticks) * 1000000;
       turnTime = overTicks * avgTime;
       cout << overTicks << " " << avgTime << " " <<  turnTime << endl;
-      motorStart(FWDPATH1);
+      write(fwdHandle, START, 1);
+      lseek(fwdHandle, SEEK_SET, 0);
       usleep(turnTime);
-      motorStart(REVPATH1);
+      write(revHandle, START, 1);
+      lseek(revHandle, SEEK_SET, 0);
       usleep(300000);
-      motorStop(REVPATH1);
-      motorStop(FWDPATH1);
+      write(revHandle, STOP, 1);
+      write(fwdHandle, STOP, 1);
+      lseek(fwdHandle, SEEK_SET, 0);
+      lseek(revHandle, SEEK_SET, 0);
     } else {
       avgTime = 0.08 * 1000000;
       turnTime = overTicks * avgTime;
-      motorStart(REVPATH1);
+      write(revHandle, START, 1);
+      lseek(revHandle, SEEK_SET, 0);
       usleep(turnTime);
-      motorStart(FWDPATH1);
+      write(fwdHandle, START, 1);
+      lseek(fwdHandle, SEEK_SET, 0);
       usleep(300000);
-      motorStop(FWDPATH1);
-      motorStop(REVPATH1);
+      write(fwdHandle, STOP, 1);
+      write(revHandle, STOP, 1);
+      lseek(fwdHandle, SEEK_SET, 0);
+      lseek(revHandle, SEEK_SET, 0);
     }
   }
 }
