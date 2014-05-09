@@ -57,7 +57,9 @@ int main(int argc, char *argv[]) {
   clock_gettime(CLOCK_MONOTONIC, &startTime);
 
   while (aIn < THRESHOLD) {
+    poll(&strFile, 1, -1);
     aIn = getAnalog(STRING1, strFile.fd);
+    lseek(strHandle, 0, SEEK_SET);
   }
 
   for (int i = 0; i < NUM_CYCLES; i++) {
