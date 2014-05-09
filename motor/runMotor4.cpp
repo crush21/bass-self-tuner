@@ -12,10 +12,9 @@ using namespace std;
 int main(int argc, char * argv[]) {
   double freqDiff;
 
-
   if (argc != 2) {
     printf("\nYou must provide one argument.\n");
-    printf("Usage: runMotor1 freqDiff\n");
+    printf("Usage: runMotor4 freqDiff\n");
     printf("\nfreqDiff:\n");
     printf(" Floating point number represent difference between\n");
     printf(" measured and ideal frequencies.\n");
@@ -27,25 +26,8 @@ int main(int argc, char * argv[]) {
   cout << "motorTune: Done" << endl;
   double turns = motorTune(freqDiff, STRING4);
   cout << "Turns: " << turns << endl;
-  if (turns > 0) {
-    motorStart(FWDPATH4);
-    cout << "motor forward" << endl;
-    encoder(STRING1,turns);
-    cout << "turning off motor" << endl;
-    motorStart(REVPATH4);
-    usleep(500000);
-    motorStop(FWDPATH4);
-    motorStop(REVPATH4);
-  } else if (turns < 0) {
-    motorStart(REVPATH4);
-    cout << "motor backward" << endl;
-    encoder(STRING1,turns);
-    cout << "turning off motor" << endl;
-    motorStart(FWDPATH4);
-    usleep(500000);
-    motorStop(REVPATH4);
-    motorStop(FWDPATH4);
-  }  
+  turnMotor(STRING4, turns);
+
   cout << "Done tuning!" << endl;
   return 0;
 }

@@ -1121,12 +1121,12 @@ void clearBottomRow() {
   writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
 }
 
-/* Writes the word "Strum" to the lower part of the LCD.
- * Receives:	 current position and whether on or off.
- * Returns:	 1 if on, 0 if off.
+/* Writes the words "Strum string 1" to the lower part of the LCD.
+ * Receives:	 Nothing.
+ * Returns:	 Nothing.
  * Restrictions: None.
  */
-void writeStrum() {
+void writeStrum1() {
   setDDRAM(ON, OFF, OFF, OFF, OFF, OFF, OFF);
   writeChar(OFF, ON, OFF, ON, OFF, OFF, ON, ON);
   writeChar(OFF, ON, ON, ON, OFF, ON, OFF, OFF);
@@ -1134,14 +1134,89 @@ void writeStrum() {
   writeChar(OFF, ON, ON, ON, OFF, ON, OFF, ON);
   writeChar(OFF, ON, ON, OFF, ON, ON, OFF, ON);
   writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, ON, ON, ON, OFF, OFF, ON, ON);
+  writeChar(OFF, ON, ON, ON, OFF, ON, OFF, OFF);
+  writeChar(OFF, ON, ON, ON, OFF, OFF, ON, OFF);
+  writeChar(OFF, ON, ON, OFF, ON, OFF, OFF, ON);
+  writeChar(OFF, ON, ON, OFF, ON, ON, ON, OFF);
+  writeChar(OFF, ON, ON, OFF, OFF, ON, ON, ON);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, ON, OFF, OFF, OFF, ON);
   writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
   writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+}
+
+/* Writes the words "Strum string 2" to the lower part of the LCD.
+ * Receives:	 Nothing.
+ * Returns:	 Nothing.
+ * Restrictions: None.
+ */
+void writeStrum2() {
+  setDDRAM(ON, OFF, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, ON, OFF, ON, OFF, OFF, ON, ON);
+  writeChar(OFF, ON, ON, ON, OFF, ON, OFF, OFF);
+  writeChar(OFF, ON, ON, ON, OFF, OFF, ON, OFF);
+  writeChar(OFF, ON, ON, ON, OFF, ON, OFF, ON);
+  writeChar(OFF, ON, ON, OFF, ON, ON, OFF, ON);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, ON, ON, ON, OFF, OFF, ON, ON);
+  writeChar(OFF, ON, ON, ON, OFF, ON, OFF, OFF);
+  writeChar(OFF, ON, ON, ON, OFF, OFF, ON, OFF);
+  writeChar(OFF, ON, ON, OFF, ON, OFF, OFF, ON);
+  writeChar(OFF, ON, ON, OFF, ON, ON, ON, OFF);
+  writeChar(OFF, ON, ON, OFF, OFF, ON, ON, ON);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, ON, OFF, OFF, ON, OFF);
   writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
   writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+}
+
+/* Writes the words "Strum string 3" to the lower part of the LCD.
+ * Receives:	 Nothing.
+ * Returns:	 Nothing.
+ * Restrictions: None.
+ */
+void writeStrum3() {
+  setDDRAM(ON, OFF, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, ON, OFF, ON, OFF, OFF, ON, ON);
+  writeChar(OFF, ON, ON, ON, OFF, ON, OFF, OFF);
+  writeChar(OFF, ON, ON, ON, OFF, OFF, ON, OFF);
+  writeChar(OFF, ON, ON, ON, OFF, ON, OFF, ON);
+  writeChar(OFF, ON, ON, OFF, ON, ON, OFF, ON);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, ON, ON, ON, OFF, OFF, ON, ON);
+  writeChar(OFF, ON, ON, ON, OFF, ON, OFF, OFF);
+  writeChar(OFF, ON, ON, ON, OFF, OFF, ON, OFF);
+  writeChar(OFF, ON, ON, OFF, ON, OFF, OFF, ON);
+  writeChar(OFF, ON, ON, OFF, ON, ON, ON, OFF);
+  writeChar(OFF, ON, ON, OFF, OFF, ON, ON, ON);
+  writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, ON, OFF, OFF, ON, ON);
   writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
   writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+}
+
+/* Writes the words "Strum string 4" to the lower part of the LCD.
+ * Receives:	 Nothing.
+ * Returns:	 Nothing.
+ * Restrictions: None.
+ */
+void writeStrum4() {
+  setDDRAM(ON, OFF, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, ON, OFF, ON, OFF, OFF, ON, ON);
+  writeChar(OFF, ON, ON, ON, OFF, ON, OFF, OFF);
+  writeChar(OFF, ON, ON, ON, OFF, OFF, ON, OFF);
+  writeChar(OFF, ON, ON, ON, OFF, ON, OFF, ON);
+  writeChar(OFF, ON, ON, OFF, ON, ON, OFF, ON);
   writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, ON, ON, ON, OFF, OFF, ON, ON);
+  writeChar(OFF, ON, ON, ON, OFF, ON, OFF, OFF);
+  writeChar(OFF, ON, ON, ON, OFF, OFF, ON, OFF);
+  writeChar(OFF, ON, ON, OFF, ON, OFF, OFF, ON);
+  writeChar(OFF, ON, ON, OFF, ON, ON, ON, OFF);
+  writeChar(OFF, ON, ON, OFF, OFF, ON, ON, ON);
   writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
+  writeChar(OFF, OFF, ON, ON, OFF, ON, OFF, OFF);
   writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
   writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
 }
@@ -1181,7 +1256,7 @@ int tuningSequence(int firstString, int secondString,
   while (waiting != 1) {
     childProcess1 = vfork();
     if (childProcess1 == 0) {
-      writeStrum();
+      writeStrum1();
       execlp(CMD1,"/root/code",reinterpret_cast<const char *>(firstNote),(char*)NULL);
       std::cout << "Child!" << std::endl;
     } else {
@@ -1202,7 +1277,7 @@ int tuningSequence(int firstString, int secondString,
   while (waiting != 1) {
     childProcess2 = vfork();
     if (childProcess2 == 0) {
-      writeStrum();
+      writeStrum2();
       execlp(CMD2,"/root/code",reinterpret_cast<const char *>(secondNote),(char*)NULL);
       std::cout << "Child!" << std::endl;
     } else {
@@ -1223,7 +1298,7 @@ int tuningSequence(int firstString, int secondString,
   while (waiting != 1) {
     childProcess3 = vfork();
     if (childProcess3 == 0) {
-      writeStrum();
+      writeStrum3();
       execlp(CMD3,"/root/code",reinterpret_cast<const char *>(thirdNote),(char*)NULL);
       std::cout << "Child!" << std::endl;
     } else {
@@ -1243,7 +1318,7 @@ int tuningSequence(int firstString, int secondString,
   while (waiting != 1) {
     childProcess4 = vfork();
     if (childProcess4 == 0) {
-      writeStrum();
+      writeStrum4();
       execlp(CMD4,"/root/code",reinterpret_cast<const char *>(fourthNote),(char*)NULL);
       std::cout << "Child!" << std::endl;
     } else {

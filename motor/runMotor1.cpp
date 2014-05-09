@@ -26,7 +26,7 @@ int main(int argc, char * argv[]) {
   cout << "motorTune: Done" << endl;
   double turns = motorTune(freqDiff, STRING1);
   cout << "Turns: " << turns << endl;
-  turnMotor(STRING1,turns);
+  turnMotor(STRING1, turns);
 
   cout << "Done tuning!" << endl;
   return 0;

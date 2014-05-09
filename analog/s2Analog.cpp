@@ -10,28 +10,30 @@
 #include <poll.h>
 
 const int NUM_CYCLES = 4096;
-const int LOW_LIMIT = NUM_CYCLES / 32;
+const int LOW_LIMIT = NUM_CYCLES / 14;
 const int PEAK_LIMIT = NUM_CYCLES / 8;
 const double ONE_MIL = 1000000.0;
 const double ONE_BIL = 1000000000.0;
+const double THRESHOLD = 239;
 
 int main(int argc, char *argv[]) {
   timespec startTime, endTime, runTime;
+  double aIn = 0.0;
   double waveform[NUM_CYCLES];
   double FFTdouble[NUM_CYCLES];
   fftw_complex FFT[NUM_CYCLES];
   double totalSec, avgSec;
   fftw_plan fftPlan;
 
-  char strIn [50] = "/sys/bus/iio/devices/iio:device0/in_voltage2_raw"; // Changed from helper.15 to helper.12
+  char strIn [50] = "/sys/bus/iio/devices/iio:device0/in_voltage1_raw";
 //  char FFTout [35] = "/root/code/output.txt";
 //  char waveOut [35] = "/root/code/waveform.txt";
 
   if (argc != 2) {
     printf("\nYou must provide one argument.\n");
     printf("The argument represents a note for a string.\n");
-    printf("The note starts at 0 = C and increases by one half step\n");
-    printf("For every integer increase of 1, to a maximum of 7 = G.\n\n");
+    printf("The note starts at 5 = F and increases by one half step\n");
+    printf("For every integer increase of 1, to a maximum of 12 = C.\n\n");
     printf("Usage: s2Analog noteNum\n");
     printf("noteNum:\n");
     printf("  Must be between 5 and 12.\n");
@@ -54,10 +56,14 @@ int main(int argc, char *argv[]) {
 
   clock_gettime(CLOCK_MONOTONIC, &startTime);
 
+  while (aIn < THRESHOLD) {
+    aIn = getAnalog(STRING2, strFile.fd);
+  }
+
   for (int i = 0; i < NUM_CYCLES; i++) {
 
     poll(&strFile, 1, -1);
-    waveform[i] = getAnalog(STRING3, strFile.fd);
+    waveform[i] = getAnalog(STRING2, strFile.fd);
     lseek(strHandle, 0, SEEK_SET);
 
   }
@@ -71,30 +77,30 @@ int main(int argc, char *argv[]) {
   std::cout << "Average sample time is: " << avgSec << std::endl;
   close(strHandle);
 
+  fftw_set_timelimit(1.0);
   fftPlan = fftw_plan_dft_r2c_1d(NUM_CYCLES, waveform, FFT, FFTW_DESTROY_INPUT | FFTW_MEASURE);
 //  std::cout << "Made it here!" << std::endl;
   fftw_execute(fftPlan);
-
-/* Not necessary, but keeping for debugging purposes.
+/*
+// Not necessary, but keeping for debugging purposes.
 // Write waveform and FFT result to files.
   std::ofstream wavFile;
   std::fstream FFTfile;
   wavFile.open(waveOut);
   FFTfile.open(FFTout);
-  for (int i = 0; i < (NUM_CYCLES / 2 + 1); i++) {
+  for (int i = 0; i < NUM_CYCLES; i++) {
     wavFile << waveform[i] << std::endl;
     FFTfile << FFT[i][0] << std::endl;
   }
   wavFile.close();
   FFTfile.close();
 */
-
   for (int j = 1; j < (NUM_CYCLES); j++) {
     FFTdouble[j] = fabs(FFT[j][0]);
   }
 
   double sampleFrequency = 1 / avgSec;
-  double frequency = getFrequency(FFTdouble, NUM_CYCLES - 1, PEAK_LIMIT, sampleFrequency);
+  double frequency = getFrequency(FFTdouble, NUM_CYCLES - 1, LOW_LIMIT, PEAK_LIMIT, sampleFrequency);
   int noteNum = atoi(argv[1]);
   double idealFreq = translateFrequency(noteNum);
   double freqDiff = idealFreq - frequency;
@@ -103,6 +109,8 @@ int main(int argc, char *argv[]) {
   std::cout << "Cent Difference: " << centDiff << std::endl;
   if (fabs(centDiff) > 5) {
 //    callMotor(STRING2, freqDiff);
+  } else {
+    return 1;
   }
   return 0;
 }

@@ -17,14 +17,14 @@
 
 using namespace std;
 
-const char FWDPATH1 [29] = "/sys/class/gpio/gpio66/value"; // P8 Pin 7
-const char REVPATH1 [29] = "/sys/class/gpio/gpio69/value"; // P8 Pin 9
-const char FWDPATH2 [29] = "/sys/class/gpio/gpio67/value"; // P8 Pin 8
-const char REVPATH2 [29] = "/sys/class/gpio/gpio68/value"; // P8 Pin 10
-const char FWDPATH3 [29] = "/sys/class/gpio/gpio23/value"; // P8 Pin 13
-const char REVPATH3 [29] = "/sys/class/gpio/gpio47/value"; // P8 Pin 15
-const char FWDPATH4 [29] = "/sys/class/gpio/gpio26/value"; // P8 Pin 14
-const char REVPATH4 [29] = "/sys/class/gpio/gpio46/value"; // P8 Pin 16
+const char FWDPATH1 [29] = "/sys/class/gpio/gpio9/value"; // P8 Pin 7
+const char REVPATH1 [29] = "/sys/class/gpio/gpio81/value"; // P8 Pin 9
+const char FWDPATH2 [29] = "/sys/class/gpio/gpio8/value"; // P8 Pin 8
+const char REVPATH2 [29] = "/sys/class/gpio/gpio80/value"; // P8 Pin 10
+const char FWDPATH3 [29] = "/sys/class/gpio/gpio78/value"; // P8 Pin 13
+const char REVPATH3 [29] = "/sys/class/gpio/gpio79/value"; // P8 Pin 15
+const char FWDPATH4 [29] = "/sys/class/gpio/gpio76/value"; // P8 Pin 14
+const char REVPATH4 [29] = "/sys/class/gpio/gpio77/value"; // P8 Pin 16
 const char * START = "1";
 const char * STOP = "0";
 

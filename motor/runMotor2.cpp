@@ -12,7 +12,6 @@ using namespace std;
 int main(int argc, char * argv[]) {
   double freqDiff;
 
-
   if (argc != 2) {
     printf("\nYou must provide one argument.\n");
     printf("Usage: runMotor2 freqDiff\n");
@@ -23,26 +22,11 @@ int main(int argc, char * argv[]) {
   }
 
   freqDiff = strtod(argv[1], NULL); // Convert argument to double.
+
   cout << "motorTune: Done" << endl;
-  double turns = motorTune(freqDiff, STRING1);
+  double turns = motorTune(freqDiff, STRING2);
   cout << "Turns: " << turns << endl;
-  if (turns > 0) {
-    motorStart(FWDPATH2);
-    cout << "motor forward" << endl;
-    encoder(STRING2,turns);
-    cout << "turning off motor" << endl;
-    motorStop(REVPATH2);
-    motorStop(FWDPATH2);
-  } else if (turns < 0) {
-    motorStart(REVPATH2);
-    cout << "motor backward" << endl;
-    encoder(STRING2,turns);
-    cout << "turning off motor" << endl;
-    motorStart(FWDPATH2);
-    usleep(500000);
-    motorStop(FWDPATH2);
-    motorStop(REVPATH2);
-  }
+  turnMotor(STRING2, turns);
 
   cout << "Done tuning!" << endl;
   return 0;

@@ -32,48 +32,36 @@ echo 11 > /sys/class/gpio/export
 echo in > /sys/class/gpio/gpio11/direction
 
 # Motor 1
-echo 66 > /sys/class/gpio/export
-echo high > /sys/class/gpio/gpio66/direction
-echo 0 > /sys/class/gpio/gpio66/value
-echo 69 > /sys/class/gpio/export
-echo high > /sys/class/gpio/gpio69/direction
-echo 0 > /sys/class/gpio/gpio69/value
-echo 45 > /sys/class/gpio/export
-echo high > /sys/class/gpio/gpio45/direction
-echo 0 > /sys/class/gpio/gpio45/value
+echo 9 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio9/direction
+echo 0 > /sys/class/gpio/gpio9/value
+echo 81 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio81/direction
+echo 0 > /sys/class/gpio/gpio81/value
 
 # Motor 2
-echo 67 > /sys/class/gpio/export
-echo high > /sys/class/gpio/gpio67/direction
-echo 0 > /sys/class/gpio/gpio67/value
-echo 68 > /sys/class/gpio/export
-echo high > /sys/class/gpio/gpio68/direction
-echo 0 > /sys/class/gpio/gpio68/value
-echo 44 > /sys/class/gpio/export
-echo high > /sys/class/gpio/gpio44/direction
-echo 0 > /sys/class/gpio/gpio44/value
+echo 8 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio8/direction
+echo 0 > /sys/class/gpio/gpio8/value
+echo 80 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio80/direction
+echo 0 > /sys/class/gpio/gpio80/value
 
 # Motor 3
-echo 23 > /sys/class/gpio/export
-echo high > /sys/class/gpio/gpio23/direction
-echo 0 > /sys/class/gpio/gpio23/value
-echo 47 > /sys/class/gpio/export
-echo high > /sys/class/gpio/gpio47/direction
-echo 0 > /sys/class/gpio/gpio47/value
-echo 27 > /sys/class/gpio/export
-echo high > /sys/class/gpio/gpio27/direction
-echo 0 > /sys/class/gpio/gpio27/value
+echo 78 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio78/direction
+echo 0 > /sys/class/gpio/gpio78/value
+echo 79 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio79/direction
+echo 0 > /sys/class/gpio/gpio79/value
 
 # Motor 4
-echo 26 > /sys/class/gpio/export
-echo high > /sys/class/gpio/gpio26/direction
-echo 0 > /sys/class/gpio/gpio26/value
-echo 46 > /sys/class/gpio/export
-echo high > /sys/class/gpio/gpio46/direction
-echo 0 > /sys/class/gpio/gpio46/value
-echo 65 > /sys/class/gpio/export
-echo high > /sys/class/gpio/gpio65/direction
-echo 0 > /sys/class/gpio/gpio65/value
+echo 76 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio76/direction
+echo 0 > /sys/class/gpio/gpio76/value
+echo 77 > /sys/class/gpio/export
+echo high > /sys/class/gpio/gpio77/direction
+echo 0 > /sys/class/gpio/gpio77/value
 
 
 echo "LCD Display Control Pins..."
