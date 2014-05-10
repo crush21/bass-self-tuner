@@ -83,12 +83,17 @@ double getFrequency(double *FFT, int size, int lowLimit, int highLimit, const do
   double * max = FFT;
   int index = 0;
   double frequency;
+  for (int i = 252; i < 257; i++) {
+    *(FFT + i) = 0;
+  }
   for (int i = lowLimit; i < highLimit; i++) {
 //    std::cout << *(FFT + i) << std::endl;
 //    sleep(2);
     if (*(FFT + i) > *max) {
-      max = FFT + i;
-      index = i;
+      if ((i > 256) || (i < 252)) {
+        max = FFT + i;
+        index = i;
+      }
     }
   }
   std::cout << "Highest index is: " << index << std::endl;
