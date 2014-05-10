@@ -160,37 +160,19 @@ int moveLeft(int currentPos) {
       break;
 // Arrow currently at position 2.
     case 2:
-      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
-      writeArrow();
+      selectString2();
       break;
 // Arrow currently at position 3.
     case 3:
-      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
-      writeArrow();
+      selectString3();
       break;
 // Arrow currently at position 4.
     case 4:
-      setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
-      writeArrow();
+      selectString4();
       break;
 // Reset arrow to position 0 and clear remaining positions.
     default:
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
-      writeArrow();
+      selectString1();
       return 0;
   }
   if (curPos < 1) {
@@ -212,50 +194,27 @@ int moveRight(int currentPos) {
   switch (curPos) {
 // Arrow currently at position 0.
     case 0:
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
-      writeArrow();
-      break; // Arrow currently at position 1.
+      selectString2();
+      break;
+// Arrow currently at position 1.
     case 1:
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
-      writeArrow();
+      selectString3();
       break;
 // Arrow currently at position 2.
     case 2:
-      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
-      writeArrow();
+      selectString4();
       break;
 // Arrow currently at position 3.
     case 3:
-      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
-      writeArrow();
+      selectGo();
       break;
 // Arrow currently at position 4.
     case 4:
-      setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
-      writeArrow();
+      selectString1();
       break;
 // Reset arrow to position 0 and clear remaining positions.
     default:
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, ON, ON);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, OFF, ON, ON, OFF);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, ON, OFF, OFF, ON);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, ON, ON, OFF, OFF);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, OFF);
-      writeArrow();
+      selectString1();
       return 0;
   }
   return (curPos + 1) % 5;
@@ -271,57 +230,30 @@ int moveUpStr1(int currentNote) {
   switch (currentNote) {
 // Case 0: C to Db.
     case 0:
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
-      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, OFF);
-      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
       break;
 // Case 1: Db to D.
     case 1:
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
-      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, OFF);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
       break;
 // Case 2: D to Eb.
     case 2:
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
-      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
-      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
       break;
 // Case 3: Eb to E.
     case 3:
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
-      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
       break;
 // Case 4: E to F.
     case 4:
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
-      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, OFF);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
       break;
 // Case 5: F to Gb.
     case 5:
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
-      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, ON);
-      writeChar(OFF, ON, ON, OFF, OFF, OFF, ON, OFF);
       break;
 // Case 6: Gb to G.
     case 6:
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
-      writeChar(OFF, ON, OFF, OFF, OFF, ON, ON, ON);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
       break;
 // Case 7: G to C.
     case 7:
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
-      writeChar(OFF, ON, OFF, OFF, OFF, OFF, ON, ON);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
       break;
 // Reset note to E.
     default:
-      setDDRAM(OFF, OFF, OFF, OFF, OFF, OFF, ON);
-      writeChar(OFF, ON, OFF, OFF, OFF, ON, OFF, ON);
-      writeChar(OFF, OFF, ON, OFF, OFF, OFF, OFF, OFF);
       return 4;
   }
   return (currentNote + 1) % 8;
