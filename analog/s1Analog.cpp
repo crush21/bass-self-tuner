@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
   double totalSec, avgSec;
   fftw_plan fftPlan;
 
-  char strIn [50] = "/sys/bus/iio/devices/iio:device0/in_voltage0_raw";
+  char strIn [50] = "/sys/bus/iio/devices/iio:device0/in_voltage1_raw";
 //  char FFTout [35] = "/root/code/output.txt";
 //  char waveOut [35] = "/root/code/waveform.txt";
 

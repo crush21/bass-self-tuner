@@ -26,7 +26,12 @@ int main(int argc, char * argv[]) {
   cout << "motorTune: Done" << endl;
   double turns = motorTune(freqDiff, STRING2);
   cout << "Turns: " << turns << endl;
-  turnMotor(STRING2, turns);
+/* This function is different from the other strings
+ * because three of our six infrared sensors failed
+ * to properly work. Because of this, a time-based
+ * motor tuning is implemented.
+ */
+  turnMotor2(turns);
 
   cout << "Done tuning!" << endl;
   return 0;

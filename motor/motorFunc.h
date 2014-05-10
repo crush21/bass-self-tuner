@@ -76,30 +76,26 @@ void turnMotor(const int stringNum, double turns){
   const char ENCODER3 [29] = "/sys/class/gpio/gpio10/value";
   const char ENCODER4 [29] = "/sys/class/gpio/gpio11/value";
   int Handle, fwdHandle, revHandle;
+  double QUARTERTIME;
 
   if (stringNum == 0) {
+    QUARTERTIME = 0.069;
     Handle = open(ENCODER1, O_RDONLY);
-  } else if (stringNum == 1) {
-    Handle = open(ENCODER2, O_RDONLY);
-  } else if (stringNum == 2) {
-    Handle = open(ENCODER3, O_RDONLY);
-  } else if (stringNum == 3) {
-    Handle = open(ENCODER4, O_RDONLY);
-  } else {
-    cout << "Invalid string" << endl;
-    exit(0);
-  }
-
-  if (stringNum == 0) {
     fwdHandle = open(FWDPATH1, O_WRONLY);
     revHandle = open(REVPATH1, O_WRONLY);
   } else if (stringNum == 1) {
+    QUARTERTIME = 0.069;
+    Handle = open(ENCODER2, O_RDONLY);
     fwdHandle = open(FWDPATH2, O_WRONLY);
     revHandle = open(REVPATH2, O_WRONLY);
   } else if (stringNum == 2) {
+    QUARTERTIME = 0.069;
+    Handle = open(ENCODER3, O_RDONLY);
     fwdHandle = open(FWDPATH3, O_WRONLY);
     revHandle = open(REVPATH3, O_WRONLY);
   } else if (stringNum == 3) {
+    QUARTERTIME = 0.069;
+    Handle = open(ENCODER4, O_RDONLY);
     fwdHandle = open(FWDPATH4, O_WRONLY);
     revHandle = open(REVPATH4, O_WRONLY);
   } else {
@@ -216,11 +212,7 @@ void turnMotor(const int stringNum, double turns){
 
   if (overTicks > 0) {
     if (ticks > 0) {
-      for (int i = 0; i < ticks; i++) {
-        avgTime += times[i];
-      }
-      avgTime = (avgTime / ticks) * 1000000;
-      turnTime = overTicks * avgTime;
+      turnTime = overTicks * QUARTERTIME;
       cout << overTicks << " " << avgTime << " " <<  turnTime << endl;
       write(fwdHandle, START, 1);
       lseek(fwdHandle, SEEK_SET, 0);
@@ -246,6 +238,89 @@ void turnMotor(const int stringNum, double turns){
       lseek(fwdHandle, SEEK_SET, 0);
       lseek(revHandle, SEEK_SET, 0);
     }
+  }
+}
+
+void turnMotor2(double turns){
+  const double QUARTERTIME = 0.069 * 1000000;
+  int fwdHandle, revHandle;
+
+  fwdHandle = open(FWDPATH2, O_WRONLY);
+  revHandle = open(REVPATH2, O_WRONLY);
+
+  double turnTime;
+  int counter = 0;
+
+  int ticks = turns / RES;
+  double timeTicks = fabs(turns) / RES;
+  cout << "Ticks: " << ticks << endl;
+  double overTicks = fabs(timeTicks) - abs(ticks);
+
+  if (turns > 0) {
+    write(fwdHandle, START, 1);
+    lseek(fwdHandle, SEEK_SET, 0);
+    cout << "motor forward" << endl;
+  } else if (turns < 0) {
+    ticks--;
+    write(revHandle, START, 1);
+    lseek(revHandle, SEEK_SET, 0);
+    cout << "motor backward" << endl;
+  }
+  
+  cout << "Turns: " << turns << endl;
+
+  if (abs(ticks) >= 1) {
+    while (counter != abs(ticks)) {
+      usleep(QUARTERTIME);
+      if (turns > 0) {
+        write(revHandle, START, 1);
+        lseek(revHandle, SEEK_SET, 0);
+        usleep(300000);
+        write(revHandle, STOP, 1);
+        lseek(fwdHandle, SEEK_SET, 0);
+      } else if (turns < 0) {
+        write(fwdHandle, START, 1);
+        lseek(fwdHandle, SEEK_SET, 0);
+        usleep(300000);
+        write(fwdHandle, STOP, 1);
+        lseek(fwdHandle, SEEK_SET, 0);
+      }
+      counter++;
+      cout << "counter: " << counter << endl;
+    }
+  }
+
+ //   cout << "turning off motor" << endl;
+  if (turns > 0) {
+    write(revHandle, START, 1);
+    lseek(revHandle, SEEK_SET, 0);
+    usleep(300000);
+    write(revHandle, STOP, 1);
+    write(fwdHandle, STOP, 1);
+    lseek(revHandle, SEEK_SET, 0);
+    lseek(fwdHandle, SEEK_SET, 0);
+  } else if (turns < 0) {
+    write(fwdHandle, START, 1);
+    lseek(fwdHandle, SEEK_SET, 0);
+    usleep(300000);
+    write(fwdHandle, STOP, 1);
+    write(revHandle, STOP, 1);
+    lseek(revHandle, SEEK_SET, 0);
+    lseek(fwdHandle, SEEK_SET, 0);
+  }
+
+  if (overTicks > 0) {
+    turnTime = overTicks * QUARTERTIME;
+    write(revHandle, START, 1);
+    lseek(revHandle, SEEK_SET, 0);
+    usleep(turnTime);
+    write(fwdHandle, START, 1);
+    lseek(fwdHandle, SEEK_SET, 0);
+    usleep(300000);
+    write(fwdHandle, STOP, 1);
+    write(revHandle, STOP, 1);
+    lseek(fwdHandle, SEEK_SET, 0);
+    lseek(revHandle, SEEK_SET, 0);
   }
 }
 
