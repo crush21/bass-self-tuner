@@ -53,7 +53,7 @@ double motorTune(double freqDiff, const int stringNum) {	// speed of motor chang
   double turns = 0.0;
 
   if(stringNum == 3){
-      turns = (freqDiff)/15.92532;
+      turns = (freqDiff)/15.51;
   } else if (stringNum == 2){
       turns = (freqDiff)/13;
   } else if (stringNum == 1){
@@ -79,22 +79,22 @@ void turnMotor(const int stringNum, double turns){
   double QUARTERTIME;
 
   if (stringNum == 0) {
-    QUARTERTIME = 0.069;
+    QUARTERTIME = 0.069 * 1000000;
     Handle = open(ENCODER1, O_RDONLY);
     fwdHandle = open(FWDPATH1, O_WRONLY);
     revHandle = open(REVPATH1, O_WRONLY);
   } else if (stringNum == 1) {
-    QUARTERTIME = 0.069;
+    QUARTERTIME = 0.069 * 1000000;
     Handle = open(ENCODER2, O_RDONLY);
     fwdHandle = open(FWDPATH2, O_WRONLY);
     revHandle = open(REVPATH2, O_WRONLY);
   } else if (stringNum == 2) {
-    QUARTERTIME = 0.069;
+    QUARTERTIME = 0.069 * 1000000;
     Handle = open(ENCODER3, O_RDONLY);
     fwdHandle = open(FWDPATH3, O_WRONLY);
     revHandle = open(REVPATH3, O_WRONLY);
   } else if (stringNum == 3) {
-    QUARTERTIME = 0.069;
+    QUARTERTIME = 0.08 * 1000000;
     Handle = open(ENCODER4, O_RDONLY);
     fwdHandle = open(FWDPATH4, O_WRONLY);
     revHandle = open(REVPATH4, O_WRONLY);
@@ -211,33 +211,36 @@ void turnMotor(const int stringNum, double turns){
   }
 
   if (overTicks > 0) {
-    if (ticks > 0) {
-      turnTime = overTicks * QUARTERTIME;
-      cout << overTicks << " " << avgTime << " " <<  turnTime << endl;
-      write(fwdHandle, START, 1);
-      lseek(fwdHandle, SEEK_SET, 0);
-      usleep(turnTime);
-      write(revHandle, START, 1);
-      lseek(revHandle, SEEK_SET, 0);
-      usleep(300000);
-      write(revHandle, STOP, 1);
-      write(fwdHandle, STOP, 1);
-      lseek(fwdHandle, SEEK_SET, 0);
-      lseek(revHandle, SEEK_SET, 0);
-    } else {
-      avgTime = 0.08 * 1000000;
-      turnTime = overTicks * avgTime;
-      write(revHandle, START, 1);
-      lseek(revHandle, SEEK_SET, 0);
-      usleep(turnTime);
-      write(fwdHandle, START, 1);
-      lseek(fwdHandle, SEEK_SET, 0);
-      usleep(300000);
-      write(fwdHandle, STOP, 1);
-      write(revHandle, STOP, 1);
-      lseek(fwdHandle, SEEK_SET, 0);
-      lseek(revHandle, SEEK_SET, 0);
+    turnTime = overTicks * QUARTERTIME;
+    cout << overTicks << " " << avgTime << " " <<  turnTime << endl;
+    if (turnTime < 30000) {
+      turnTime += 30000;
     }
+    write(fwdHandle, START, 1);
+    lseek(fwdHandle, SEEK_SET, 0);
+    usleep(turnTime);    
+    write(revHandle, START, 1);
+    lseek(revHandle, SEEK_SET, 0);
+    usleep(300000);
+    write(revHandle, STOP, 1);
+    write(fwdHandle, STOP, 1);
+    lseek(fwdHandle, SEEK_SET, 0);
+    lseek(revHandle, SEEK_SET, 0);
+  } else {
+    turnTime = overTicks * QUARTERTIME;
+    if (turnTime < 30000) {
+      turnTime += 30000;
+    }
+    write(revHandle, START, 1);
+    lseek(revHandle, SEEK_SET, 0);
+    usleep(turnTime);
+    write(fwdHandle, START, 1);
+    lseek(fwdHandle, SEEK_SET, 0);
+    usleep(300000);
+    write(fwdHandle, STOP, 1);
+    write(revHandle, STOP, 1);
+    lseek(fwdHandle, SEEK_SET, 0);
+    lseek(revHandle, SEEK_SET, 0);
   }
 }
 
@@ -309,8 +312,26 @@ void turnMotor2(double turns){
     lseek(fwdHandle, SEEK_SET, 0);
   }
 
-  if (overTicks > 0) {
+  if ((turns > 0) && (overTicks != 0)) {
     turnTime = overTicks * QUARTERTIME;
+    if (turnTime < 30000) {
+      turnTime += 30000;
+    }
+    write(fwdHandle, START, 1);
+    lseek(fwdHandle, SEEK_SET, 0);
+    usleep(turnTime);
+    write(revHandle, START, 1);
+    lseek(revHandle, SEEK_SET, 0);
+    usleep(300000);
+    write(fwdHandle, STOP, 1);
+    write(revHandle, STOP, 1);
+    lseek(fwdHandle, SEEK_SET, 0);
+    lseek(revHandle, SEEK_SET, 0);
+  } else if ((turns < 0) && (overTicks != 0)){
+    turnTime = overTicks * QUARTERTIME;
+    if (turnTime < 20000) {
+      turnTime += 20000;
+    }
     write(revHandle, START, 1);
     lseek(revHandle, SEEK_SET, 0);
     usleep(turnTime);

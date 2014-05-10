@@ -9,7 +9,7 @@
 #include <fstream>
 #include <poll.h>
 
-const int NUM_CYCLES = 2048;
+const int NUM_CYCLES = 4096;
 const int LOW_LIMIT = NUM_CYCLES / 14;
 const int PEAK_LIMIT = NUM_CYCLES / 10;
 const double ONE_MIL = 1000000.0;
