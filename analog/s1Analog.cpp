@@ -10,11 +10,11 @@
 #include <poll.h>
 
 const int NUM_CYCLES = 4096;
-const int LOW_LIMIT = NUM_CYCLES / 14;
-const int PEAK_LIMIT = NUM_CYCLES / 8;
+const int LOW_LIMIT = NUM_CYCLES / 32;
+const int PEAK_LIMIT = NUM_CYCLES / 17;
 const double ONE_MIL = 1000000.0;
 const double ONE_BIL = 1000000000.0;
-const double THRESHOLD = 239;
+const double THRESHOLD = 830;
 
 int main(int argc, char *argv[]) {
   timespec startTime, endTime, runTime;
