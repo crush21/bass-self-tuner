@@ -210,7 +210,7 @@ void turnMotor(const int stringNum, double turns){
     lseek(fwdHandle, SEEK_SET, 0);
   }
 
-  if (overTicks > 0) {
+  if (turns > 0) {
     turnTime = overTicks * QUARTERTIME;
     cout << overTicks << " " << avgTime << " " <<  turnTime << endl;
     if (turnTime < 30000) {
@@ -226,7 +226,7 @@ void turnMotor(const int stringNum, double turns){
     write(fwdHandle, STOP, 1);
     lseek(fwdHandle, SEEK_SET, 0);
     lseek(revHandle, SEEK_SET, 0);
-  } else {
+  } else if (turns < 0) {
     turnTime = overTicks * QUARTERTIME;
     if (turnTime < 30000) {
       turnTime += 30000;

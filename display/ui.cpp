@@ -2,7 +2,7 @@
  * To control the 16 x 2 character LCD interface
  */
 
-#include "lcd.h"
+#include "ui.h"
 
 const char * ZERO = "0";
 const char * ONE = "1";
@@ -32,7 +32,7 @@ int main() {
   int string4 = 19; // Holds "note" of G string
 
   clearScreen();
-  startScreen();
+  selectString1();
   int i = 0;
   bool isOn = false;
   while (1) {
@@ -59,19 +59,19 @@ int main() {
 	  tuningSequence(string1, string2, string3, string4);
 	}
         isOn = true;
-      } else if (upPush[0] == '0') {
+      } else if (upPush[0] == '1') {
 	if (stringNum == 0) {
           string1 = moveUpStr1(string1);
 	} else if (stringNum == 1) {
           string2 = moveUpStr2(string2);
-          std::cout << string2 << std::endl;
+//          std::cout << string2 << std::endl;
 	} else if (stringNum == 2) {
           string3 = moveUpStr3(string3);
 	} else if (stringNum == 3) {
           string4 = moveUpStr4(string4);
         }
         isOn = true;
-      } else if (downPush[0] == '0') {
+      } else if (downPush[0] == '1') {
 	if (stringNum == 0) {
           string1 = moveDownStr1(string1);
 	} else if (stringNum == 1) {
@@ -89,8 +89,8 @@ int main() {
 //                << enterPush[0] << " " << upPush[0] << " "
 //                << downPush[0] << std::endl;
       if ((leftPush[0] == '0') && (rightPush[0] == '0') &&
-	  (enterPush[0] == '0') && (upPush[0] == '1') &&
-	  (downPush[0] == '1')) {
+	  (enterPush[0] == '0') && (upPush[0] == '0') &&
+	  (downPush[0] == '0')) {
 //        std::cout << "All off!" << std::endl;
         i++;
         isOn = false;
