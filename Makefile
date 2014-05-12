@@ -84,4 +84,4 @@ ui.o:  display/ui.cpp
 	$(CC) $(CFLAGS) -o ui.o display/ui.cpp
 
 clean:
-	rm -f *o s1Analog s2Analog s3Analog s4Analog runMotor1 runMotor2 runMotor3 runMotor4 lcd
+	rm -f *o s1Analog s2Analog s3Analog s4Analog runMotor1 runMotor2 runMotor3 runMotor4 lcd ui
