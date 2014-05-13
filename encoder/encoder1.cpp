@@ -1,3 +1,10 @@
+/**********************************************
+
+Encoder code written by Chris Diemer 5/2/2014
+
+***********************************************/
+
+
 #include <iostream> 
 #include <unistd.h>
 #include <fcntl.h>
